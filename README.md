@@ -19,9 +19,9 @@ archive.
 A separately built, package-only driver archive can be attached to a release
 after its model-specific exporter and manifest are reviewed. Never publish the
 private collection archive because it also contains full device identities and
-local inventory. The release must identify the matching catalog manifest by
-path and SHA-256. Written redistribution authorization must cover the exact
-files and delivery method.
+local inventory. Each release has a checked record under `releases/` that binds
+the catalog manifest path and SHA-256 to the asset name and SHA-256. Written
+redistribution authorization must cover the exact files and delivery method.
 The repository license, once selected, will apply only to original repository
 content and will not replace Razer's rights in its files.
 
@@ -39,10 +39,16 @@ OpenBlade repositories have separate responsibilities:
 
 | Device | Hardware identity | Driver versions | Status |
 |---|---|---|---|
-| Razer Blade 16 RZ09-0581 | `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` | [Authorized package prerelease](https://github.com/OSSBlade/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76); clean installation remains pending |
+| Razer Blade 16 RZ09-0581 | `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` | [Private-repository package prerelease](https://github.com/OSSBlade/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76); clean installation remains pending |
 
 The `02E0` package does not cover RZ09-0528 (`02C6`) or Razer accessories.
 Those devices need their own installed-package inventory and validation.
+The current repository and release are private, so public links to them return
+404 unless the reader has access. Making the repository public would also make
+the existing driver asset public and needs a separate audience decision.
+The release record identifies the exporter by pull request, commit, path, and
+script hash. Its current reachability is `UnmergedPullRequest`; update the
+record to a main-reachable commit if the core pull request merges.
 
 ## Contributing an installed package
 

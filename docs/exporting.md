@@ -41,7 +41,9 @@ $model = 'RZ09-XXXX'
 $targetVid = '1532'
 $targetPid = 'XXXX'
 $timestamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$privateRoot = "C:\tmp\Blade-$model-driver-evidence-$timestamp"
+$privateRoot = Join-Path `
+    $env:TEMP `
+    "Blade-$model-driver-evidence-$timestamp"
 
 if ($model -eq 'RZ09-XXXX' -or $targetPid -eq 'XXXX') {
     throw 'Set the exact model number and target VID/PID before collection.'
@@ -245,10 +247,12 @@ Use SignTool to verify each catalog and every INF, SYS, DLL, or other payload
 against that catalog. Repeat the membership command for every package file:
 
 ```powershell
-$signTool = 'C:\path\to\signtool.exe'
-$catalog = 'C:\path\to\package.cat'
-$inf = 'C:\path\to\package.inf'
-$driver = 'C:\path\to\driver.sys'
+$signTool = Join-Path `
+    $env:ProgramFiles `
+    'Windows Kits\10\bin\<sdk-version>\x64\signtool.exe'
+$catalog = Join-Path $packageRoot '<package>\package.cat'
+$inf = Join-Path $packageRoot '<package>\package.inf'
+$driver = Join-Path $packageRoot '<package>\driver.sys'
 
 & $signTool verify /kp /v $catalog
 if ($LASTEXITCODE -ne 0) { throw 'Catalog signature verification failed.' }
@@ -305,7 +309,10 @@ facts. Keep:
 - relative package filenames, sizes, versions, SHA-256 hashes, signer identity,
   signature status, and catalog membership results;
 - the vendor application version that supplied the installed stack;
-- the private archive hash; and
+- the collection time in ISO-8601 UTC form, or `Unavailable` when it was not
+  retained;
+- the reviewed package-only archive filename and SHA-256, never the private
+  evidence archive hash; and
 - explicit limitations and privacy checks.
 
 Remove machine-local `oem###.inf` aliases and every local or unique value. The

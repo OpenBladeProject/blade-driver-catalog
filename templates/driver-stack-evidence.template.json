@@ -1,4 +1,5 @@
 {
+  "manifestType": "OpenBlade.RazerDriverCatalogEntry",
   "schemaVersion": 1,
   "scope": {
     "modelNumber": "RZ09-XXXX",
@@ -20,13 +21,24 @@
     "collectedAtUtc": "YYYY-MM-DDTHH:MM:SSZ",
     "vendorSoftwareVersion": "TODO",
     "privateInventoryReviewed": false,
-    "privateArchiveSha256": "TODO"
+    "packageArchiveFileName": "TODO",
+    "packageArchiveSize": 0,
+    "packageArchiveSha256": "TODO",
+    "exporterProvenance": {
+      "repository": "TODO",
+      "pullRequest": "TODO",
+      "revision": "TODO",
+      "reachability": "TODO",
+      "path": "TODO",
+      "sha256": "TODO"
+    }
   },
   "deviceTopology": [
     {
       "instancePrefix": "TODO: omit the unique instance suffix",
       "class": "TODO",
       "service": "TODO",
+      "filters": [],
       "parentPrefix": "TODO: omit the unique instance suffix",
       "originalInf": "TODO",
       "role": "Unknown"

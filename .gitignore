@@ -1,6 +1,10 @@
 raw/
 work/
 
+*-private.*
+*-private-evidence.*
+system-identity.json
+
 *.cat
 *.cab
 *.bin
