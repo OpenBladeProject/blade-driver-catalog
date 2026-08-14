@@ -186,8 +186,15 @@
     "rollback": "Pending"
   },
   "redistribution": {
-    "status": "UserReportedPermissionNotReviewed",
-    "authorizationStoredOutsideRepository": true
+    "status": "PermissionConfirmedByProjectOwner",
+    "authorizationStoredOutsideRepository": true,
+    "authorizedDeliveryMethod": "GitHub release asset",
+    "release": {
+      "tag": "rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76",
+      "asset": "Razer-02E0-Driver-Stack-1.0.0.78-1.0.0.76.zip",
+      "sha256": "2286405641678B664BE537B666673613043A19A9A78127E8880F349A2691A5A8",
+      "publicationStatus": "Prerelease"
+    }
   },
   "privacy": {
     "containsDriverBytes": false,

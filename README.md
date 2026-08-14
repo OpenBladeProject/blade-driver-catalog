@@ -39,7 +39,7 @@ OpenBlade repositories have separate responsibilities:
 
 | Device | Hardware identity | Driver versions | Status |
 |---|---|---|---|
-| Razer Blade 16 RZ09-0581 | `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` | Source-machine export and native brightness path validated; clean installation remains pending |
+| Razer Blade 16 RZ09-0581 | `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` | [Authorized package prerelease](https://github.com/OSSBlade/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76); clean installation remains pending |
 
 The `02E0` package does not cover RZ09-0528 (`02C6`) or Razer accessories.
 Those devices need their own installed-package inventory and validation.
