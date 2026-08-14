@@ -1,0 +1,16 @@
+raw/
+work/
+
+*.cat
+*.cab
+*.bin
+*.dll
+*.exe
+*.inf
+*.msi
+*.msix
+*.pnf
+*.rar
+*.sys
+*.7z
+*.zip

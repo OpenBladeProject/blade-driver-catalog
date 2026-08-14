@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "scope": {
+    "modelNumber": "RZ09-XXXX",
+    "productName": "TODO",
+    "biosVersion": "TODO",
+    "windowsBuild": "TODO",
+    "architecture": "amd64",
+    "usbIdentities": [
+      {
+        "vid": "1532",
+        "pid": "XXXX",
+        "interfaces": [
+          "MI_XX"
+        ]
+      }
+    ]
+  },
+  "collection": {
+    "collectedAtUtc": "YYYY-MM-DDTHH:MM:SSZ",
+    "vendorSoftwareVersion": "TODO",
+    "privateInventoryReviewed": false,
+    "privateArchiveSha256": "TODO"
+  },
+  "deviceTopology": [
+    {
+      "instancePrefix": "TODO: omit the unique instance suffix",
+      "class": "TODO",
+      "service": "TODO",
+      "parentPrefix": "TODO: omit the unique instance suffix",
+      "originalInf": "TODO",
+      "role": "Unknown"
+    }
+  ],
+  "packages": [
+    {
+      "directory": "TODO",
+      "originalInf": "TODO",
+      "provider": "TODO",
+      "class": "TODO",
+      "classGuid": "TODO",
+      "driverVer": "TODO",
+      "binaryFileVersion": "TODO",
+      "catalog": "TODO",
+      "catalogSignatureStatus": "TODO",
+      "signerSubject": "TODO",
+      "signerThumbprint": "TODO",
+      "services": [],
+      "hardwareMatches": [],
+      "files": [
+        {
+          "path": "TODO: relative path only",
+          "length": 0,
+          "fileVersion": "TODO",
+          "sha256": "TODO",
+          "signatureStatus": "TODO",
+          "catalogRole": "Member",
+          "catalogMembershipStatus": "Pending"
+        }
+      ]
+    }
+  ],
+  "featureEvidence": {
+    "candidatePaths": [],
+    "physicalValidation": "NotInvestigated",
+    "lifecycleValidation": "NotInvestigated",
+    "cleanInstallation": "NotInvestigated",
+    "rollback": "NotInvestigated"
+  },
+  "redistribution": {
+    "status": "NotPublished",
+    "authorizationStoredOutsideRepository": false
+  },
+  "privacy": {
+    "containsDriverBytes": false,
+    "containsSerial": false,
+    "containsUsername": false,
+    "containsLocalPath": false,
+    "containsFullInstanceId": false,
+    "containsMachineLocalPublishedInf": false
+  },
+  "limitations": [
+    "This export proves only what was installed on the inspected machine.",
+    "It does not prove ABI compatibility, safe installation order, or production admission."
+  ]
+}

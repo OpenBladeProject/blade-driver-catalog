@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "scope": {
+    "modelNumber": "RZ09-0581",
+    "productName": "Razer Blade 16 (2026)",
+    "biosVersion": "4.00",
+    "windowsBuild": "26200",
+    "architecture": "amd64",
+    "usbIdentities": [
+      {
+        "vid": "1532",
+        "pid": "02E0",
+        "interfaces": ["MI_01", "MI_02"]
+      }
+    ]
+  },
+  "collection": {
+    "collectedAtUtc": "NotCataloged",
+    "vendorSoftwareVersion": "Synapse 4",
+    "privateInventoryReviewed": true,
+    "privateArchiveFileName": "Razer-02E0-Driver-Stack-1.0.0.78-1.0.0.76.zip",
+    "privateArchiveSha256": "2286405641678B664BE537B666673613043A19A9A78127E8880F349A2691A5A8",
+    "sourceCoreRevision": "869e47e07b1a84c4e353490519484fa1589f4ae9"
+  },
+  "deviceTopology": [
+    {
+      "instancePrefix": "USB\\VID_1532&PID_02E0&MI_01",
+      "class": "HIDClass",
+      "service": "HidUsb",
+      "filters": ["RzDev_02e0 lower filter"],
+      "parentPrefix": "USB\\VID_1532&PID_02E0",
+      "originalInf": "rzdevu_02e0_dkm.inf",
+      "role": "Physical interface filter and virtual-device enumerator"
+    },
+    {
+      "instancePrefix": "RZVIRTUAL\\VID_1532&PID_02E0&MI_00&COL03",
+      "class": "HIDClass",
+      "service": "RzDev_02e0",
+      "filters": [],
+      "parentPrefix": "USB\\VID_1532&PID_02E0&MI_01",
+      "originalInf": "rzdevu_02e0_vcon.inf",
+      "role": "Virtual Consumer Control device"
+    },
+    {
+      "instancePrefix": "HID\\VID_1532&PID_02E0&MI_01&COL01",
+      "class": "Keyboard",
+      "service": "kbdhid",
+      "filters": ["RzDev_02e0 upper filter"],
+      "parentPrefix": "USB\\VID_1532&PID_02E0&MI_01",
+      "originalInf": "rzdevu_02e0_kbd.inf",
+      "role": "Physical keyboard collection filter"
+    },
+    {
+      "instancePrefix": "HID\\VID_1532&PID_02E0&MI_02",
+      "class": "Mouse",
+      "service": "mouhid",
+      "filters": ["RzDev_02e0 upper filter"],
+      "parentPrefix": "USB\\VID_1532&PID_02E0&MI_02",
+      "originalInf": "rzdevu_02e0_mou.inf",
+      "role": "Physical mouse collection filter and control-device enumerator"
+    },
+    {
+      "instancePrefix": "RZCONTROL\\VID_1532&PID_02E0&MI_00",
+      "class": "Razer Device",
+      "service": "RzCommon",
+      "filters": [],
+      "parentPrefix": "HID\\VID_1532&PID_02E0&MI_02",
+      "originalInf": "rzcommonu.inf",
+      "role": "Control child and typed control interface"
+    }
+  ],
+  "packages": [
+    {
+      "directory": "rzdevu_02e0_dkm",
+      "originalInf": "rzdevu_02e0_dkm.inf",
+      "provider": "Razer Inc",
+      "class": "HIDClass",
+      "classGuid": "{745A17A0-74D3-11D0-B6FE-00A0C90F57DA}",
+      "driverVer": "01/28/2026,10.0.15063.0",
+      "binaryFileVersion": "1.0.0.78",
+      "catalog": "rzdev_02e0_dkm.cat",
+      "catalogSignatureStatus": "Valid",
+      "signerSubject": "CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "signerThumbprint": "32B4E7CE92A59C722B8BDF7AE3E66520CFB9DE21",
+      "services": ["RzDev_02e0"],
+      "hardwareMatches": ["USB\\VID_1532&PID_02E0&MI_01"],
+      "files": [
+        {"path": "rzdevu_02e0_dkm/rzdevu_02e0_dkm.inf", "length": 1835, "fileVersion": "NotApplicable", "sha256": "C9831A19FE081F7AFA403E70116AB35762A3D4E339C4A7724CC6E64A3B035173", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"},
+        {"path": "rzdevu_02e0_dkm/rzdev_02e0_dkm.cat", "length": 11771, "fileVersion": "NotApplicable", "sha256": "2FB8F3A324D63590DBECE9C42D71E0B6498DA9BDECCB10045824056ED1EE4FFF", "signatureStatus": "Valid", "catalogRole": "Catalog", "catalogMembershipStatus": "NotApplicable"},
+        {"path": "rzdevu_02e0_dkm/RzDev_02e0.sys", "length": 65872, "fileVersion": "1.0.0.78", "sha256": "BC1666048D81A8DBA6BBFFDBDC86C2119632FD68EF2BB6D5D417FE3B84744787", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"}
+      ]
+    },
+    {
+      "directory": "rzdevu_02e0_vcon",
+      "originalInf": "rzdevu_02e0_vcon.inf",
+      "provider": "Razer Inc",
+      "class": "HIDClass",
+      "classGuid": "{745A17A0-74D3-11D0-B6FE-00A0C90F57DA}",
+      "driverVer": "01/28/2026,10.0.15063.0",
+      "binaryFileVersion": "1.0.0.78",
+      "catalog": "rzdev_02e0_vcon.cat",
+      "catalogSignatureStatus": "Valid",
+      "signerSubject": "CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "signerThumbprint": "32B4E7CE92A59C722B8BDF7AE3E66520CFB9DE21",
+      "services": ["RzDev_02e0"],
+      "hardwareMatches": ["RZVIRTUAL\\VID_1532&PID_02E0&MI_00&COL03"],
+      "files": [
+        {"path": "rzdevu_02e0_vcon/rzdevu_02e0_vcon.inf", "length": 1880, "fileVersion": "NotApplicable", "sha256": "BC3E0BCA22643930B25D4CF649144E89CFED0825493AA385931FF9F542FF3613", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"},
+        {"path": "rzdevu_02e0_vcon/rzdev_02e0_vcon.cat", "length": 11778, "fileVersion": "NotApplicable", "sha256": "0C3841B570DBC80819B44EB6027D3611FC2B39F063A612910F58F60EC99F0E21", "signatureStatus": "Valid", "catalogRole": "Catalog", "catalogMembershipStatus": "NotApplicable"},
+        {"path": "rzdevu_02e0_vcon/RzDev_02e0.sys", "length": 65872, "fileVersion": "1.0.0.78", "sha256": "BC1666048D81A8DBA6BBFFDBDC86C2119632FD68EF2BB6D5D417FE3B84744787", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"}
+      ]
+    },
+    {
+      "directory": "rzcommonu",
+      "originalInf": "rzcommonu.inf",
+      "provider": "Razer Inc",
+      "class": "Razer Device",
+      "classGuid": "{1750F915-5639-497C-966C-3A65ACECFCB6}",
+      "driverVer": "09/26/2023,10.0.15063.0",
+      "binaryFileVersion": "1.0.0.76",
+      "catalog": "rzcommon.cat",
+      "catalogSignatureStatus": "Valid",
+      "signerSubject": "CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "signerThumbprint": "FAC666005546D6BE881A31C1267717879401A950",
+      "services": ["RzCommon"],
+      "hardwareMatches": ["RAZER\\DeviceContol"],
+      "files": [
+        {"path": "rzcommonu/rzcommonu.inf", "length": 1646, "fileVersion": "NotApplicable", "sha256": "DD3C8D65C7C3CCF2093FE70FB21FB8DC724E837880566BAE629B3104A5B1B37B", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"},
+        {"path": "rzcommonu/rzcommon.cat", "length": 13844, "fileVersion": "NotApplicable", "sha256": "1DFBA6428F727EA414F0FB5E938EE76063B1193A6CC12895396C9B89486C6F6E", "signatureStatus": "Valid", "catalogRole": "Catalog", "catalogMembershipStatus": "NotApplicable"},
+        {"path": "rzcommonu/RzCommon.sys", "length": 64880, "fileVersion": "1.0.0.76", "sha256": "64B72EF9CE409BB17D31096C119B68C4A6A02AB35B7535D763157A4E1A587E59", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"}
+      ]
+    },
+    {
+      "directory": "rzdevu_02e0_kbd",
+      "originalInf": "rzdevu_02e0_kbd.inf",
+      "provider": "Razer Inc",
+      "class": "Keyboard",
+      "classGuid": "{4D36E96B-E325-11CE-BFC1-08002BE10318}",
+      "driverVer": "01/28/2026,10.0.15063.0",
+      "binaryFileVersion": "1.0.0.78",
+      "catalog": "rzdev_02e0_kbd.cat",
+      "catalogSignatureStatus": "Valid",
+      "signerSubject": "CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "signerThumbprint": "32B4E7CE92A59C722B8BDF7AE3E66520CFB9DE21",
+      "services": ["RzDev_02e0"],
+      "hardwareMatches": ["HID\\VID_1532&PID_02E0&MI_01&COL01"],
+      "files": [
+        {"path": "rzdevu_02e0_kbd/rzdevu_02e0_kbd.inf", "length": 1980, "fileVersion": "NotApplicable", "sha256": "F3222D8A260DA3BFC87C19080C080D675E90D1F1EB7D1793A6148CBE3E90F5F3", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"},
+        {"path": "rzdevu_02e0_kbd/rzdev_02e0_kbd.cat", "length": 11774, "fileVersion": "NotApplicable", "sha256": "75F200B0643A3F79E29646C2DD98A6FDA419F5D2608F691AE8C6AB587DD6A108", "signatureStatus": "Valid", "catalogRole": "Catalog", "catalogMembershipStatus": "NotApplicable"},
+        {"path": "rzdevu_02e0_kbd/RzDev_02e0.sys", "length": 65872, "fileVersion": "1.0.0.78", "sha256": "BC1666048D81A8DBA6BBFFDBDC86C2119632FD68EF2BB6D5D417FE3B84744787", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"}
+      ]
+    },
+    {
+      "directory": "rzdevu_02e0_mou",
+      "originalInf": "rzdevu_02e0_mou.inf",
+      "provider": "Razer Inc",
+      "class": "Mouse",
+      "classGuid": "{4D36E96F-E325-11CE-BFC1-08002BE10318}",
+      "driverVer": "01/28/2026,10.0.15063.0",
+      "binaryFileVersion": "1.0.0.78",
+      "catalog": "rzdev_02e0_mou.cat",
+      "catalogSignatureStatus": "Valid",
+      "signerSubject": "CN=Microsoft Windows Hardware Compatibility Publisher, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+      "signerThumbprint": "32B4E7CE92A59C722B8BDF7AE3E66520CFB9DE21",
+      "services": ["RzDev_02e0"],
+      "hardwareMatches": ["HID\\VID_1532&PID_02E0&MI_02"],
+      "files": [
+        {"path": "rzdevu_02e0_mou/rzdevu_02e0_mou.inf", "length": 2032, "fileVersion": "NotApplicable", "sha256": "05AC3D6E2BC6B84B6F255CBEAD573156FC6F1C0CF7B44924D873572F944B649B", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"},
+        {"path": "rzdevu_02e0_mou/rzdev_02e0_mou.cat", "length": 11774, "fileVersion": "NotApplicable", "sha256": "8C3A7AD5C68B9ACAFB36B35DD8E20A18B4B188E9594FFC7626A406FC75E92FC1", "signatureStatus": "Valid", "catalogRole": "Catalog", "catalogMembershipStatus": "NotApplicable"},
+        {"path": "rzdevu_02e0_mou/RzDev_02e0.sys", "length": 65872, "fileVersion": "1.0.0.78", "sha256": "BC1666048D81A8DBA6BBFFDBDC86C2119632FD68EF2BB6D5D417FE3B84744787", "signatureStatus": "Valid", "catalogRole": "Member", "catalogMembershipStatus": "Pending"}
+      ]
+    }
+  ],
+  "featureEvidence": {
+    "candidatePaths": [
+      {
+        "feature": "Windows native display brightness",
+        "controlInterface": "RZCONTROL\\VID_1532&PID_02E0&MI_00",
+        "virtualInput": "RZVIRTUAL\\VID_1532&PID_02E0&MI_00&COL03",
+        "consumerUsages": ["0x006F", "0x0070"]
+      }
+    ],
+    "physicalValidation": "Brightness changed from 52 to 42, returned to 52, and the Windows flyout was visually confirmed on the source RZ09-0581.",
+    "lifecycleValidation": "Pending",
+    "cleanInstallation": "Pending",
+    "rollback": "Pending"
+  },
+  "redistribution": {
+    "status": "UserReportedPermissionNotReviewed",
+    "authorizationStoredOutsideRepository": true
+  },
+  "privacy": {
+    "containsDriverBytes": false,
+    "containsSerial": false,
+    "containsUsername": false,
+    "containsLocalPath": false,
+    "containsFullInstanceId": false,
+    "containsMachineLocalPublishedInf": false
+  },
+  "limitations": [
+    "The package is admitted only for RZ09-0581 with USB PID 02E0.",
+    "It does not cover RZ09-0528 with PID 02C6 or Razer accessories.",
+    "INF and SYS catalog membership remains pending SignTool verification.",
+    "Clean installation, repair, lifecycle recovery, and rollback remain unvalidated."
+  ]
+}
