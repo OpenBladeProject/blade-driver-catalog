@@ -34,30 +34,26 @@ function Get-PrivacyViolation {
         [Parameter(Mandatory)][string]$Text
     )
 
-    $withoutUrls = [regex]::Replace(
-        $Text,
-        '(?i)\bhttps?://[^\s<>"'')\]]+',
-        '<url>')
     $literalBackslash = [regex]::Escape([string][char]92)
     $twoBackslashes = "(?:$literalBackslash){2}"
     $fourBackslashes = "(?:$literalBackslash){4}"
     $stringBoundary = '(?:^|["''\s(=:])'
 
-    if ($withoutUrls -match '(?i)oem[0-9]+\.inf') {
+    if ($Text -match '(?i)oem[0-9]+\.inf') {
         return 'machine-local published INF'
     }
-    if ($withoutUrls -match '(?i)(?<![A-Z0-9])[A-Z]:[\\/]') {
+    if ($Text -match '(?i)(?<![A-Z0-9])[A-Z]:[\\/]') {
         return 'local drive path'
     }
-    if ($withoutUrls -match
+    if ($Text -match
         "(?m)$stringBoundary(?:$fourBackslashes|$twoBackslashes)[?.]") {
         return 'device-interface path'
     }
-    if ($withoutUrls -match
+    if ($Text -match
         "(?m)$stringBoundary(?:$fourBackslashes|$twoBackslashes)(?![?.$literalBackslash])") {
         return 'UNC path'
     }
-    if ($withoutUrls -match
+    if ($Text -match
         "(?i)(?:$literalBackslash){1,2}[0-9]+&[0-9A-F]{4,}&[0-9]+(?:&[0-9A-F]+)?") {
         return 'full device-instance suffix'
     }
@@ -66,7 +62,7 @@ function Get-PrivacyViolation {
         '(?i)(?:USB|HID|RZVIRTUAL|RZCONTROL|RAZER)' +
         $instanceSeparator + '[^\s\\"]+' +
         $instanceSeparator + '[^\s\\"]+'
-    if ($withoutUrls -match $fullInstancePattern) {
+    if ($Text -match $fullInstancePattern) {
         return 'full device-instance suffix'
     }
 
@@ -123,7 +119,8 @@ Assert-RequiredProperties $template.collection @(
     'exporterProvenance') `
     'The driver evidence template collection'
 Assert-RequiredProperties $template.collection.exporterProvenance @(
-    'repository','pullRequest','revision','reachability','path','sha256') `
+    'repository','pullRequest','revision','reachability','path','gitBlobSha1',
+    'gitBlobContentSha256') `
     'The driver evidence template exporter provenance'
 foreach ($deprecatedProperty in 'privateArchiveFileName','privateArchiveSha256') {
     Assert-True ($template.collection.PSObject.Properties.Name -notcontains
@@ -145,7 +142,8 @@ Assert-RequiredProperties $template.featureEvidence @(
     'candidatePaths','physicalValidation','lifecycleValidation','cleanInstallation',
     'rollback') 'The driver evidence template feature evidence'
 Assert-RequiredProperties $template.redistribution @(
-    'status','authorizationStoredOutsideRepository') `
+    'status','authorizationStoredOutsideRepository','reportedPermissionGrantor',
+    'permissionBasis','independentDocumentReview') `
     'The driver evidence template redistribution'
 Assert-RequiredProperties $template.privacy @(
     'containsDriverBytes','containsSerial','containsUsername','containsLocalPath',
@@ -237,7 +235,8 @@ foreach ($path in $manifestPaths) {
     Assert-True ($entry.collection.packageArchiveSha256 -match '^[0-9A-F]{64}$') `
         "$context has an invalid package archive SHA-256."
     Assert-RequiredProperties $entry.collection.exporterProvenance @(
-        'repository','pullRequest','revision','reachability','path','sha256') `
+        'repository','pullRequest','revision','reachability','path','gitBlobSha1',
+        'gitBlobContentSha256') `
         "$context exporter provenance"
     $exporter = $entry.collection.exporterProvenance
     Assert-True ($exporter.repository -match '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$') `
@@ -251,8 +250,10 @@ foreach ($path in $manifestPaths) {
     Assert-True ($exporter.path -match '^[^\\/]+(?:/[^\\/]+)+$' -and
         $exporter.path -notmatch '(?:^|/)\.\.?(?:/|$)') `
         "$context has an invalid exporter path."
-    Assert-True ($exporter.sha256 -match '^[0-9A-F]{64}$') `
-        "$context has an invalid exporter SHA-256."
+    Assert-True ($exporter.gitBlobSha1 -match '^[0-9a-f]{40}$') `
+        "$context has an invalid exporter Git blob SHA-1."
+    Assert-True ($exporter.gitBlobContentSha256 -match '^[0-9A-F]{64}$') `
+        "$context has an invalid exporter blob-content SHA-256."
 
     Assert-True (@($entry.deviceTopology).Count -gt 0) `
         "$context has no device topology."
@@ -272,12 +273,38 @@ foreach ($path in $manifestPaths) {
         'candidatePaths','physicalValidation','lifecycleValidation',
         'cleanInstallation','rollback') "$context feature evidence"
     Assert-RequiredProperties $entry.redistribution @(
-        'status','authorizationStoredOutsideRepository') "$context redistribution"
+        'status','authorizationStoredOutsideRepository','reportedPermissionGrantor',
+        'permissionBasis','independentDocumentReview') "$context redistribution"
+    Assert-True ($entry.redistribution.status -in @(
+            'NotPublished','WrittenPermissionReportedFromRazerUSLtd')) `
+        "$context has an unsupported permission status."
+    Assert-True (-not [string]::IsNullOrWhiteSpace(
+            $entry.redistribution.reportedPermissionGrantor)) `
+        "$context has no reported permission grantor."
+    Assert-True (-not [string]::IsNullOrWhiteSpace(
+            $entry.redistribution.permissionBasis)) `
+        "$context has no permission basis."
+    Assert-True ($entry.redistribution.independentDocumentReview -is [bool]) `
+        "$context has an invalid permission-review flag."
     if ($entry.redistribution.PSObject.Properties.Name -contains 'release') {
+        Assert-True ($entry.redistribution.status -eq
+            'WrittenPermissionReportedFromRazerUSLtd') `
+            "$context release has an inaccurate permission status."
+        Assert-True ($entry.redistribution.reportedPermissionGrantor -eq
+            'Razer US Ltd') `
+            "$context release has an inaccurate reported permission grantor."
+        Assert-True ($entry.redistribution.permissionBasis -eq
+            'ProjectOwnerStatement') `
+            "$context release has an inaccurate permission basis."
+        Assert-True (-not $entry.redistribution.independentDocumentReview) `
+            "$context must not claim independent permission-document review."
         Assert-RequiredProperties $entry.redistribution.release @(
             'tag','asset','sha256','publicationStatus',
             'repositoryVisibilityAtPublication','authorizedAudience','record') `
             "$context release"
+        Assert-True ($entry.redistribution.release.publicationStatus -in @(
+                'Prerelease','Release')) `
+            "$context release has an invalid publication status."
     }
 
     foreach ($property in 'containsDriverBytes','containsSerial','containsUsername',
@@ -334,7 +361,7 @@ foreach ($path in $manifestPaths) {
 
 $releaseRecordPaths = @(
     Get-ChildItem -LiteralPath (Join-Path $repository 'releases') `
-        -Recurse -Filter 'release-record.json' -File)
+        -Recurse -Filter '*.json' -File)
 Assert-True ($releaseRecordPaths.Count -ge 1) `
     'The catalog must contain at least one checked release record.'
 
@@ -349,34 +376,37 @@ foreach ($recordPath in $releaseRecordPaths) {
         "$context has an unsupported schema version."
     Assert-RequiredProperties $record.release @(
         'repository','tag','url','prerelease','repositoryVisibility',
-        'authorizedAudience','asset') "$context release"
+        'authorizedAudience','reportedPermissionGrantor','permissionBasis',
+        'independentDocumentReview','asset') "$context release"
     Assert-RequiredProperties $record.release.asset @('name','size','sha256') `
         "$context asset"
     Assert-RequiredProperties $record.catalogManifest @(
         'manifestType','path','sha256') "$context catalog manifest"
     Assert-RequiredProperties $record.exporter @(
-        'repository','pullRequest','revision','reachability','path','sha256') `
+        'repository','pullRequest','revision','reachability','path','gitBlobSha1',
+        'gitBlobContentSha256') `
         "$context exporter"
 
-    $tagDirectory = Split-Path -Leaf (Split-Path -Parent $recordPath.FullName)
-    Assert-True ([string]::Equals(
-            $record.release.tag,
-            $tagDirectory,
-            [StringComparison]::Ordinal)) `
-        "$context tag does not match its directory."
     Assert-True ($record.release.repository -eq 'OSSBlade/blade-driver-catalog') `
         "$context names the wrong release repository."
     $expectedReleaseUrl =
         "https://github.com/$($record.release.repository)/releases/tag/$($record.release.tag)"
     Assert-True ($record.release.url -eq $expectedReleaseUrl) `
         "$context has an inconsistent release URL."
-    Assert-True ($record.release.prerelease -is [bool] -and
-        $record.release.prerelease) `
-        "$context must describe a prerelease."
+    Assert-True ($record.release.prerelease -is [bool]) `
+        "$context has an invalid prerelease flag."
     Assert-True ($record.release.repositoryVisibility -in @('Private','Public')) `
         "$context has an invalid repository visibility."
     Assert-True (-not [string]::IsNullOrWhiteSpace($record.release.authorizedAudience)) `
         "$context has no authorized audience."
+    Assert-True (-not [string]::IsNullOrWhiteSpace(
+            $record.release.reportedPermissionGrantor)) `
+        "$context has no reported permission grantor."
+    Assert-True (-not [string]::IsNullOrWhiteSpace(
+            $record.release.permissionBasis)) `
+        "$context has no permission basis."
+    Assert-True ($record.release.independentDocumentReview -is [bool]) `
+        "$context has an invalid permission-review flag."
     Assert-True ($record.release.asset.name -match '^[^\\/]+\.zip$') `
         "$context has an invalid asset name."
     Assert-True ($record.release.asset.size -gt 0) `
@@ -415,17 +445,36 @@ foreach ($recordPath in $releaseRecordPaths) {
         "$context asset SHA-256 does not match the catalog manifest."
     Assert-True ($boundManifest.redistribution.release.tag -eq $record.release.tag) `
         "$context tag does not match the catalog manifest."
+    $expectedPublicationStatus = if ($record.release.prerelease) {
+        'Prerelease'
+    }
+    else {
+        'Release'
+    }
+    Assert-True ($boundManifest.redistribution.release.publicationStatus -eq
+        $expectedPublicationStatus) `
+        "$context prerelease flag does not match the catalog manifest."
     Assert-True ($boundManifest.redistribution.release.repositoryVisibilityAtPublication -eq
         $record.release.repositoryVisibility) `
         "$context repository visibility does not match the catalog manifest."
     Assert-True ($boundManifest.redistribution.release.authorizedAudience -eq
         $record.release.authorizedAudience) `
         "$context authorized audience does not match the catalog manifest."
+    Assert-True ($boundManifest.redistribution.reportedPermissionGrantor -eq
+        $record.release.reportedPermissionGrantor) `
+        "$context permission grantor does not match the catalog manifest."
+    Assert-True ($boundManifest.redistribution.permissionBasis -eq
+        $record.release.permissionBasis) `
+        "$context permission basis does not match the catalog manifest."
+    Assert-True ($boundManifest.redistribution.independentDocumentReview -eq
+        $record.release.independentDocumentReview) `
+        "$context permission review status does not match the catalog manifest."
     $recordRelativePath = (
         $recordPath.FullName.Substring($repository.Length + 1)).Replace('\', '/')
     Assert-True ($boundManifest.redistribution.release.record -eq $recordRelativePath) `
         "$context path is not recorded by the catalog manifest."
-    foreach ($property in 'repository','pullRequest','revision','reachability','path','sha256') {
+    foreach ($property in 'repository','pullRequest','revision','reachability','path',
+            'gitBlobSha1','gitBlobContentSha256') {
         Assert-True ($boundManifest.collection.exporterProvenance.$property -eq
             $record.exporter.$property) `
             "$context exporter '$property' does not match the catalog manifest."
@@ -451,7 +500,8 @@ foreach ($block in $powershellBlocks) {
 }
 
 $candidatePaths = @(
-    & git -C $repository ls-files --cached --others --exclude-standard |
+    & git -c core.quotepath=false -C $repository `
+        ls-files --cached --others --exclude-standard |
         Sort-Object -Unique)
 if ($LASTEXITCODE -ne 0) {
     throw 'Git could not enumerate tracked and unignored files.'
@@ -490,6 +540,9 @@ $unsafeInterface = 'value=' + $slash + $slash + '?' + $slash + 'hid#device'
 $unsafeInstance = 'value=USB' + $slash + '7&1234ABCD&0&1'
 $unsafeSerialInstance =
     'value=USB' + $slash + 'VID_1532&PID_02E0' + $slash + 'ABC123456'
+$unsafeUrlInstance =
+    'https://example.test/device/USB' + $slash +
+    'VID_1532&PID_02E0' + $slash + 'ABC123456'
 $unsafeDrive = 'value=C:' + $slash + 'Users' + $slash + 'example'
 Assert-True ((Get-PrivacyViolation -Text $unsafeUnc) -eq 'UNC path') `
     'The privacy scanner did not detect a UNC path.'
@@ -500,6 +553,9 @@ Assert-True ((Get-PrivacyViolation -Text $unsafeInstance) -eq 'full device-insta
 Assert-True ((Get-PrivacyViolation -Text $unsafeSerialInstance) -eq
     'full device-instance suffix') `
     'The privacy scanner did not detect a serial-style full device-instance suffix.'
+Assert-True ((Get-PrivacyViolation -Text $unsafeUrlInstance) -eq
+    'full device-instance suffix') `
+    'The privacy scanner did not inspect a URL-contained full device-instance ID.'
 Assert-True ((Get-PrivacyViolation -Text $unsafeDrive) -eq 'local drive path') `
     'The privacy scanner did not detect a local drive path.'
 Assert-True ($null -eq (Get-PrivacyViolation -Text 'https://example.test/path')) `

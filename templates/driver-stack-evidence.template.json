@@ -30,7 +30,8 @@
       "revision": "TODO",
       "reachability": "TODO",
       "path": "TODO",
-      "sha256": "TODO"
+      "gitBlobSha1": "TODO",
+      "gitBlobContentSha256": "TODO"
     }
   },
   "deviceTopology": [
@@ -81,7 +82,10 @@
   },
   "redistribution": {
     "status": "NotPublished",
-    "authorizationStoredOutsideRepository": false
+    "authorizationStoredOutsideRepository": false,
+    "reportedPermissionGrantor": "TODO",
+    "permissionBasis": "TODO",
+    "independentDocumentReview": false
   },
   "privacy": {
     "containsDriverBytes": false,

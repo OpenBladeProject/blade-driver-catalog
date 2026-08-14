@@ -19,11 +19,13 @@ archive.
 A separately built, package-only driver archive can be attached to a release
 after its model-specific exporter and manifest are reviewed. Never publish the
 private collection archive because it also contains full device identities and
-local inventory. Each release has a checked record under `releases/` that binds
-the catalog manifest path and SHA-256 to the asset name and SHA-256. Written
-redistribution authorization must cover the exact files and delivery method.
-The repository license, once selected, will apply only to original repository
-content and will not replace Razer's rights in its files.
+local inventory. The [record for the current release](releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)
+binds the catalog manifest path and SHA-256 to the asset name and SHA-256. The
+project owner reports written permission from Razer US Ltd for the recorded
+files, audience, and delivery method. This catalog does not claim an independent
+review of the permission document. The repository license, once selected, will
+apply only to original repository content and will not replace Razer's rights in
+its files.
 
 OpenBlade repositories have separate responsibilities:
 

@@ -25,10 +25,11 @@
     "exporterProvenance": {
       "repository": "OSSBlade/openblade-core",
       "pullRequest": "https://github.com/OSSBlade/openblade-core/pull/163",
-      "revision": "94d1e4725af0c1ceafbf125064dd6b6ba0c9ec8e",
+      "revision": "277ebf89c88acd68f8c451773abb5860661c4479",
       "reachability": "UnmergedPullRequest",
       "path": "build/Export-RazerBrightnessDriverPackage.ps1",
-      "sha256": "321AA84258472E659365936DAA06DE59690F607903AEBFD59B8BAB97AF87F64E"
+      "gitBlobSha1": "fec399f26d591773292507d97402fa7f14889bd4",
+      "gitBlobContentSha256": "84D4BA3D9018D4E52B6023367CBA8770DA80ECBF21E1831331824A84E82689F3"
     }
   },
   "deviceTopology": [
@@ -195,8 +196,11 @@
     "rollback": "Pending"
   },
   "redistribution": {
-    "status": "PermissionConfirmedByProjectOwner",
+    "status": "WrittenPermissionReportedFromRazerUSLtd",
     "authorizationStoredOutsideRepository": true,
+    "reportedPermissionGrantor": "Razer US Ltd",
+    "permissionBasis": "ProjectOwnerStatement",
+    "independentDocumentReview": false,
     "authorizedDeliveryMethod": "GitHub release asset",
     "release": {
       "tag": "rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76",
@@ -205,7 +209,7 @@
       "publicationStatus": "Prerelease",
       "repositoryVisibilityAtPublication": "Private",
       "authorizedAudience": "Repository collaborators",
-      "record": "releases/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76/release-record.json"
+      "record": "releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json"
     }
   },
   "privacy": {

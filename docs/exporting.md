@@ -312,7 +312,9 @@ facts. Keep:
 - the collection time in ISO-8601 UTC form, or `Unavailable` when it was not
   retained;
 - the reviewed package-only archive filename and SHA-256, never the private
-  evidence archive hash; and
+  evidence archive hash;
+- the reported permission grantor, the basis for that report, and whether the
+  permission document received an independent review; and
 - explicit limitations and privacy checks.
 
 Remove machine-local `oem###.inf` aliases and every local or unique value. The
