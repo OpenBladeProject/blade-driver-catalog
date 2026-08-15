@@ -23,9 +23,8 @@ local inventory. The [record for the current release](releases/rz09-0581-02e0-1.
 binds the catalog manifest path and SHA-256 to the asset name and SHA-256. The
 project owner reports written permission from Razer US Ltd for the recorded
 files, audience, and delivery method. This catalog does not claim an independent
-review of the permission document. The repository license, once selected, will
-apply only to original repository content and will not replace Razer's rights in
-its files.
+review of the permission document. Apache-2.0 applies only to original
+repository content and does not replace Razer's rights in its files.
 
 OpenBlade repositories have separate responsibilities:
 
@@ -42,6 +41,9 @@ OpenBlade repositories have separate responsibilities:
 | Device | Hardware identity | Driver versions | Status |
 |---|---|---|---|
 | Razer Blade 16 RZ09-0581 | `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` | [Private-repository package prerelease](https://github.com/OSSBlade/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76); clean installation remains pending |
+
+Microsoft Windows SDK SignTool verified all five catalog signatures and all ten
+INF and SYS catalog memberships under kernel-mode policy.
 
 The `02E0` package does not cover RZ09-0528 (`02C6`) or Razer accessories.
 Those devices need their own installed-package inventory and validation.
@@ -66,6 +68,17 @@ Start with [docs/exporting.md](docs/exporting.md). It explains how to:
 Copy [the evidence template](templates/driver-stack-evidence.template.json) for
 the new device. A reviewer must confirm the package topology before any runtime
 or installation claim moves to OpenBlade core.
+
+## License
+
+Repository-authored documentation, metadata, templates, tests, and tooling are
+licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for the
+scope statement.
+
+Razer ZIP, INF, CAT, SYS, and other proprietary release assets are excluded from
+Apache-2.0. They remain governed by Razer's rights and the separately recorded
+redistribution permission described in
+[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Validation
 

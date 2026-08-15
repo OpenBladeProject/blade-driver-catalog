@@ -20,7 +20,7 @@
   "catalogManifest": {
     "manifestType": "OpenBlade.RazerDriverCatalogEntry",
     "path": "devices/rz09-0581/1532-02e0/1.0.0.78-1.0.0.76/manifest.json",
-    "sha256": "4EB83C60541A62654916E486F5C9A0E1183C1E7489234646F5650A7485A91A2B"
+    "sha256": "852673D778BB0F70ED8A083919133772F422044FC38B39749C7388B1A45818AD"
   },
   "exporter": {
     "repository": "OSSBlade/openblade-core",

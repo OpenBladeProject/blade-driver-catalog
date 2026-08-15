@@ -32,6 +32,18 @@
       "path": "TODO",
       "gitBlobSha1": "TODO",
       "gitBlobContentSha256": "TODO"
+    },
+    "catalogVerification": {
+      "status": "Pending",
+      "tool": "Microsoft Windows SDK SignTool",
+      "toolProductVersion": "TODO",
+      "acquisitionPackage": "Microsoft.Windows.SDK.BuildTools",
+      "acquisitionVersion": "TODO",
+      "acquisitionSha256": "TODO",
+      "verificationPolicy": "KernelMode",
+      "catalogsVerified": 0,
+      "membersVerified": 0,
+      "verifiedAtUtc": "Unavailable"
     }
   },
   "deviceTopology": [

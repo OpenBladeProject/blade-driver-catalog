@@ -26,7 +26,9 @@ device-instance IDs, interface paths, container IDs, and machine-local
 - Official Razer software and drivers already installed
 - Windows PowerShell 5.1 opened as administrator
 - A new private output directory outside Git
-- SignTool from the Windows SDK or WDK for catalog verification
+- SignTool from the Windows SDK, WDK, or Microsoft's
+  [`Microsoft.Windows.SDK.BuildTools`](https://www.nuget.org/packages/Microsoft.Windows.SDK.BuildTools)
+  package for catalog verification
 
 PnPUtil is included with Windows. Microsoft documents both the
 [structured driver inventory](https://learn.microsoft.com/en-us/windows-hardware/drivers/driversecurity/create-a-driver-inventory)
@@ -247,9 +249,12 @@ Use SignTool to verify each catalog and every INF, SYS, DLL, or other payload
 against that catalog. Repeat the membership command for every package file:
 
 ```powershell
-$signTool = Join-Path `
-    $env:ProgramFiles `
-    'Windows Kits\10\bin\<sdk-version>\x64\signtool.exe'
+$sdkBin = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\bin'
+$signTool = Get-ChildItem -LiteralPath $sdkBin -Recurse -Filter signtool.exe |
+    Where-Object { (Split-Path -Leaf (Split-Path -Parent $_.FullName)) -eq 'x64' } |
+    Sort-Object FullName -Descending |
+    Select-Object -First 1 -ExpandProperty FullName
+if (-not $signTool) { throw 'Install or extract Windows SDK SignTool first.' }
 $catalog = Join-Path $packageRoot '<package>\package.cat'
 $inf = Join-Path $packageRoot '<package>\package.inf'
 $driver = Join-Path $packageRoot '<package>\driver.sys'
@@ -263,6 +268,23 @@ if ($LASTEXITCODE -ne 0) { throw 'INF catalog membership verification failed.' }
 & $signTool verify /kp /v /c $catalog $driver
 if ($LASTEXITCODE -ne 0) { throw 'Driver catalog membership verification failed.' }
 ```
+
+If SignTool is not installed, download the Microsoft-owned
+`Microsoft.Windows.SDK.BuildTools` NuGet package to a private tools directory.
+Verify the package before extracting it:
+
+```powershell
+dotnet nuget verify --all .\Microsoft.Windows.SDK.BuildTools.<version>.nupkg
+tar -xf .\Microsoft.Windows.SDK.BuildTools.<version>.nupkg -C .\sdk-build-tools
+$signTool = Get-ChildItem -LiteralPath .\sdk-build-tools `
+    -Recurse -Filter signtool.exe |
+    Where-Object { (Split-Path -Leaf (Split-Path -Parent $_.FullName)) -eq 'x64' } |
+    Select-Object -First 1 -ExpandProperty FullName
+```
+
+Record the SDK package name, version, SHA-256, SignTool product version,
+verification policy, UTC time, and successful catalog and member counts in the
+sanitized catalog manifest. Do not record the local tool or package paths.
 
 ## 6. Create the private evidence archive
 

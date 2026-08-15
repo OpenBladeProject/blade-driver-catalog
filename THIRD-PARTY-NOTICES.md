@@ -2,8 +2,8 @@
 
 Razer driver packages, including their INF, catalog, binary, and related files,
 are proprietary works supplied by Razer. Razer retains all rights in those
-files. A license applied to this repository's original documentation, tooling,
-and metadata does not cover the Razer packages.
+files. Apache-2.0 applies only to original repository content. It grants no
+rights to Razer package bytes or proprietary GitHub release assets.
 
 Do not publish a package unless written authorization covers the exact files,
 versions, audience, and delivery method. Keep that authorization outside Git if

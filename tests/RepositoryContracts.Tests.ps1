@@ -70,6 +70,9 @@ function Get-PrivacyViolation {
 }
 
 $readme = [IO.File]::ReadAllText((Join-Path $repository 'README.md'))
+$licensePath = Join-Path $repository 'LICENSE'
+$notice = [IO.File]::ReadAllText((Join-Path $repository 'NOTICE'))
+$thirdParty = [IO.File]::ReadAllText((Join-Path $repository 'THIRD-PARTY-NOTICES.md'))
 $guide = [IO.File]::ReadAllText((Join-Path $repository 'docs\exporting.md'))
 $ignore = [IO.File]::ReadAllText((Join-Path $repository '.gitignore'))
 $template = Get-Content `
@@ -81,6 +84,26 @@ $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
 
 Assert-True ($readme.Contains('[docs/exporting.md](docs/exporting.md)')) `
     'README.md must link to the export guide.'
+Assert-True ((Get-Item -LiteralPath $licensePath).Length -eq 11358) `
+    'LICENSE must be the canonical LF-encoded Apache-2.0 text.'
+Assert-True ((Get-FileHash -LiteralPath $licensePath -Algorithm SHA256).Hash -eq
+    'CFC7749B96F63BD31C3C42B5C471BF756814053E847C10F3EB003417BC523D30') `
+    'LICENSE does not match the canonical Apache-2.0 text.'
+foreach ($link in '[Apache License 2.0](LICENSE)','[NOTICE](NOTICE)',
+        '[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)') {
+    Assert-True ($readme.Contains($link)) `
+        "README.md must contain the license boundary link '$link'."
+}
+Assert-True ($readme.Contains('proprietary release assets are excluded from')) `
+    'README.md must exclude proprietary release assets from Apache-2.0.'
+Assert-True ($notice.Contains('Copyright 2026 OSSBlade contributors') -and
+    $notice.Contains('Razer driver packages') -and
+    $notice.Contains('not covered by that license')) `
+    'NOTICE must retain the OSSBlade copyright and Razer asset exclusion.'
+Assert-True ($thirdParty.Contains('Apache-2.0 applies only to original') -and
+    $thirdParty.Contains('grants no') -and
+    $thirdParty.Contains('rights to Razer package bytes')) `
+    'THIRD-PARTY-NOTICES.md must retain the Apache-2.0 boundary.'
 Assert-True ($guide.Contains('/enum-drivers /devices /files /format xml')) `
     'The guide must use structured PnPUtil inventory.'
 Assert-True ($guide.Contains('/export-driver $publishedInf $destination')) `
@@ -89,6 +112,10 @@ Assert-True ($guide.Contains('Do not use `/export-driver *`')) `
     'The guide must prohibit broad Driver Store export.'
 Assert-True ($guide.Contains('does not prove')) `
     'The guide must distinguish candidate evidence from admission.'
+Assert-True ($guide.Contains('Microsoft.Windows.SDK.BuildTools') -and
+    $guide.Contains('dotnet nuget verify --all') -and
+    $guide.Contains('${env:ProgramFiles(x86)}')) `
+    'The guide must document verified SDK SignTool acquisition and discovery.'
 Assert-True (-not $guide.Contains([char]0x2013)) `
     'The guide contains an en dash.'
 Assert-True (-not $guide.Contains([char]0x2014)) `
@@ -116,12 +143,16 @@ Assert-RequiredProperties $template.scope @(
 Assert-RequiredProperties $template.collection @(
     'collectedAtUtc','vendorSoftwareVersion','privateInventoryReviewed',
     'packageArchiveFileName','packageArchiveSize','packageArchiveSha256',
-    'exporterProvenance') `
+    'exporterProvenance','catalogVerification') `
     'The driver evidence template collection'
 Assert-RequiredProperties $template.collection.exporterProvenance @(
     'repository','pullRequest','revision','reachability','path','gitBlobSha1',
     'gitBlobContentSha256') `
     'The driver evidence template exporter provenance'
+Assert-RequiredProperties $template.collection.catalogVerification @(
+    'status','tool','toolProductVersion','acquisitionPackage','acquisitionVersion',
+    'acquisitionSha256','verificationPolicy','catalogsVerified','membersVerified',
+    'verifiedAtUtc') 'The driver evidence template catalog verification'
 foreach ($deprecatedProperty in 'privateArchiveFileName','privateArchiveSha256') {
     Assert-True ($template.collection.PSObject.Properties.Name -notcontains
         $deprecatedProperty) `
@@ -201,7 +232,7 @@ foreach ($path in $manifestPaths) {
     Assert-RequiredProperties $entry.collection @(
         'collectedAtUtc','vendorSoftwareVersion','privateInventoryReviewed',
         'packageArchiveFileName','packageArchiveSize','packageArchiveSha256',
-        'exporterProvenance') "$context collection"
+        'exporterProvenance','catalogVerification') "$context collection"
     foreach ($deprecatedProperty in 'privateArchiveFileName','privateArchiveSha256') {
         Assert-True ($entry.collection.PSObject.Properties.Name -notcontains
             $deprecatedProperty) `
@@ -254,6 +285,32 @@ foreach ($path in $manifestPaths) {
         "$context has an invalid exporter Git blob SHA-1."
     Assert-True ($exporter.gitBlobContentSha256 -match '^[0-9A-F]{64}$') `
         "$context has an invalid exporter blob-content SHA-256."
+    $catalogVerification = $entry.collection.catalogVerification
+    Assert-RequiredProperties $catalogVerification @(
+        'status','tool','toolProductVersion','acquisitionPackage','acquisitionVersion',
+        'acquisitionSha256','verificationPolicy','catalogsVerified','membersVerified',
+        'verifiedAtUtc') "$context catalog verification"
+    Assert-True ($catalogVerification.status -in @('Pending','Verified')) `
+        "$context has an invalid catalog verification status."
+    Assert-True ($catalogVerification.tool -eq 'Microsoft Windows SDK SignTool') `
+        "$context has an unexpected catalog verification tool."
+    Assert-True ($catalogVerification.verificationPolicy -eq 'KernelMode') `
+        "$context has an unexpected catalog verification policy."
+    if ($catalogVerification.status -eq 'Verified') {
+        Assert-True ($catalogVerification.toolProductVersion -match '^\d+(?:\.\d+){3}$') `
+            "$context has an invalid SignTool product version."
+        Assert-True ($catalogVerification.acquisitionPackage -eq
+            'Microsoft.Windows.SDK.BuildTools') `
+            "$context has an unexpected SignTool acquisition package."
+        Assert-True ($catalogVerification.acquisitionVersion -match
+            '^\d+(?:\.\d+){3}$') `
+            "$context has an invalid SignTool acquisition version."
+        Assert-True ($catalogVerification.acquisitionSha256 -match '^[0-9A-F]{64}$') `
+            "$context has an invalid SignTool acquisition SHA-256."
+        Assert-True ($catalogVerification.verifiedAtUtc -match
+            '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$') `
+            "$context has an invalid catalog verification timestamp."
+    }
 
     Assert-True (@($entry.deviceTopology).Count -gt 0) `
         "$context has no device topology."
@@ -315,6 +372,9 @@ foreach ($path in $manifestPaths) {
             "Manifest '$($path.FullName)' has unsafe privacy flag '$property'."
     }
 
+    $catalogCount = 0
+    $memberCount = 0
+    $verifiedMemberCount = 0
     foreach ($package in $entry.packages) {
         Assert-RequiredProperties $package @(
             'directory','originalInf','provider','class','classGuid','driverVer',
@@ -348,14 +408,26 @@ foreach ($path in $manifestPaths) {
             Assert-True ($file.catalogRole -in @('Catalog','Member')) `
                 "Package file '$($file.path)' has an invalid catalog role."
             if ($file.catalogRole -eq 'Catalog') {
+                $catalogCount++
                 Assert-True ($file.catalogMembershipStatus -eq 'NotApplicable') `
                     "Catalog '$($file.path)' must not claim membership in itself."
             }
             else {
+                $memberCount++
+                if ($file.catalogMembershipStatus -eq 'Verified') {
+                    $verifiedMemberCount++
+                }
                 Assert-True ($file.catalogMembershipStatus -in @('Pending','Verified')) `
                     "Package member '$($file.path)' has invalid catalog status."
             }
         }
+    }
+    if ($catalogVerification.status -eq 'Verified') {
+        Assert-True ($catalogVerification.catalogsVerified -eq $catalogCount) `
+            "$context catalog verification count does not match the manifest."
+        Assert-True ($catalogVerification.membersVerified -eq $memberCount -and
+            $verifiedMemberCount -eq $memberCount) `
+            "$context member verification count does not match the manifest."
     }
 }
 
@@ -521,7 +593,7 @@ foreach ($path in $candidatePaths) {
     $extension = [IO.Path]::GetExtension($leaf)
     $allowed = @('.md','.json','.ps1','.yml','.yaml')
     Assert-True (
-        ($leaf -in @('.gitattributes','.gitignore','LICENSE')) -or
+        ($leaf -in @('.gitattributes','.gitignore','LICENSE','NOTICE')) -or
         ($extension -in $allowed)) `
         "Unexpected tracked or unignored file type: $path"
 
