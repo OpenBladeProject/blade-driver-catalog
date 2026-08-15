@@ -1,0 +1,114 @@
+{
+  "manifestType": "OpenBlade.RazerDriverCatalogEntry",
+  "schemaVersion": 1,
+  "scope": {
+    "modelNumber": "RZ09-XXXX",
+    "productName": "TODO",
+    "biosVersion": "TODO",
+    "windowsBuild": "TODO",
+    "architecture": "amd64",
+    "usbIdentities": [
+      {
+        "vid": "1532",
+        "pid": "XXXX",
+        "interfaces": [
+          "MI_XX"
+        ]
+      }
+    ]
+  },
+  "collection": {
+    "collectedAtUtc": "YYYY-MM-DDTHH:MM:SSZ",
+    "vendorSoftwareVersion": "TODO",
+    "privateInventoryReviewed": false,
+    "packageArchiveFileName": "TODO",
+    "packageArchiveSize": 0,
+    "packageArchiveSha256": "TODO",
+    "exporterProvenance": {
+      "repository": "TODO",
+      "pullRequest": "TODO",
+      "revision": "TODO",
+      "reachability": "TODO",
+      "path": "TODO",
+      "gitBlobSha1": "TODO",
+      "gitBlobContentSha256": "TODO"
+    },
+    "catalogVerification": {
+      "status": "Pending",
+      "tool": "Microsoft Windows SDK SignTool",
+      "toolProductVersion": "TODO",
+      "acquisitionPackage": "Microsoft.Windows.SDK.BuildTools",
+      "acquisitionVersion": "TODO",
+      "acquisitionSha256": "TODO",
+      "verificationPolicy": "KernelMode",
+      "catalogsVerified": 0,
+      "membersVerified": 0,
+      "verifiedAtUtc": "Unavailable"
+    }
+  },
+  "deviceTopology": [
+    {
+      "instancePrefix": "TODO: omit the unique instance suffix",
+      "class": "TODO",
+      "service": "TODO",
+      "filters": [],
+      "parentPrefix": "TODO: omit the unique instance suffix",
+      "originalInf": "TODO",
+      "role": "Unknown"
+    }
+  ],
+  "packages": [
+    {
+      "directory": "TODO",
+      "originalInf": "TODO",
+      "provider": "TODO",
+      "class": "TODO",
+      "classGuid": "TODO",
+      "driverVer": "TODO",
+      "binaryFileVersion": "TODO",
+      "catalog": "TODO",
+      "catalogSignatureStatus": "TODO",
+      "signerSubject": "TODO",
+      "signerThumbprint": "TODO",
+      "services": [],
+      "hardwareMatches": [],
+      "files": [
+        {
+          "path": "TODO: relative path only",
+          "length": 0,
+          "fileVersion": "TODO",
+          "sha256": "TODO",
+          "signatureStatus": "TODO",
+          "catalogRole": "Member",
+          "catalogMembershipStatus": "Pending"
+        }
+      ]
+    }
+  ],
+  "featureEvidence": {
+    "candidatePaths": [],
+    "physicalValidation": "NotInvestigated",
+    "lifecycleValidation": "NotInvestigated",
+    "cleanInstallation": "NotInvestigated",
+    "rollback": "NotInvestigated"
+  },
+  "redistribution": {
+    "status": "NotPublished",
+    "authorizationStoredOutsideRepository": false,
+    "reportedPermissionGrantor": "TODO",
+    "permissionBasis": "TODO",
+    "independentDocumentReview": false
+  },
+  "privacy": {
+    "containsDriverBytes": false,
+    "containsSerial": false,
+    "containsUsername": false,
+    "containsLocalPath": false,
+    "containsFullInstanceId": false,
+    "containsMachineLocalPublishedInf": false
+  },
+  "limitations": [
+    "This export proves only what was installed on the inspected machine.",
+    "It does not prove ABI compatibility, safe installation order, or production admission."
+  ]
+}
