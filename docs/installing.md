@@ -3,6 +3,19 @@
 This guide is for the Blade 16 RZ09-0581 (`1532:02E0`) package listed in the
 [README](../README.md). It enables OpenBlade to use the Windows brightness
 flyout. The OpenBlade installer does not install or remove Razer drivers.
+When the driver is unavailable, brightness keys use WMI and the OpenBlade
+flyout.
+
+## Package details
+
+| Hardware identity | Driver versions |
+| --- | --- |
+| `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` |
+
+Microsoft Windows SDK SignTool verified all five catalog signatures and all ten
+INF and SYS catalog memberships under kernel-mode policy. Clean installation
+of the standalone package remains pending. The package does not cover
+RZ09-0528 (`02C6`) or Razer accessories.
 
 ## Install through Synapse
 
