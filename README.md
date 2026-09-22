@@ -1,40 +1,11 @@
 # Blade driver catalog
 
-This repository catalogs original signed Razer driver packages by exact Blade
-model and hardware identity. It provides read-only export instructions,
-commit-safe evidence templates, hashes, signatures, and device-to-package
-relationships.
+This repository records original signed Razer driver packages for exact Blade
+models and hardware identities. It contains package metadata, hashes, signature
+results, evidence templates, and read-only export instructions.
 
-It is not an official Razer repository. OpenBlade does not author, modify, or
-re-sign the cataloged drivers.
-
-## Repository boundary
-
-Git contains metadata and tooling only. INF, CAT, SYS, PNF, ZIP, and other
-proprietary package files are ignored and must not be committed.
-
-See [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) before publishing an
-archive.
-
-A separately built, package-only driver archive can be attached to a release
-after its model-specific exporter and manifest are reviewed. Never publish the
-private collection archive because it also contains full device identities and
-local inventory. The [record for the current release](releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)
-binds the catalog manifest path and SHA-256 to the asset name and SHA-256. The
-project owner reports written permission from Razer US Ltd for the recorded
-files, audience, and delivery method. This catalog does not claim an independent
-review of the permission document. Apache-2.0 applies only to original
-repository content and does not replace Razer's rights in its files.
-
-OpenBlade repositories have separate responsibilities:
-
-- [`openblade-core`](https://github.com/OSSBlade/openblade-core) owns runtime
-  admission, exact-device checks, fallback behavior, and validated installation
-  policy.
-- [`openblade-captures`](https://github.com/OSSBlade/openblade-captures) owns
-  protocol captures and hardware behavior evidence.
-- This repository owns driver package inventory, export instructions, sanitized
-  manifests, and any permission-governed release assets.
+OpenBlade does not author, modify, or re-sign these drivers. This is an
+independent project and is not an official Razer repository.
 
 ## Current catalog
 
@@ -45,29 +16,24 @@ OpenBlade repositories have separate responsibilities:
 Microsoft Windows SDK SignTool verified all five catalog signatures and all ten
 INF and SYS catalog memberships under kernel-mode policy.
 
-The `02E0` package does not cover RZ09-0528 (`02C6`) or Razer accessories.
-Those devices need their own installed-package inventory and validation.
-The current repository and release are private, so public links to them return
-404 unless the reader has access. Making the repository public would also make
-the existing driver asset public and needs a separate audience decision.
-The release record identifies the exporter by pull request, commit, path, and
-script hash. Its current reachability is `UnmergedPullRequest`; update the
-record to a main-reachable commit if the core pull request merges.
+The `02E0` package covers only the listed RZ09-0581 hardware. It does not cover
+RZ09-0528 (`02C6`) or Razer accessories. Each device needs its own package
+inventory and validation.
 
-## Contributing an installed package
+## Use the catalog
 
-Start with [docs/exporting.md](docs/exporting.md). It explains how to:
+- [docs/exporting.md](docs/exporting.md) explains the read-only
+  collection workflow and how to prepare a commit-safe catalog entry.
+- [Release assets and repository boundaries](docs/release-assets.md) explains
+  what belongs in Git, how release archives are controlled, and how this
+  catalog relates to other OpenBlade repositories.
+- [The evidence template](templates/driver-stack-evidence.template.json) lists
+  the facts required for a new device entry.
 
-1. record a private device and Driver Store inventory;
-2. select only packages proved by that device graph;
-3. export complete packages with Windows PnPUtil;
-4. verify hashes, signatures, and catalog membership;
-5. create a private archive; and
-6. submit a sanitized manifest without proprietary bytes or local identifiers.
-
-Copy [the evidence template](templates/driver-stack-evidence.template.json) for
-the new device. A reviewer must confirm the package topology before any runtime
-or installation claim moves to OpenBlade core.
+A catalog entry records evidence from one machine. It does not prove that a
+package works on another model, is safe to install on a clean machine, or
+provides a particular runtime feature. OpenBlade core reviews those claims
+separately before enabling a driver path.
 
 ## License
 
@@ -80,9 +46,9 @@ Apache-2.0. They remain governed by Razer's rights and the separately recorded
 redistribution permission described in
 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
-## Validation
+## Validate changes
 
-Run the offline repository checks with Windows PowerShell 5.1:
+Run the offline checks with Windows PowerShell 5.1:
 
 ```powershell
 & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
