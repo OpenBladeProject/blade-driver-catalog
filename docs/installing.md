@@ -31,7 +31,6 @@ status as described under [Check the result](#5-check-the-result).
 
 Open the [driver prerelease](https://github.com/OSSBlade/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76)
 and download `Razer-02E0-Driver-Stack-1.0.0.78-1.0.0.76.zip` from its assets.
-The repository is private; you need collaborator access to download it.
 The source-code ZIP is not the driver package.
 
 Use the [release record](../releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)
