@@ -20,8 +20,6 @@ installing.
 | --- | --- | --- |
 | Razer Blade 16 RZ09-0581 | Razer driver stack for native Windows brightness controls | [Installation guide](docs/installing.md) |
 
-Release downloads currently require access to this private repository.
-
 ## Add a device
 
 Follow [docs/exporting.md](docs/exporting.md) to collect an installed package

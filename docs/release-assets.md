@@ -36,9 +36,8 @@ binds the catalog manifest path and SHA-256 to the release asset name and
 SHA-256. It also records the exporter by pull request, commit, path, and script
 hash.
 
-The repository and prerelease are currently private, so readers without access
-receive a 404 from their links. Making the repository public would also make
-the existing driver asset public and requires a separate audience decision.
+Any change to the release audience requires a separate distribution decision
+within the recorded authorization.
 
 The checked record still labels the exporter `UnmergedPullRequest`, but
 [OpenBlade core PR #163](https://github.com/OpenBladeProject/openblade-core/pull/163)
