@@ -317,6 +317,9 @@ identities, and add the required third-party notice. The exact `02E0` exporter
 in OpenBlade core is one admitted implementation. Do not turn this generic
 collection workflow into a release builder.
 
+See [Release assets and repository boundaries](release-assets.md) for the
+review and permission requirements that apply to a distributable archive.
+
 ## 7. Prepare a commit-safe catalog entry
 
 Copy `templates/driver-stack-evidence.template.json` to an exact model and
