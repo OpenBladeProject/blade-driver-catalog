@@ -7,6 +7,23 @@ results, evidence templates, and read-only export instructions.
 OpenBlade does not author, modify, or re-sign these drivers. This is an
 independent project and is not an official Razer repository.
 
+## Install the brightness driver
+
+The cataloged driver enables the native Windows brightness flyout in OpenBlade
+on the Razer Blade 16 RZ09-0581 (`1532:02E0`). OpenBlade's installer does not
+install it.
+
+- To install through Razer, install and run [Razer Synapse](https://www.razer.com/synapse-4)
+  once on the laptop so it can install the driver stack.
+- To install the standalone ZIP, follow the [installation guide](docs/installing.md).
+  It covers downloading, verifying, installing, checking the result, and rollback.
+  This manual route is still a clean-install validation procedure.
+
+After installation, restart OpenBlade and check **About > Device information**.
+The Razer brightness driver row should show **Available · Windows OSD**.
+Brightness keys still work through OpenBlade's own flyout when the driver is
+unavailable.
+
 ## Current catalog
 
 | Device | Hardware identity | Driver versions | Status |
