@@ -20,13 +20,13 @@
   "catalogManifest": {
     "manifestType": "OpenBlade.RazerDriverCatalogEntry",
     "path": "devices/rz09-0581/1532-02e0/1.0.0.78-1.0.0.76/manifest.json",
-    "sha256": "852673D778BB0F70ED8A083919133772F422044FC38B39749C7388B1A45818AD"
+    "sha256": "D3AE7A63874A1EF8274F4C2A844B01DEED965DB01977EC9E0A167126D1C2A6DB"
   },
   "exporter": {
     "repository": "OSSBlade/openblade-core",
     "pullRequest": "https://github.com/OSSBlade/openblade-core/pull/163",
     "revision": "277ebf89c88acd68f8c451773abb5860661c4479",
-    "reachability": "UnmergedPullRequest",
+    "reachability": "MergedCommit",
     "path": "build/Export-RazerBrightnessDriverPackage.ps1",
     "gitBlobSha1": "fec399f26d591773292507d97402fa7f14889bd4",
     "gitBlobContentSha256": "84D4BA3D9018D4E52B6023367CBA8770DA80ECBF21E1831331824A84E82689F3"

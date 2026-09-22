@@ -26,7 +26,7 @@
       "repository": "OSSBlade/openblade-core",
       "pullRequest": "https://github.com/OSSBlade/openblade-core/pull/163",
       "revision": "277ebf89c88acd68f8c451773abb5860661c4479",
-      "reachability": "UnmergedPullRequest",
+      "reachability": "MergedCommit",
       "path": "build/Export-RazerBrightnessDriverPackage.ps1",
       "gitBlobSha1": "fec399f26d591773292507d97402fa7f14889bd4",
       "gitBlobContentSha256": "84D4BA3D9018D4E52B6023367CBA8770DA80ECBF21E1831331824A84E82689F3"
