@@ -39,10 +39,10 @@ hash.
 Any change to the release audience requires a separate distribution decision
 within the recorded authorization.
 
-The checked record still labels the exporter `UnmergedPullRequest`, but
-[OpenBlade core PR #163](https://github.com/OpenBladeProject/openblade-core/pull/163)
-merged on August 15, 2026. The record needs a separate data update to point to a
-commit reachable from `main`.
+The recorded exporter commit is reachable from core `main` through
+[OpenBlade core PR #163](https://github.com/OpenBladeProject/openblade-core/pull/163),
+merged on August 15, 2026. Its Git blob and SHA-256 match the recorded script.
+The catalog retains the original export revision and marks it `MergedCommit`.
 
 ## OpenBlade repository responsibilities
 
