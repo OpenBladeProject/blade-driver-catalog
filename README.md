@@ -15,7 +15,7 @@ Match the model number on your laptop.
 | Blade 16 (2026), RZ09-0581 | [Razer 02E0 driver stack](devices/rz09-0581/1532-02e0/1.0.0.78-1.0.0.76/manifest.json) | [Prerelease download](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76) |
 | Blade 16 (2025), RZ09-0528 | [Razer 02C6 driver stack](devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json) | [Prerelease download](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0528-1532-02c6-driver-stack-1.0.0.78-1.0.0.76) |
 
-For the 2026 model, follow the [installation guide](docs/installing.md).
+Follow the [installation guide](docs/installing.md) for your model.
 
 ## Add your Blade
 
