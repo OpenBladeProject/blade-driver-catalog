@@ -197,6 +197,19 @@ Assert-True (-not $manifest.privacy.containsDriverBytes) `
 Assert-True (-not $manifest.privacy.containsFullInstanceId) `
     'A catalog manifest must not contain full instance IDs.'
 
+$blade2025Path = Join-Path $repository (
+    'devices\rz09-0528\1532-02c6\1.0.0.78-1.0.0.76\manifest.json')
+$blade2025 = Get-Content -LiteralPath $blade2025Path -Raw | ConvertFrom-Json
+Assert-True ($blade2025.scope.modelNumber -eq 'RZ09-0528' -and
+    $blade2025.scope.usbIdentities[0].pid -eq '02C6') `
+    'The Blade 16 (2025) entry has the wrong hardware scope.'
+Assert-True ($blade2025.packages.Count -eq 5 -and
+    $blade2025.collection.catalogVerification.membersVerified -eq 10) `
+    'The Blade 16 (2025) entry does not cover the verified five-package stack.'
+Assert-True ($blade2025.redistribution.status -eq 'NotPublished' -and
+    $blade2025.collection.PSObject.Properties.Name -notcontains 'exporterProvenance') `
+    'The Blade 16 (2025) entry must remain an unpublished inventory.'
+
 $manifestPaths = @(
     Get-ChildItem -LiteralPath (Join-Path $repository 'devices') `
         -Recurse -Filter 'manifest.json' -File)
@@ -232,7 +245,7 @@ foreach ($path in $manifestPaths) {
     Assert-RequiredProperties $entry.collection @(
         'collectedAtUtc','vendorSoftwareVersion','privateInventoryReviewed',
         'packageArchiveFileName','packageArchiveSize','packageArchiveSha256',
-        'exporterProvenance','catalogVerification') "$context collection"
+        'catalogVerification') "$context collection"
     foreach ($deprecatedProperty in 'privateArchiveFileName','privateArchiveSha256') {
         Assert-True ($entry.collection.PSObject.Properties.Name -notcontains
             $deprecatedProperty) `
@@ -265,6 +278,7 @@ foreach ($path in $manifestPaths) {
         "$context has an invalid package archive size."
     Assert-True ($entry.collection.packageArchiveSha256 -match '^[0-9A-F]{64}$') `
         "$context has an invalid package archive SHA-256."
+    if ($entry.collection.PSObject.Properties.Name -contains 'exporterProvenance') {
     Assert-RequiredProperties $entry.collection.exporterProvenance @(
         'repository','pullRequest','revision','reachability','path','gitBlobSha1',
         'gitBlobContentSha256') `
@@ -285,6 +299,11 @@ foreach ($path in $manifestPaths) {
         "$context has an invalid exporter Git blob SHA-1."
     Assert-True ($exporter.gitBlobContentSha256 -match '^[0-9A-F]{64}$') `
         "$context has an invalid exporter blob-content SHA-256."
+    }
+    else {
+        Assert-True ($entry.redistribution.status -eq 'NotPublished') `
+            "$context has no exporter provenance but is marked for publication."
+    }
     $catalogVerification = $entry.collection.catalogVerification
     Assert-RequiredProperties $catalogVerification @(
         'status','tool','toolProductVersion','acquisitionPackage','acquisitionVersion',
@@ -299,13 +318,15 @@ foreach ($path in $manifestPaths) {
     if ($catalogVerification.status -eq 'Verified') {
         Assert-True ($catalogVerification.toolProductVersion -match '^\d+(?:\.\d+){3}$') `
             "$context has an invalid SignTool product version."
-        Assert-True ($catalogVerification.acquisitionPackage -eq
-            'Microsoft.Windows.SDK.BuildTools') `
-            "$context has an unexpected SignTool acquisition package."
+        Assert-True ($catalogVerification.acquisitionPackage -in @(
+                'Microsoft.Windows.SDK.BuildTools','Installed Windows SDK')) `
+            "$context has an unexpected SignTool acquisition source."
         Assert-True ($catalogVerification.acquisitionVersion -match
             '^\d+(?:\.\d+){3}$') `
             "$context has an invalid SignTool acquisition version."
-        Assert-True ($catalogVerification.acquisitionSha256 -match '^[0-9A-F]{64}$') `
+        Assert-True ($catalogVerification.acquisitionSha256 -match '^[0-9A-F]{64}$' -or
+            ($catalogVerification.acquisitionPackage -eq 'Installed Windows SDK' -and
+             $catalogVerification.acquisitionSha256 -eq 'Unavailable')) `
             "$context has an invalid SignTool acquisition SHA-256."
         Assert-True ($catalogVerification.verifiedAtUtc -match
             '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$') `
