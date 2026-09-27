@@ -23,8 +23,8 @@
     "vendorSoftwareVersion": "Razer Synapse 4.0.821",
     "privateInventoryReviewed": true,
     "packageArchiveFileName": "Razer-02C6-Driver-Stack-1.0.0.78-1.0.0.76.zip",
-    "packageArchiveSize": 227022,
-    "packageArchiveSha256": "DDF9262D94586D14491CDFA94033842ADD115AE98D29AAEA508D39F3B5932CB6",
+    "packageArchiveSize": 227351,
+    "packageArchiveSha256": "533F8464A6A3ED328ABDADAC2DF2619859A6151FC17E775F46FCE310A682F8C5",
     "catalogVerification": {
       "status": "Verified",
       "tool": "Microsoft Windows SDK SignTool",
