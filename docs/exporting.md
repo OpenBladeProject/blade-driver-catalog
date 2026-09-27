@@ -338,12 +338,18 @@ facts. Keep:
   retained;
 - the reviewed package-only archive filename and SHA-256, never the private
   evidence archive hash;
+- exporter provenance when a model-specific exporter has been reviewed;
 - the reported permission grantor, the basis for that report, and whether the
   permission document received an independent review; and
 - explicit limitations and privacy checks.
 
 Remove machine-local `oem###.inf` aliases and every local or unique value. The
 catalog entry contains hashes and metadata only.
+
+For an unpublished inventory entry without a reviewed exporter, omit
+`collection.exporterProvenance` and set `redistribution.status` to
+`NotPublished`. Add exporter provenance only when an exact, reviewed exporter
+exists.
 
 Use a path such as:
 
