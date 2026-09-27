@@ -1,51 +1,41 @@
 # Blade driver catalog
 
-Find original signed Razer driver packages and installation instructions for
-Razer Blade laptops. The catalog records each package's hardware matches,
-versions, file hashes, and signature checks. Contributors can also use it to
-document drivers installed on other Blade models.
+Find the Razer driver package for your Blade model. Each catalog entry shows
+which device it came from and how to check the files.
 
-This is an independent OpenBlade project. OpenBlade does not author, modify,
-or re-sign Razer drivers.
+OpenBlade is independent of Razer. We keep the original signed driver files
+intact.
 
-## Driver catalog
+## Blade models
 
-Choose your exact laptop model below. Published packages have an installation
-guide covering download, verification, installation, and recovery. Inventory
-entries record installed driver evidence but are not available for download.
-Check each entry's validation status before installing.
+Match the model number on your laptop. The installation guide is for the 2026
+Blade 16; the 2025 entry currently records the driver files found on that model.
 
-| Laptop | Package | Status |
+| Model | Driver | Status |
 | --- | --- | --- |
-| Razer Blade 16 RZ09-0581 (2026) | Razer driver stack for native Windows brightness controls | [Installation guide](docs/installing.md) |
-| Razer Blade 16 RZ09-0528 (2025) | [Razer 02C6 driver stack](devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json) | Inventory only; no published package or installation guide |
+| Blade 16 (2026), RZ09-0581 | Razer driver stack for Windows brightness keys | [Installation guide](docs/installing.md) |
+| Blade 16 (2025), RZ09-0528 | [Razer 02C6 driver stack](devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json) | Driver inventory; download pending |
 
-## Add a device
+## Add your Blade
 
-Follow [docs/exporting.md](docs/exporting.md) to collect an installed package
-and prepare a catalog entry. Start with the
-[evidence template](templates/driver-stack-evidence.template.json), and submit
-reviewed metadata without driver files or private machine details.
+Missing a model? [docs/exporting.md](docs/exporting.md) shows how to collect its
+installed driver packages. Use the
+[evidence template](templates/driver-stack-evidence.template.json) to submit
+the model and file details. Keep the driver files and personal device details
+out of the submission.
 
-A new entry records what was found on that device. Installation testing and
-OpenBlade feature support are reviewed separately. See
-[release assets and repository boundaries](docs/release-assets.md) for
-publication requirements and the relationship to other OpenBlade repositories.
+See [release assets and repository boundaries](docs/release-assets.md) for how
+we make driver downloads available.
 
 ## License
 
-Repository-authored documentation, metadata, templates, tests, and tooling are
-licensed under the [Apache License 2.0](LICENSE). See [NOTICE](NOTICE) for the
-scope statement.
+The text and tools in this repository use the
+[Apache License 2.0](LICENSE). The Razer driver files belong to Razer. See
+[NOTICE](NOTICE) and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for details.
 
-Razer ZIP, INF, CAT, SYS, and other proprietary release assets are excluded from
-Apache-2.0. They remain governed by Razer's rights and the separately recorded
-redistribution permission described in
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+## Run the checks
 
-## Validate changes
-
-Run the offline checks with Windows PowerShell 5.1:
+On Windows, run:
 
 ```powershell
 & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `

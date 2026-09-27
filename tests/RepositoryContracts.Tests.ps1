@@ -94,8 +94,8 @@ foreach ($link in '[Apache License 2.0](LICENSE)','[NOTICE](NOTICE)',
     Assert-True ($readme.Contains($link)) `
         "README.md must contain the license boundary link '$link'."
 }
-Assert-True ($readme.Contains('proprietary release assets are excluded from')) `
-    'README.md must exclude proprietary release assets from Apache-2.0.'
+Assert-True ($readme.Contains('The Razer driver files belong to Razer.')) `
+    'README.md must keep the Razer driver ownership boundary.'
 Assert-True ($notice.Contains('Copyright 2026 OSSBlade contributors') -and
     $notice.Contains('Razer driver packages') -and
     $notice.Contains('not covered by that license')) `
