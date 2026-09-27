@@ -8,13 +8,14 @@ intact.
 
 ## Blade models
 
-Match the model number on your laptop. The 2025 package is a prerelease; its
-installation steps have not been tested on a fresh Windows setup.
+Match the model number on your laptop.
 
-| Model | Driver | Status |
+| Model | Driver details | Download |
 | --- | --- | --- |
-| Blade 16 (2026), RZ09-0581 | Razer driver stack for Windows brightness keys | [Installation guide](docs/installing.md) |
+| Blade 16 (2026), RZ09-0581 | [Razer 02E0 driver stack](devices/rz09-0581/1532-02e0/1.0.0.78-1.0.0.76/manifest.json) | [Prerelease download](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76) |
 | Blade 16 (2025), RZ09-0528 | [Razer 02C6 driver stack](devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json) | [Prerelease download](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0528-1532-02c6-driver-stack-1.0.0.78-1.0.0.76) |
+
+For the 2026 model, follow the [installation guide](docs/installing.md).
 
 ## Add your Blade
 
