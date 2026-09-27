@@ -25,6 +25,15 @@
     "packageArchiveFileName": "Razer-02C6-Driver-Stack-1.0.0.78-1.0.0.76.zip",
     "packageArchiveSize": 227351,
     "packageArchiveSha256": "533F8464A6A3ED328ABDADAC2DF2619859A6151FC17E775F46FCE310A682F8C5",
+    "exporterProvenance": {
+      "repository": "OpenBladeProject/blade-driver-catalog",
+      "pullRequest": "https://github.com/OpenBladeProject/blade-driver-catalog/pull/15",
+      "revision": "470ca49f40505063aa7ae87b889ed4af5ee72f75",
+      "reachability": "MergedCommit",
+      "path": "build/Export-Razer02C6DriverPackage.ps1",
+      "gitBlobSha1": "945af45018139db13470e0da8758c17bd67446ff",
+      "gitBlobContentSha256": "D7D0903BD7A8809B97CEA80D54592FB0D0D669EA228B13791FE4AFBBF50A8AD6"
+    },
     "catalogVerification": {
       "status": "Verified",
       "tool": "Microsoft Windows SDK SignTool",
@@ -349,11 +358,21 @@
     "rollback": "NotInvestigated"
   },
   "redistribution": {
-    "status": "NotPublished",
-    "authorizationStoredOutsideRepository": false,
-    "reportedPermissionGrantor": "None recorded for this package",
-    "permissionBasis": "No model-specific redistribution authorization reviewed",
-    "independentDocumentReview": false
+    "status": "WrittenPermissionReportedFromRazerUSLtd",
+    "authorizationStoredOutsideRepository": true,
+    "reportedPermissionGrantor": "Razer US Ltd",
+    "permissionBasis": "ProjectOwnerStatement",
+    "independentDocumentReview": false,
+    "authorizedDeliveryMethod": "GitHub release asset",
+    "release": {
+      "tag": "rz09-0528-1532-02c6-driver-stack-1.0.0.78-1.0.0.76",
+      "asset": "Razer-02C6-Driver-Stack-1.0.0.78-1.0.0.76.zip",
+      "sha256": "533F8464A6A3ED328ABDADAC2DF2619859A6151FC17E775F46FCE310A682F8C5",
+      "publicationStatus": "Prerelease",
+      "repositoryVisibilityAtPublication": "Private",
+      "authorizedAudience": "Repository collaborators",
+      "record": "releases/rz09-0528-02c6-1.0.0.78-1.0.0.76.json"
+    }
   },
   "privacy": {
     "containsDriverBytes": false,
@@ -365,7 +384,8 @@
   },
   "limitations": [
     "The package inventory is scoped to RZ09-0528 and the observed USB PID 02C6.",
-    "The private archive is a local evidence artifact, not a published release asset.",
+    "The package-only release asset contains no private device inventory or machine identifiers.",
+    "The project owner reports that the written Razer US Ltd grant used for the 2026 release also covers these exact 2025 package files, the private repository audience, and GitHub prerelease delivery; the document was not independently reviewed.",
     "Catalog signatures and INF/SYS membership were verified with the installed Windows SDK SignTool under kernel-mode policy.",
     "The installed Windows SDK acquisition archive and its hash were unavailable.",
     "Runtime behavior, clean installation, lifecycle recovery, and rollback remain unvalidated."

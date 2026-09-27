@@ -1,0 +1,34 @@
+{
+  "manifestType": "OpenBlade.RazerDriverReleaseRecord",
+  "schemaVersion": 1,
+  "release": {
+    "repository": "OpenBladeProject/blade-driver-catalog",
+    "tag": "rz09-0528-1532-02c6-driver-stack-1.0.0.78-1.0.0.76",
+    "url": "https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0528-1532-02c6-driver-stack-1.0.0.78-1.0.0.76",
+    "prerelease": true,
+    "repositoryVisibility": "Private",
+    "authorizedAudience": "Repository collaborators",
+    "reportedPermissionGrantor": "Razer US Ltd",
+    "permissionBasis": "ProjectOwnerStatement",
+    "independentDocumentReview": false,
+    "asset": {
+      "name": "Razer-02C6-Driver-Stack-1.0.0.78-1.0.0.76.zip",
+      "size": 227351,
+      "sha256": "533F8464A6A3ED328ABDADAC2DF2619859A6151FC17E775F46FCE310A682F8C5"
+    }
+  },
+  "catalogManifest": {
+    "manifestType": "OpenBlade.RazerDriverCatalogEntry",
+    "path": "devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json",
+    "sha256": "2558F18D3785DB3F73EF50F2AF7ADBF6F0938BAB8A4827CA9590DE91978D69FE"
+  },
+  "exporter": {
+    "repository": "OpenBladeProject/blade-driver-catalog",
+    "pullRequest": "https://github.com/OpenBladeProject/blade-driver-catalog/pull/15",
+    "revision": "470ca49f40505063aa7ae87b889ed4af5ee72f75",
+    "reachability": "MergedCommit",
+    "path": "build/Export-Razer02C6DriverPackage.ps1",
+    "gitBlobSha1": "945af45018139db13470e0da8758c17bd67446ff",
+    "gitBlobContentSha256": "D7D0903BD7A8809B97CEA80D54592FB0D0D669EA228B13791FE4AFBBF50A8AD6"
+  }
+}
