@@ -206,9 +206,10 @@ Assert-True ($blade2025.scope.modelNumber -eq 'RZ09-0528' -and
 Assert-True ($blade2025.packages.Count -eq 5 -and
     $blade2025.collection.catalogVerification.membersVerified -eq 10) `
     'The Blade 16 (2025) entry does not cover the verified five-package stack.'
-Assert-True ($blade2025.redistribution.status -eq 'NotPublished' -and
-    $blade2025.collection.PSObject.Properties.Name -notcontains 'exporterProvenance') `
-    'The Blade 16 (2025) entry must remain an unpublished inventory.'
+Assert-True ($blade2025.redistribution.status -eq
+    'WrittenPermissionReportedFromRazerUSLtd' -and
+    $blade2025.collection.exporterProvenance.reachability -eq 'MergedCommit') `
+    'The Blade 16 (2025) entry must record its release authorization and exporter.'
 
 $manifestPaths = @(
     Get-ChildItem -LiteralPath (Join-Path $repository 'devices') `
@@ -480,7 +481,9 @@ foreach ($recordPath in $releaseRecordPaths) {
         'gitBlobContentSha256') `
         "$context exporter"
 
-    Assert-True ($record.release.repository -eq 'OSSBlade/blade-driver-catalog') `
+    Assert-True ($record.release.repository -in @(
+            'OSSBlade/blade-driver-catalog',
+            'OpenBladeProject/blade-driver-catalog')) `
         "$context names the wrong release repository."
     $expectedReleaseUrl =
         "https://github.com/$($record.release.repository)/releases/tag/$($record.release.tag)"
