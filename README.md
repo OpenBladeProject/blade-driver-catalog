@@ -8,21 +8,17 @@ document drivers installed on other Blade models.
 This is an independent OpenBlade project. OpenBlade does not author, modify,
 or re-sign Razer drivers.
 
-## Find and install a driver
+## Driver catalog
 
-Choose your laptop from the catalog below, then follow its installation guide.
-Each guide explains where to download the package, how to check it, how to
-install it, and how to recover if installation fails. Packages apply only to
-the hardware listed in their entry; check the guide's validation status before
-installing.
+Choose your exact laptop model below. Published packages have an installation
+guide covering download, verification, installation, and recovery. Inventory
+entries record installed driver evidence but are not available for download.
+Check each entry's validation status before installing.
 
-| Laptop | Package | Installation |
+| Laptop | Package | Status |
 | --- | --- | --- |
-| Razer Blade 16 RZ09-0581 | Razer driver stack for native Windows brightness controls | [Installation guide](docs/installing.md) |
-
-The [RZ09-0528 Blade 16 (2025) entry](devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json)
-records the installed Razer 02C6 driver stack and its signed package hashes.
-Its package is under review and has no published download or installation guide.
+| Razer Blade 16 RZ09-0581 (2026) | Razer driver stack for native Windows brightness controls | [Installation guide](docs/installing.md) |
+| Razer Blade 16 RZ09-0528 (2025) | [Razer 02C6 driver stack](devices/rz09-0528/1532-02c6/1.0.0.78-1.0.0.76/manifest.json) | Inventory only; no published package or installation guide |
 
 ## Add a device
 
