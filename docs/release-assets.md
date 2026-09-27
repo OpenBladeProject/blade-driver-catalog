@@ -24,17 +24,17 @@ inventory and machine-local aliases, and include the required third-party
 notice.
 
 The project owner reports written permission from Razer US Ltd for the files,
-audience, and delivery method in the current prerelease. The catalog does not
+audience, and delivery method in both prereleases. The catalog does not
 claim an independent review of that permission document. Apache-2.0 applies
 only to original repository content and grants no rights to Razer package bytes
 or proprietary release assets.
 
-## Current prerelease record
+## Prerelease records
 
-The [checked release record](../releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)
-binds the catalog manifest path and SHA-256 to the release asset name and
-SHA-256. It also records the exporter by pull request, commit, path, and script
-hash.
+The checked records for the [2026 Blade 16](../releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)
+and [2025 Blade 16](../releases/rz09-0528-02c6-1.0.0.78-1.0.0.76.json)
+bind each catalog manifest to its release asset. Both record the exporter
+revision and script hash.
 
 Any change to the release audience requires a separate distribution decision
 within the recorded authorization.
@@ -43,6 +43,8 @@ The recorded exporter commit is reachable from core `main` through
 [OpenBlade core PR #163](https://github.com/OpenBladeProject/openblade-core/pull/163),
 merged on August 15, 2026. Its Git blob and SHA-256 match the recorded script.
 The catalog retains the original export revision and marks it `MergedCommit`.
+The 2025 package uses the model-specific exporter merged in
+[catalog PR #15](https://github.com/OpenBladeProject/blade-driver-catalog/pull/15).
 
 ## OpenBlade repository responsibilities
 
