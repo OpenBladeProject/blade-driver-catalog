@@ -39,10 +39,10 @@ revision and script hash.
 Any change to the release audience requires a separate distribution decision
 within the recorded authorization.
 
-The recorded exporter commit is reachable from core `main` through
+The 2026 package's recorded exporter commit is reachable from core `main` through
 [OpenBlade core PR #163](https://github.com/OpenBladeProject/openblade-core/pull/163),
 merged on August 15, 2026. Its Git blob and SHA-256 match the recorded script.
-The catalog retains the original export revision and marks it `MergedCommit`.
+The record retains the original export revision with status `MergedCommit`.
 The 2025 package uses the model-specific exporter merged in
 [catalog PR #15](https://github.com/OpenBladeProject/blade-driver-catalog/pull/15).
 

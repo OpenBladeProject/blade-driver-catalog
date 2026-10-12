@@ -47,8 +47,9 @@ procedure yet; use Synapse for that model.
 
 ## Check the result
 
-After installation, check Device Manager for problems with the built-in Razer
-device, then restart OpenBlade and test the brightness keys. On the 2026 model,
-OpenBlade's About > Device information should show the Razer brightness driver
-as `Available · Windows OSD`, and the keys should use the Windows brightness
-flyout.
+Use OpenBlade 0.24.3 or newer for native Windows brightness on both listed
+models. After installation, check Device Manager for problems with the built-in
+Razer device, then restart OpenBlade and test the brightness keys.
+About > Device information should show the Razer brightness driver as
+`Available · Windows OSD`, and the keys should use the Windows brightness
+flyout. Each laptop needs its own matching driver stack.
