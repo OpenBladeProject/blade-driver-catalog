@@ -5,14 +5,14 @@ installed the drivers. It reads device and Driver Store state, then copies
 explicitly selected packages with Windows PnPUtil. It does not install, bind,
 restart, disable, remove, or update a driver or device.
 
-An export is candidate evidence from one machine. It does not prove that
-another model uses the same package, that the package is safe to install on a
-clean machine, or that it provides a particular runtime feature.
+An export records the packages installed on one machine. It does not prove
+compatibility with another model, safe clean installation, or a runtime feature;
+each needs its own validation.
 
 ## Keep the raw package private
 
-The private archive belongs in neither Git history nor a public issue. Keep it
-outside the repository in a private working directory or transfer location.
+Keep the archive outside the repository in a private working directory or
+transfer location. Never add it to Git history or a public issue.
 
 Commit only a reviewed manifest under `devices/`. The manifest may contain
 model and non-unique hardware IDs, package versions, dependency roles, hashes,
@@ -61,7 +61,7 @@ if (Test-Path -LiteralPath $privateRoot) {
 New-Item -ItemType Directory -Path $privateRoot -ErrorAction Stop | Out-Null
 ```
 
-Record non-unique system identity fields. This block deliberately omits the
+Record non-unique system identity fields. The command omits the
 system UUID, BIOS serial, and baseboard serial.
 
 ```powershell
@@ -357,9 +357,9 @@ Use a path such as:
 devices/rz09-xxxx/1532-xxxx/driver-version/manifest.json
 ```
 
-The first review decides whether the packages identify a candidate feature
-path. Runtime analysis, physical validation, driver-host recycle, reboot,
-sleep, clean installation, and rollback are separate gates.
+Reviewers first check whether the packages could provide the feature. Runtime
+analysis, physical validation, driver-host recycle, reboot, sleep, clean
+installation, and rollback require separate checks.
 
 ## Commands that are out of scope
 

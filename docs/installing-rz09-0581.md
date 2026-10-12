@@ -14,8 +14,7 @@ flyout.
 | `1532:02E0` | RzDev `1.0.0.78`, RzCommon `1.0.0.76` |
 
 Microsoft Windows SDK SignTool verified all five catalog signatures and all ten
-INF and SYS catalog memberships under kernel-mode policy. Clean installation
-of the standalone package remains pending. The package does not cover
+INF and SYS catalog memberships under kernel-mode policy. The package does not cover
 RZ09-0528 (`02C6`) or Razer accessories.
 
 ## Install through Synapse
@@ -48,8 +47,8 @@ installing them on matching devices. Microsoft documents `/add-driver`,
 
 Clean installation of this standalone package is still awaiting validation.
 Use the procedure below only on a recoverable RZ09-0581. The stack filters the
-integrated keyboard and mouse paths, restarts parts of the USB device tree, and may require
-a reboot. Use AC power, keep an external USB keyboard and mouse connected, and
+integrated keyboard and mouse paths, restarts parts of the USB device tree, and
+may require a reboot. Use AC power, keep an external USB keyboard and mouse connected, and
 make sure recovery access works before testing it.
 
 ## 2. Verify the laptop and package
@@ -119,8 +118,8 @@ Invoke-PnpLogged @('/add-driver', "$packageRoot\rzdevu_02e0_mou\rzdevu_02e0_mou.
 ```
 
 After each command, copy the newly reported published name and package identity
-into the journal. Mark whether it existed in the pre-install inventory. This is
-the ownership proof used by rollback.
+into the journal. Mark whether it existed in the pre-install inventory so
+rollback can identify packages introduced by this test.
 
 After all five packages stage successfully, bind them in dependency order:
 
@@ -153,7 +152,6 @@ proves were introduced by that test. Remove those packages in this order:
 RzCommon, VCon, mouse, keyboard, then DKM. Use
 `pnputil /delete-driver <journal-owned-oem.inf> /uninstall` and stop if Windows
 reports that a package is in use or a reboot is required.
-
 
 ## Technical reference
 
