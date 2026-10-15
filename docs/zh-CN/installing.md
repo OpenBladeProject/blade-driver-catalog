@@ -22,12 +22,12 @@
 
 在 Blade 上安装 [Razer Synapse](https://www.razer.com/synapse-4) 并运行一次。Synapse 会为连接的笔记本电脑安装对应的 Razer 驱动程序栈。设置方法见 Razer 的[安装说明](https://mysupport.razer.com/app/answers/detail/a_id/1834/)。重新启动 OpenBlade 前先退出 Synapse。
 
-OpenBlade 安装程序不会安装或删除 Razer 驱动程序。驱动程序不可用时，OpenBlade 会使用 WMI 亮度路径和自己的浮出界面。
+OpenBlade 安装程序不会安装或删除 Razer 驱动程序。驱动程序不可用时，OpenBlade 会通过 WMI 调节亮度，并显示自己的浮动面板。
 
 <a id="use-a-catalog-download"></a>
 ## 使用目录中的下载包
 
-从与你的型号匹配的版本中选择 ZIP。GitHub 上的源代码 ZIP 不是驱动程序包。[2026 记录](../../releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)或[2025 记录](../../releases/rz09-0528-02c6-1.0.0.78-1.0.0.76.json)列出了预期文件名和 SHA-256。解压前先用该哈希核对下载的 ZIP。
+请从对应型号的发布页面下载 ZIP。GitHub 上的源代码 ZIP 不是驱动程序包。[2026 记录](../../releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)或[2025 记录](../../releases/rz09-0528-02c6-1.0.0.78-1.0.0.76.json)列出了预期文件名和 SHA-256。解压前先用该哈希核对下载的 ZIP。
 
 ```powershell
 Get-FileHash -LiteralPath 'path-to-the-driver-zip' -Algorithm SHA256
@@ -38,4 +38,4 @@ Get-FileHash -LiteralPath 'path-to-the-driver-zip' -Algorithm SHA256
 <a id="check-the-result"></a>
 ## 检查结果
 
-两款型号都需要 OpenBlade 0.24.3 或更高版本才能使用原生 Windows 亮度。安装后，在设备管理器中检查内置 Razer 设备是否存在问题，然后重新启动 OpenBlade 并测试亮度键。**About > Device information** 中的 Razer 亮度驱动程序应显示 `Available · Windows OSD`，按键应使用 Windows 亮度浮出界面。每台笔记本电脑都必须使用与其型号匹配的驱动程序栈。
+两款型号都需要 OpenBlade 0.24.3 或更高版本才能使用原生 Windows 亮度。安装后，在设备管理器中检查内置 Razer 设备是否存在问题，然后重新启动 OpenBlade 并测试亮度键。**About > Device information** 中的 Razer 亮度驱动程序应显示 `Available · Windows OSD`，按亮度键时应显示 Windows 亮度浮动面板。每台笔记本电脑都必须使用与其型号匹配的驱动程序栈。

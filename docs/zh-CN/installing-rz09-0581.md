@@ -2,7 +2,7 @@
 
 [English](../installing-rz09-0581.md) | 简体中文 | [Русский](../ru-RU/installing-rz09-0581.md)
 
-此独立安装步骤仅适用于[安装指南](installing.md)中列出的 Blade 16 RZ09-0581（`1532:02E0`）程序包。安装后，OpenBlade 可以使用 Windows 亮度浮出界面。OpenBlade 安装程序不会安装或删除 Razer 驱动程序。驱动程序不可用时，亮度键使用 WMI 和 OpenBlade 自己的浮出界面。
+以下独立安装步骤仅适用于[安装指南](installing.md)中列出的 Blade 16 RZ09-0581（`1532:02E0`）程序包。安装后，OpenBlade 可以使用 Windows 的亮度浮动面板。OpenBlade 安装程序不会安装或删除 Razer 驱动程序。驱动程序不可用时，亮度键通过 WMI 调节亮度，并显示 OpenBlade 自己的浮动面板。
 
 <a id="package-details"></a>
 ## 程序包详情
@@ -21,7 +21,7 @@ Microsoft Windows SDK SignTool 已按内核模式策略验证全部五个目录�
 <a id="1-download-the-standalone-package"></a>
 ## 1. 下载独立程序包
 
-打开[驱动程序预发布版](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76)，从资源中下载 `Razer-02E0-Driver-Stack-1.0.0.78-1.0.0.76.zip`。源代码 ZIP 不是驱动程序包。
+打开[驱动程序预发布版](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76)，从发布附件中下载 `Razer-02E0-Driver-Stack-1.0.0.78-1.0.0.76.zip`。源代码 ZIP 不是驱动程序包。
 
 用[发布记录](../../releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json)核对压缩包名称和 SHA-256，用[目录清单](../../devices/rz09-0581/1532-02e0/1.0.0.78-1.0.0.76/manifest.json)核对程序包标识。把已验证的 ZIP 解压到一个新目录。下文的 `$packageRoot` 应指向该目录；目录中必须有五个程序包子目录。不要在 RZ09-0528 或其他型号上使用此程序包。
 
@@ -43,7 +43,7 @@ Windows 自带 PnPUtil，可把已签名程序包暂存到 Driver Store，并安
 
 暂存任何文件前，在程序包和仓库之外创建日志。记录 BIOS 标识、已连接的匹配实例、`pnputil /enum-drivers /files` 的输出、当前绑定与设备栈，以及当前 `RZVIRTUAL` 和 `RZCONTROL` 树。保留原始输出，不要手写摘要。
 
-下列辅助函数把每条 PnPUtil 命令、输出和退出代码追加到日志。先设置 `$packageRoot` 和 `$journalDirectory`。任何非零退出代码出现后立即停止。结果不明确时不要重试。
+下列辅助函数把每条 PnPUtil 命令、输出和退出代码追加到日志。先设置 `$packageRoot` 和 `$journalDirectory`。任何命令返回非零退出代码时，立即停止。结果不明确时不要重试。
 
 ```powershell
 $packageRoot = Read-Host 'Full path to the extracted driver package'
@@ -98,12 +98,12 @@ Invoke-PnpLogged @('/add-driver', "$packageRoot\rzcommonu\rzcommonu.inf", '/inst
 <a id="5-check-the-result"></a>
 ## 5. 检查结果
 
-安装后，检查准确的 `RZVIRTUAL` 和 `RZCONTROL` 子项、其服务与设备栈，并确认设备管理器没有问题。重新启动 OpenBlade，打开 **About > Device information**。Razer 亮度驱动程序一行应显示 `Available · Windows OSD`。实际按下、按住再松开亮度键时，亮度必须改变，并使用 Windows 浮出界面。
+安装后，检查准确的 `RZVIRTUAL` 和 `RZCONTROL` 子项、其服务与设备栈，并确认设备管理器没有问题。重新启动 OpenBlade，打开 **About > Device information**。Razer 亮度驱动程序一行应显示 `Available · Windows OSD`。实际按下、按住再松开亮度键时，亮度必须改变，并显示 Windows 浮动面板。
 
 <a id="roll-back-a-validation-attempt"></a>
 ## 回滚验证尝试
 
-不要使用范围宽泛的设备删除、`/force` 或按设备类重新启动命令。回滚只能删除持久的安装前日志证明由本次测试新增的已发布程序包。按以下顺序删除：RzCommon、VCon、mouse、keyboard、DKM。使用 `pnputil /delete-driver <journal-owned-oem.inf> /uninstall`；如果 Windows 报告程序包正在使用或要求重新启动，请停止。
+不要使用范围宽泛的设备删除、`/force` 或按设备类重新启动命令。回滚时，只能删除已保存的安装前日志能够证明由本次测试新增的已发布程序包。按以下顺序删除：RzCommon、VCon、mouse、keyboard、DKM。使用 `pnputil /delete-driver <journal-owned-oem.inf> /uninstall`；如果 Windows 报告程序包正在使用或要求重新启动，请停止。
 
 <a id="technical-reference"></a>
 ## 技术参考
