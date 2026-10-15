@@ -1,5 +1,7 @@
 # Install Razer drivers for your Blade
 
+English | [简体中文](zh-CN/installing.md) | [Русский](ru-RU/installing.md)
+
 Start by checking your model number. The Razer driver packages for these Blade
 16 models are different and must stay with their matching laptops.
 

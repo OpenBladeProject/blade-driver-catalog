@@ -1,5 +1,7 @@
 # Install the Razer brightness driver on RZ09-0581
 
+English | [简体中文](zh-CN/installing-rz09-0581.md) | [Русский](ru-RU/installing-rz09-0581.md)
+
 This standalone procedure is for the Blade 16 RZ09-0581 (`1532:02E0`) package
 listed in the [installation guide](installing.md). It enables OpenBlade to use
 the Windows brightness flyout. The OpenBlade installer does not install or

@@ -1,5 +1,7 @@
 # Exporting an installed Razer driver stack
 
+English | [简体中文](zh-CN/exporting.md) | [Русский](ru-RU/exporting.md)
+
 Use this workflow on a Razer device whose official software has already
 installed the drivers. It reads device and Driver Store state, then copies
 explicitly selected packages with Windows PnPUtil. It does not install, bind,
