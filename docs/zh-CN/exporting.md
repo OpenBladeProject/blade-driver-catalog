@@ -4,12 +4,11 @@
 
 [English](../exporting.md) | 简体中文 | [Русский](../ru-RU/exporting.md)
 
-此流程适用于官方软件已安装驱动的 Razer 设备。
-它读取设备和 Driver Store 状态，再使用 Windows PnPUtil 复制明确选中的包。
+如果 Razer 设备已通过官方软件安装驱动，可按此流程导出。
+工具先读取设备和 Driver Store 状态，再用 Windows PnPUtil 复制明确选中的驱动包。
 它不会安装、绑定、重启、禁用、移除或更新驱动或设备。
 
-导出记录一台机器上已安装的包，不能证明其他型号兼容、全新安装安全或具备某项运行时功能。
-这些均需各自验证。
+导出结果只记录这台机器上已安装的驱动包。其他型号是否兼容、能否安全全新安装、是否具备某项运行时功能，都需要单独验证。
 
 <a id="keep-the-raw-package-private"></a>
 
@@ -27,7 +26,7 @@
 
 ## 要求
 
-- 被调查 Razer 设备原生运行的 Windows 11
+- 在待调查的 Razer 设备上原生运行 Windows 11
 - 已安装官方 Razer 软件和驱动
 - 以管理员身份打开 Windows PowerShell 5.1
 - Git 之外的新私密输出目录
@@ -68,7 +67,7 @@ if (Test-Path -LiteralPath $privateRoot) {
 New-Item -ItemType Directory -Path $privateRoot -ErrorAction Stop | Out-Null
 ```
 
-记录不具唯一性的系统身份字段。命令省略系统 UUID、BIOS 序列号和主板序列号。
+记录不能唯一识别这台机器的系统身份字段。命令省略系统 UUID、BIOS 序列号和主板序列号。
 
 ```powershell
 $system = Get-ItemProperty `
@@ -111,7 +110,7 @@ if ($LASTEXITCODE -ne 0) {
 ```
 
 记录已连接 Razer 设备的关系图。
-此筛选器仅发现候选项，不决定哪个包提供某项功能。
+筛选结果只是候选项，不能据此判断某项功能由哪个驱动包实现。
 
 ```powershell
 $escapedVid = [regex]::Escape($targetVid)
@@ -166,13 +165,13 @@ foreach ($node in $razerNodes) {
 
 <a id="3-select-packages-proved-by-the-graph"></a>
 
-## 3. 选择由关系图证明相关的包
+## 3. 根据设备关系图选择驱动包
 
-结合 `driver-store-private.xml` 和设备日志检查。
+对照 `driver-store-private.xml` 和设备日志进行检查。
 仅当关系图显示某个已发布 OEM INF 绑定到该 Razer 物理设备或相关后代设备时，才选择它。
 
 不要选择提供者包含 `Razer` 的所有包，也不要因为版本较新就选择未使用的包。
-不要从其他目录条目推定包数量、SYS 名称、服务或虚拟设备拓扑。
+不要套用其他目录条目中的包数量、SYS 名称、服务或虚拟设备拓扑。
 
 将机器本地的已发布名称保存在私密日志中：
 
@@ -218,7 +217,7 @@ foreach ($publishedInf in $publishedInfs) {
 ```
 
 不要使用 `/export-driver *`。
-大范围导出会收集无关的专有驱动，并模糊包与设备的关系。
+大范围导出会混入无关的专有驱动，也会让包与设备的对应关系难以辨认。
 
 <a id="5-hash-and-inspect-the-export"></a>
 
@@ -255,7 +254,7 @@ $fileManifest |
 [修改签名目录中的文件会使包签名失效](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/catalog-files)。
 
 使用 SignTool 验证每个签名目录，并对照该目录验证每个 INF、SYS、DLL 或其他负载文件。
-对包中每个文件重复成员关系命令：
+对包中的每个文件都运行下面的成员关系验证命令：
 
 ```powershell
 $sdkBin = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\bin'
@@ -278,7 +277,7 @@ if ($LASTEXITCODE -ne 0) { throw 'INF catalog membership verification failed.' }
 if ($LASTEXITCODE -ne 0) { throw 'Driver catalog membership verification failed.' }
 ```
 
-如果未安装 SignTool，请将 Microsoft 所有的 `Microsoft.Windows.SDK.BuildTools`
+如果未安装 SignTool，请将 Microsoft 发布的 `Microsoft.Windows.SDK.BuildTools`
 NuGet 包下载到私密工具目录，解压前先验证包：
 
 ```powershell
@@ -318,10 +317,10 @@ Get-FileHash -LiteralPath $privateEvidenceArchive -Algorithm SHA256
 在私密日志中记录证据归档哈希。
 不要将它附到公开议题、拉取请求或版本发布中。
 
-可分发附件需要独立的型号专用导出器。
+要生成可分发的附件，必须使用独立的型号专用导出器。
 该导出器必须从经过审核的清单开始，只复制已准入包文件、
 移除机器本地别名和私密清单、验证固定哈希和签名者身份，并加入必需的第三方声明。
-OpenBlade 核心的精确 `02E0` 导出器是一个已准入实现。
+OpenBlade 核心中仅适用于 `02E0` 的导出器已通过准入审核。
 不要把此通用收集流程变成发布构建器。
 
 可分发归档的审核和授权要求见[发布附件与仓库边界](release-assets.md)。
@@ -342,10 +341,10 @@ OpenBlade 核心的精确 `02E0` 导出器是一个已准入实现。
 - ISO-8601 UTC 格式的收集时间，未保留时填写 `Unavailable`；
 - 经过审核的纯包归档文件名和 SHA-256，绝不填写私密证据归档哈希；
 - 型号专用导出器经过审核时，记录其来源；
-- 所报告的授权方、该报告的依据，以及授权文件是否经过独立审核；
+- 据报告授予授权的一方、报告依据，以及授权文件是否经过独立审核；
 - 明确的限制和隐私检查。
 
-移除机器本地的 `oem###.inf` 别名，以及每个本地或唯一值。
+移除本机的 `oem###.inf` 别名，以及所有本地信息和唯一标识。
 目录条目只包含哈希和元数据。
 
 未公开且没有经过审核导出器的清单条目，应省略 `collection.exporterProvenance`，
