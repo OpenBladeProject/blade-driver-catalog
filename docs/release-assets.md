@@ -1,5 +1,7 @@
 # Release assets and repository boundaries
 
+English | [简体中文](zh-CN/release-assets.md) | [Русский](ru-RU/release-assets.md)
+
 ## What belongs in Git
 
 Git contains metadata and tooling only. INF, CAT, SYS, PNF, ZIP, and other
@@ -48,10 +50,10 @@ The 2025 package uses the model-specific exporter merged in
 
 ## OpenBlade repository responsibilities
 
-- [`openblade-core`](https://github.com/OSSBlade/openblade-core) owns runtime
+- [`openblade-core`](https://github.com/OpenBladeProject/openblade-core) owns runtime
   admission, exact-device checks, fallback behavior, and validated installation
   policy.
-- [`openblade-captures`](https://github.com/OSSBlade/openblade-captures) owns
+- [`openblade-captures`](https://github.com/OpenBladeProject/openblade-captures) owns
   protocol captures and hardware behavior evidence.
 - This repository owns driver package inventory, read-only export instructions,
   sanitized manifests, and release assets covered by recorded permission.

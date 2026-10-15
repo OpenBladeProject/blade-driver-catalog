@@ -1,5 +1,7 @@
 # Blade driver catalog
 
+English | [简体中文](README.zh-CN.md) | [Русский](README.ru-RU.md)
+
 Find the Razer driver package for your Blade model. Each catalog entry shows
 which device it came from and how to check the files.
 
