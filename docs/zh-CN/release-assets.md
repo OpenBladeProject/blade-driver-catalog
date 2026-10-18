@@ -55,8 +55,9 @@ Apache-2.0 仅适用于仓库原创内容，不授予 Razer 驱动包内容或�
 
 - [`openblade-core`](https://github.com/OpenBladeProject/openblade-core/blob/main/README.zh-CN.md)
   负责运行时准入、精确设备检查、回退行为和经验证的安装策略。
-- [`openblade-captures`](https://github.com/OpenBladeProject/openblade-captures/blob/main/README.zh-CN.md)
-  负责协议采集和硬件行为证据。
+- [`synapse-observer`](https://github.com/OpenBladeProject/synapse-observer/blob/main/README.zh-CN.md)
+  为新的支持请求收集设备信息和 Synapse 设置变化。
+  私有旧仓库 `openblade-captures` 保留以往的协议证据和测试样本。
 - 本仓库负责驱动包清单、只读导出说明、脱敏清单，以及所记录授权覆盖的发布附件。
 
 OpenBlade 核心接受运行时或安装结论前，审核者必须确认包拓扑。

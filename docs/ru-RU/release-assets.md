@@ -60,8 +60,10 @@
 - [`openblade-core`](https://github.com/OpenBladeProject/openblade-core/blob/main/README.ru-RU.md) отвечает за
   проверки допуска при работе, проверки точной модели устройства, резервные
   способы управления и проверенную политику установки.
-- [`openblade-captures`](https://github.com/OpenBladeProject/openblade-captures/blob/main/README.ru-RU.md) отвечает
-  за записи обмена по протоколу и данные о работе оборудования.
+- [`synapse-observer`](https://github.com/OpenBladeProject/synapse-observer/blob/main/README.ru-RU.md) собирает
+  сведения об устройстве и изменениях настроек Synapse для новых запросов на поддержку.
+  Закрытый устаревший репозиторий `openblade-captures` хранит прежние
+  данные протоколов и тестовые материалы.
 - Этот репозиторий отвечает за инвентаризацию пакетов драйверов, инструкции по
   экспорту без изменения системы, очищенные манифесты и файлы выпуска, охваченные
   зафиксированным разрешением.
