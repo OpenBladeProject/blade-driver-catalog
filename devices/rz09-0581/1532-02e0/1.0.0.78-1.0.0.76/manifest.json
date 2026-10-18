@@ -219,8 +219,8 @@
       "asset": "Razer-02E0-Driver-Stack-1.0.0.78-1.0.0.76.zip",
       "sha256": "715045E146971D3AD851E84433A76282E7FF7D407A0C22C0507427AF22ACDBE0",
       "publicationStatus": "Prerelease",
-      "repositoryVisibilityAtPublication": "Private",
-      "authorizedAudience": "Repository collaborators",
+      "repositoryVisibilityAtPublication": "Public",
+      "authorizedAudience": "Public users",
       "record": "releases/rz09-0581-02e0-1.0.0.78-1.0.0.76.json"
     }
   },
