@@ -6,8 +6,8 @@
     "tag": "rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76",
     "url": "https://github.com/OSSBlade/blade-driver-catalog/releases/tag/rz09-0581-1532-02e0-driver-stack-1.0.0.78-1.0.0.76",
     "prerelease": true,
-    "repositoryVisibility": "Private",
-    "authorizedAudience": "Repository collaborators",
+    "repositoryVisibility": "Public",
+    "authorizedAudience": "Public users",
     "reportedPermissionGrantor": "Razer US Ltd",
     "permissionBasis": "ProjectOwnerStatement",
     "independentDocumentReview": false,
@@ -20,7 +20,7 @@
   "catalogManifest": {
     "manifestType": "OpenBlade.RazerDriverCatalogEntry",
     "path": "devices/rz09-0581/1532-02e0/1.0.0.78-1.0.0.76/manifest.json",
-    "sha256": "D3AE7A63874A1EF8274F4C2A844B01DEED965DB01977EC9E0A167126D1C2A6DB"
+    "sha256": "9693F79F6D0BAC000FC119EB474EF70960371A03DC5C996BB7BC29AEDA70BA27"
   },
   "exporter": {
     "repository": "OSSBlade/openblade-core",
