@@ -13,8 +13,8 @@ function Assert-ThxBaseAudioPrerequisites($Entry) {
     }
     if ($Entry.status.evidence -cne 'SourceVerified' -or
         $Entry.status.installation -cne 'InstallationUnvalidated' -or
-        $Entry.status.provisioningImplemented -ne $false) {
-        throw 'THX base-audio evidence overstated installation or provisioning status.'
+        $Entry.status.provisioningImplemented -ne $true) {
+        throw 'THX base-audio evidence or candidate provisioning implementation status drifted.'
     }
 
     $expectedIntelSource =
@@ -178,6 +178,15 @@ function Assert-ThxBaseAudioPrerequisites($Entry) {
 
 $schemaPath = Join-Path $repository 'schemas\thx-base-audio-prerequisites.schema.json'
 $entryPath = Join-Path $repository 'evidence\thx-base-audio\prerequisites.json'
+$schema = Get-Content -LiteralPath $schemaPath -Raw | ConvertFrom-Json
+$expectedProvisioningComment =
+    'True means a candidate source implementation exists at OpenBlade core commit ' +
+    '1f839e64a0853ad2b5d085fe571b84e9df0857ee; it does not mean shipped or ' +
+    'installation-validated.'
+if ($schema.properties.status.properties.provisioningImplemented.'$comment' -cne
+    $expectedProvisioningComment) {
+    throw 'Candidate provisioning implementation revision or status meaning drifted.'
+}
 $raw = Get-Content -LiteralPath $entryPath -Raw
 $entry = $raw | ConvertFrom-Json
 Assert-ThxBaseAudioPrerequisites $entry
@@ -191,7 +200,7 @@ if ((Get-Command Test-Json -ErrorAction SilentlyContinue) -and
 
 $mutations = @(
     { param($x) $x.status.installation = 'InstallationValidated' },
-    { param($x) $x.status.provisioningImplemented = $true },
+    { param($x) $x.status.provisioningImplemented = $false },
     { param($x) $x.intel.source.downloadUrl = 'https://example.invalid/intel.cab' },
     { param($x) $x.intel.source.cabSize++ },
     { param($x) $x.intel.source.cabSha256 = 'A' * 64 },

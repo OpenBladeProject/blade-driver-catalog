@@ -16,7 +16,10 @@
       "properties": {
         "evidence": { "const": "SourceVerified" },
         "installation": { "const": "InstallationUnvalidated" },
-        "provisioningImplemented": { "const": false }
+        "provisioningImplemented": {
+          "$comment": "True means a candidate source implementation exists at OpenBlade core commit 1f839e64a0853ad2b5d085fe571b84e9df0857ee; it does not mean shipped or installation-validated.",
+          "const": true
+        }
       }
     },
     "intel": {

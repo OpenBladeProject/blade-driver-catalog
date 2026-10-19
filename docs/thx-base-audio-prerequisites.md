@@ -1,17 +1,23 @@
 # THX base-audio prerequisites
 
 This page records signed base-audio evidence for the three modern THX models.
-The metadata is `SourceVerified`, installation is `InstallationUnvalidated`,
-and prerequisite provisioning is not implemented. The complete machine-readable
-pins are in [`prerequisites.json`](../evidence/thx-base-audio/prerequisites.json).
+The metadata is `SourceVerified` and installation remains
+`InstallationUnvalidated`. `provisioningImplemented: true` means a candidate
+source implementation exists in draft core PR
+[#819](https://github.com/OpenBladeProject/openblade-core/pull/819) at
+[`1f839e64`](https://github.com/OpenBladeProject/openblade-core/commit/1f839e64a0853ad2b5d085fe571b84e9df0857ee);
+it does not mean the feature is merged to `main`, shipped, or physically
+validated. The complete machine-readable pins are in
+[`prerequisites.json`](../evidence/thx-base-audio/prerequisites.json).
 
 ## RZ09-0581: Intel SST E328 and SoundWire SDCA
 
 The official Microsoft Update Catalog package uses `IntcAudioBus.inf` as its
 PCI root. That INF uses `CopyINF` to stage nine related Intel packages. Staging
 those packages is not a request to install every generic INF with a wildcard;
-Windows PnP binds only matching devices. A future recipe must stage the one
-pinned root package and let its declared `CopyINF` closure be imported.
+Windows PnP binds only matching devices. The candidate implementation passes
+only the named pinned root INF to Windows, lets that root import its declared
+`CopyINF` closure, and does not install generic Intel INFs by wildcard.
 The Intel root also matches E428 and 4D28 class devices, while the Realtek root
 matches eleven codec IDs. An `/install` action can therefore reach incidental
 matching targets; those complete INF lists are evidence scope and do not admit
@@ -30,8 +36,10 @@ The active exact-model chain is:
 
 The three active INF files are byte-identical to version `20.43.12634.0` in the
 pinned official CAB. The Catalog entry itself lists generic E328 controller IDs;
-it does not name `SUBSYS_30101A58` or RZ09-0581. Any future admission therefore
-needs both the exact RZ09-0581 host gate and the exact controller chain above.
+it does not name `SUBSYS_30101A58` or RZ09-0581. The candidate implementation
+requires the exact RZ09-0581 host gate, refuses every other present match from
+the complete root-INF hardware-ID list, and verifies the exact controller chain
+above after installation.
 
 The codec side uses Windows inbox SoundWire SDCA. The audio class, peripheral
 and aggregator roles (`sdcaclass.inf`, `sdcamfd.inf`, `sdcaaggregator.inf`) are OS
@@ -61,4 +69,8 @@ Windows inbox `ks.inf` and `wdmaudio.inf` registration sections.
 No reviewed INF references Synapse or Razer App Engine. This evidence proves
 source completeness and signatures. It does not prove clean-install ordering,
 reboot behavior, runtime audio behavior, redistribution rights, or rollback.
-OpenBlade does not currently provision these prerequisites.
+Draft core PR [#819](https://github.com/OpenBladeProject/openblade-core/pull/819)
+at [`1f839e64`](https://github.com/OpenBladeProject/openblade-core/commit/1f839e64a0853ad2b5d085fe571b84e9df0857ee)
+contains the candidate provisioning implementation. No clean installation has
+been physically validated, and released OpenBlade builds do not currently
+provision these prerequisites.
