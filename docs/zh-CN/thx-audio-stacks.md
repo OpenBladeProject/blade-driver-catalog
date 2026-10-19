@@ -16,7 +16,9 @@
 
 每个现代条目记录原始下载链接、文件大小、SHA-256、数字签名，以及驱动文件和固定配置文件的校验值。Git 仓库只保存元数据；文件由 Razer 提供，或按授权作为目录的独立发行附件提供。
 
-电脑需要先安装对应的基础音频驱动：RZ09-0528 和 RZ09-0530 使用 Realtek HDA 驱动；RZ09-0581 使用 Intel SST 和 Windows 自带的 SDCA 音频驱动。THX 安装包不包含这些驱动，OpenBlade 目前也不会安装它们。已找到的 Windows 更新官方来源见[基础音频驱动调查](../thx-base-audio-prerequisites.md)；来源已确认，并不代表已有完整且经过验证的安装方案。Razer 建议通过 [Windows 更新或系统恢复](https://mysupport.razer.com/app/answers/detail/a_id/3985)恢复音频驱动。rznb11 不能替代 rznb12。
+[核心项目 PR #819](https://github.com/OpenBladeProject/openblade-core/pull/819) 的候选实现已加入这三个型号的基础音频驱动安装步骤：RZ09-0528 和 RZ09-0530 使用对应的 Realtek HDA 驱动包；RZ09-0581 使用 Intel SST 和 Windows 自带的 SDCA 音频驱动。型号和驱动包验证通过后，候选实现可以安装目录中列出的 Realtek 或 Intel 驱动包。Windows 自带的 SDCA 驱动仍需由系统提供，并通过完整性和签名验证。THX 安装包本身不包含这些基础驱动。
+
+官方来源和验证要求见[基础音频驱动说明](../thx-base-audio-prerequisites.md)。该实现尚未合并或发布，也未在未安装 Synapse 的系统上验证全新安装流程、重启后的运行情况和实际音频输出。Razer 也介绍了通过 [Windows 更新或系统恢复](https://mysupport.razer.com/app/answers/detail/a_id/3985)恢复音频驱动的方法。rznb11 不能替代 rznb12。
 
 旧版条目记录了 RZ09-0482、RZ09-0483 和 RZ09-0484 对应的 Realtek 编解码器硬件 ID 和基础驱动包，以及四个已签名的 Windows 11 THX 2.6.5 组件包：服务、HSA、配置和 APO。SCU 工具内置了型号识别规则和 THX SpeakerPath 调音数据：子系统编号 `2020` 对应 PI490，`3006` 对应 SO690，`3007` 对应 KI890。工具会拒绝使用通用备用配置。
 

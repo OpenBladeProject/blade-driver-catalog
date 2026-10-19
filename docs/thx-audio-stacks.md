@@ -24,13 +24,18 @@ base installer is published as a separate experimental
 with its original license notice and SHA-256 checksums. No binary bytes are
 stored in Git.
 
-The base audio prerequisites must already be installed. RZ09-0528 and RZ09-0530
-use a matching Realtek HDA codec package. RZ09-0581 uses Windows inbox SDCA audio
-over Intel SST. The THX installers do not contain these prerequisites, and the
-current OpenBlade recipe does not install them. Official Windows Update sources
-are recorded separately in the [base audio investigation](thx-base-audio-prerequisites.md);
-source verification does not establish a complete or tested installation recipe.
-Razer also documents restoring audio through
+Draft core PR [#819](https://github.com/OpenBladeProject/openblade-core/pull/819)
+implements a base-audio setup step for these three models. RZ09-0528 and
+RZ09-0530 use the matching Realtek HDA package; RZ09-0581 uses Intel SST and
+Windows inbox SDCA audio. The candidate can install the cataloged Realtek or
+Intel packages after exact-model and package checks pass. Windows inbox SDCA
+remains an OS prerequisite whose presence and trust must be verified. The THX
+installers themselves do not contain these prerequisites.
+
+The [base audio guide](thx-base-audio-prerequisites.md) records the official
+sources and checks. This implementation is not merged or shipped, and clean
+installation with Synapse absent, restart behavior and audio operation remain
+unvalidated. Razer also documents restoring audio through
 [Windows Update or system recovery](https://mysupport.razer.com/app/answers/detail/a_id/3985).
 The rznb11 installer must not be used for rznb12.
 
@@ -123,7 +128,7 @@ mutation. Fresh installation remains physically unvalidated. Mutable user
 settings and presets are separate from the immutable configuration pins; an
 updater's output hash does not prove preservation of those settings.
 
-See the [core investigation](https://github.com/OpenBladeProject/openblade-core/blob/942c620e0c2b52be274e2ef99ea629ab1cb8dbb4/docs/thx-installation-investigation.md)
+See the [core investigation](https://github.com/OpenBladeProject/openblade-core/blob/4bf8bbce4d16ffa8693044f5e4dc94a57dd6328e/docs/thx-installation-investigation.md)
 for the static inspection and [issue #808](https://github.com/OpenBladeProject/openblade-core/issues/808)
 for the affected-user report. New models require an explicit review in
 [the applicability ledger](../catalog/applicability.json), including models for
