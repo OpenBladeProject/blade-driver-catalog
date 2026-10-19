@@ -20,3 +20,8 @@ control code.
 - Use Conventional Commits with lowercase imperative summaries.
 - Run `tests/Run-All.ps1` after changing documentation, templates, manifests,
   or repository policy.
+- Keep `catalog/applicability.json` complete for every discovered driver and
+  component entry against every supported OpenBlade model. A new core model
+  requires vendor-source review of all entries, an updated source pin and
+  ledger, and a refreshed core coverage fixture. A shared dependency is not
+  evidence that a complete package is universal. See `docs/upstream-components.md`.
