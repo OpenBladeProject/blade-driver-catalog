@@ -22,10 +22,11 @@
     "intel": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["models", "source", "catalogHardwareIds", "exactObservedChain", "activePublishedInfBindings", "activeInfByteMatchesOfficialCab", "root", "copyInf", "packages", "inbox", "sameCabNotInRootClosure", "limit"],
+      "required": ["models", "source", "rootHardwareIds", "catalogHardwareIds", "exactObservedChain", "activePublishedInfBindings", "activeInfByteMatchesOfficialCab", "root", "copyInf", "packages", "inbox", "sameCabNotInRootClosure", "limit"],
       "properties": {
         "models": { "const": ["RZ09-0581"] },
         "source": { "$ref": "#/$defs/catalogSource" },
+        "rootHardwareIds": { "type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
         "catalogHardwareIds": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
         "exactObservedChain": { "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
         "activePublishedInfBindings": { "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Za-z0-9]+\\.inf=[0-9.]+$" } },
@@ -41,7 +42,7 @@
     "realtek": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["models", "source", "driverVer", "inf", "catalog", "files", "inbox"],
+      "required": ["models", "rootHardwareIds", "source", "driverVer", "inf", "catalog", "files", "inbox"],
       "properties": {
         "models": {
           "type": "object",
@@ -52,6 +53,7 @@
             "RZ09_0530": { "const": "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582023" }
           }
         },
+        "rootHardwareIds": { "type": "array", "minItems": 11, "maxItems": 11, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
         "source": { "$ref": "#/$defs/realtekSource" },
         "driverVer": { "const": "10/28/2025,6.0.9906.1" },
         "inf": { "const": "HDXACPRazer.inf" },
@@ -78,7 +80,7 @@
   "$defs": {
     "sha256": { "type": "string", "pattern": "^[A-F0-9]{64}$" },
     "fileName": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.inf$" },
-    "hardwareId": { "type": "string", "pattern": "^(PCI|INTELAUDIO)\\\\[A-Z0-9_&]+$" },
+    "hardwareId": { "type": "string", "pattern": "^(PCI|INTELAUDIO|HDAUDIO)\\\\[A-Z0-9_&]+$" },
     "url": { "type": "string", "pattern": "^https://" },
     "catalogSource": {
       "type": "object",

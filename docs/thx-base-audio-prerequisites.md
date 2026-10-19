@@ -12,6 +12,10 @@ PCI root. That INF uses `CopyINF` to stage nine related Intel packages. Staging
 those packages is not a request to install every generic INF with a wildcard;
 Windows PnP binds only matching devices. A future recipe must stage the one
 pinned root package and let its declared `CopyINF` closure be imported.
+The Intel root also matches E428 and 4D28 class devices, while the Realtek root
+matches eleven codec IDs. An `/install` action can therefore reach incidental
+matching targets; those complete INF lists are evidence scope and do not admit
+models beyond RZ09-0581, RZ09-0528, and RZ09-0530.
 
 The reviewed CAB contains all files declared by the root and the nine staged
 packages. All ten catalogs have valid Microsoft Windows Hardware Compatibility
@@ -29,10 +33,12 @@ pinned official CAB. The Catalog entry itself lists generic E328 controller IDs;
 it does not name `SUBSYS_30101A58` or RZ09-0581. Any future admission therefore
 needs both the exact RZ09-0581 host gate and the exact controller chain above.
 
-The codec side is Windows inbox SoundWire SDCA (`sdcaclass.inf`, `sdcamfd.inf`,
-`sdcaaggregator.inf`, and `sdcahid.inf`). These packages are OS prerequisites,
-not files supplied by the Intel CAB. Their presence and compatible Windows
-version must be checked rather than copying or redistributing them.
+The codec side uses Windows inbox SoundWire SDCA. The audio class, peripheral
+and aggregator roles (`sdcaclass.inf`, `sdcamfd.inf`, `sdcaaggregator.inf`) are OS
+prerequisites, not files supplied by the Intel CAB. Their presence and trust
+must be checked rather than copying or redistributing them. The observed SDCA
+HID role (`sdcahid.inf`) is OS graph evidence, not an additional THX prerequisite.
+Observed Windows file versions do not establish a minimum supported build.
 
 ## RZ09-0528 and RZ09-0530: Realtek HDA
 

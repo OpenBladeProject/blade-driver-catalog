@@ -30,6 +30,18 @@ function Assert-ThxBaseAudioPrerequisites($Entry) {
         throw 'Official Intel source URL, size or digest drifted.'
     }
 
+    $expectedIntelRootIds = @(
+        'PCI\VEN_8086&DEV_E328&CC_0401',
+        'PCI\VEN_8086&DEV_E328&CC_040380',
+        'PCI\VEN_8086&DEV_E428&CC_0401',
+        'PCI\VEN_8086&DEV_E428&CC_040380',
+        'PCI\VEN_8086&DEV_4D28&CC_0401',
+        'PCI\VEN_8086&DEV_4D28&CC_040380')
+    if ((@($Entry.intel.rootHardwareIds) -join '|') -cne
+        ($expectedIntelRootIds -join '|')) {
+        throw 'Intel root INF hardware-ID scope drifted.'
+    }
+
     $expectedCatalogIds = @(
         'INTELAUDIO\DIF_0005&UIF_0000&SDW_CTLR_DEV_E328&VEN_8086&DEV_0333',
         'INTELAUDIO\SDW_CTLR_DEV_E328&VEN_8086&DEV_0333')
@@ -110,6 +122,22 @@ function Assert-ThxBaseAudioPrerequisites($Entry) {
     if ($actualRealtekSource -cne $expectedRealtekSource) {
         throw 'Official Realtek source URLs, size or digest drifted.'
     }
+    $expectedRealtekRootIds = @(
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582024',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A58300E',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582023',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582022',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582020',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0897&SUBSYS_1A58201E',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0897&SUBSYS_1A58201C',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582013',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582014',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0897&SUBSYS_1A582013',
+        'HDAUDIO\FUNC_01&VEN_10EC&DEV_0897&SUBSYS_1A582014')
+    if ((@($Entry.realtek.rootHardwareIds) -join '|') -cne
+        ($expectedRealtekRootIds -join '|')) {
+        throw 'Realtek root INF hardware-ID scope drifted.'
+    }
     if ($Entry.realtek.models.RZ09_0528 -cne
         'HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A58300E' -or
         $Entry.realtek.models.RZ09_0530 -cne
@@ -167,6 +195,7 @@ $mutations = @(
     { param($x) $x.intel.source.downloadUrl = 'https://example.invalid/intel.cab' },
     { param($x) $x.intel.source.cabSize++ },
     { param($x) $x.intel.source.cabSha256 = 'A' * 64 },
+    { param($x) $x.intel.rootHardwareIds[2] = $x.intel.rootHardwareIds[0] },
     { param($x) $x.intel.catalogHardwareIds[0] = $x.intel.exactObservedChain[2] },
     { param($x) $x.intel.exactObservedChain[2] = 'INTELAUDIO\SDW_CTLR_DEV_E328&VEN_8086&DEV_0333' },
     { param($x) $x.intel.copyInf = @($x.intel.copyInf | Select-Object -Skip 1) },
@@ -174,6 +203,7 @@ $mutations = @(
     { param($x) $x.realtek.source.detailUrls[0] = 'https://example.invalid/detail' },
     { param($x) $x.realtek.source.cabSize++ },
     { param($x) $x.realtek.source.cabSha256 = 'B' * 64 },
+    { param($x) $x.realtek.rootHardwareIds[0] = $x.realtek.rootHardwareIds[1] },
     { param($x) $x.realtek.models.RZ09_0528 = $x.realtek.models.RZ09_0530 },
     { param($x) $x.verification.synapseReferences = 1 }
 )
@@ -192,4 +222,4 @@ if ($raw -match "(?i)[A-Z]:$pathSeparator|oem\d+\.inf") {
     throw 'Published evidence contains a local path or machine-local OEM INF name.'
 }
 
-Write-Output 'THX base-audio prerequisite contracts passed: 10 Intel catalogs, 65 Intel members, 5 Realtek files and 14 rejection checks.'
+Write-Output 'THX base-audio prerequisite contracts passed: 10 Intel catalogs, 65 Intel members, 5 Realtek files and 16 rejection checks.'
