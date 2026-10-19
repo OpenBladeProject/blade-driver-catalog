@@ -63,5 +63,8 @@ component applicability drift. Existing driver manifest schemas remain unchanged
 The [THX audio stack entries](thx-audio-stacks.md) cover all seven supported
 models: exact rznb11 and rznb12 packages, blocked legacy 2.6.5 component
 candidates for the three 2023 THX models, and the Dolby-only RZ09-0328. The
-legacy candidates are not installable without exact OEM child enumeration and
-model tuning; rznb12 also still lacks its base installer.
+legacy entries include exact Realtek codec OEM tuning, but remain unprovisionable
+because runtime THX software-component enumeration and THX deviceEQ integration
+are not established. The cataloged rznb12 version also lacks a reviewed public
+source for its base installer; an older cached base package does not admit the
+required 4.2.41.2499 stack.

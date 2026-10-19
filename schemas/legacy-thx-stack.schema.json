@@ -77,6 +77,19 @@
         "pid": { "type": "string", "pattern": "^[0-9A-F]{4}$" }
       }
     },
+    "oemCodecTuning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileName", "size", "sha256", "profileName", "scope", "thxIntegration"],
+      "properties": {
+        "fileName": { "const": "RTAIODAT.DAT" },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "profileName": { "enum": ["Razer_2020", "Razer_3006", "Razer_3007"] },
+        "scope": { "const": "RealtekCodec" },
+        "thxIntegration": { "const": "NotEstablished" }
+      }
+    },
     "baseAudioPackage": {
       "type": "object",
       "additionalProperties": false,
@@ -89,6 +102,7 @@
         "cab",
         "infSha256",
         "catalogSha256",
+        "oemCodecTuning",
         "catalogSigner"
       ],
       "properties": {
@@ -100,6 +114,7 @@
         "cab": { "$ref": "#/$defs/cab" },
         "infSha256": { "$ref": "#/$defs/sha256" },
         "catalogSha256": { "$ref": "#/$defs/sha256" },
+        "oemCodecTuning": { "$ref": "#/$defs/oemCodecTuning" },
         "catalogSigner": { "$ref": "#/$defs/signer" }
       }
     }
@@ -225,8 +240,8 @@
       ],
       "properties": {
         "status": { "const": "Blocked" },
-        "exactOemChildEnumerationPackage": { "const": "Missing" },
-        "exactModelTuning": { "const": "Missing" },
+        "exactOemChildEnumerationPackage": { "const": "NotEstablished" },
+        "exactModelTuning": { "const": "NotEstablished" },
         "genericComponentsAreModelBindingEvidence": { "const": false },
         "installableCandidate": { "const": false },
         "blockers": {
