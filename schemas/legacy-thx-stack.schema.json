@@ -80,14 +80,29 @@
     "oemCodecTuning": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["fileName", "size", "sha256", "profileName", "scope", "thxIntegration"],
+      "required": ["fileName", "size", "sha256", "profileName", "profilePayload", "scope", "thxIntegration"],
       "properties": {
         "fileName": { "const": "RTAIODAT.DAT" },
         "size": { "type": "integer", "minimum": 1 },
         "sha256": { "$ref": "#/$defs/sha256" },
         "profileName": { "enum": ["Razer_2020", "Razer_3006", "Razer_3007"] },
+        "profilePayload": { "$ref": "#/$defs/realtekProfilePayload" },
         "scope": { "const": "RealtekCodec" },
         "thxIntegration": { "const": "NotEstablished" }
+      }
+    },
+    "realtekProfilePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileIndex", "descriptorOffset", "payloadOffset", "size", "sha256", "recordCount", "recordType"],
+      "properties": {
+        "profileIndex": { "type": "integer", "minimum": 0 },
+        "descriptorOffset": { "type": "integer", "minimum": 16 },
+        "payloadOffset": { "type": "integer", "minimum": 16 },
+        "size": { "type": "integer", "minimum": 36 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "recordCount": { "const": 1 },
+        "recordType": { "const": "RTKAMPI" }
       }
     },
     "thxScuTuning": {

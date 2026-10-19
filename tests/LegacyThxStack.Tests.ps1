@@ -37,6 +37,19 @@ function Assert-LegacyThxStack($Stack) {
     if (($actualProfiles -join ',') -cne ($expectedProfiles -join ',')) {
         throw 'Legacy THX candidates are not the exact reviewed profile set.'
     }
+    $expectedPayloads = @(
+        'RZ09-0482|2428|137132|53267534|6900|BAC1AC6C25DC7AF6B51EC7AD0A474FA4D87E54B0096E9A1A334F7776B4A43D3C|1|RTKAMPI',
+        'RZ09-0483|2397|140436|53506474|18324|42D19433C85388ABE861BF4A850D6B39B193905F60FA7B0824F99BBAABCDFC6E|1|RTKAMPI',
+        'RZ09-0484|2394|140352|53436686|27748|BD0731A047C8EA9F68F82212CB8320AC2CD2995CEBE478C4BF896908AD1480E7|1|RTKAMPI')
+    $actualPayloads = @($Stack.candidateProfiles | ForEach-Object {
+            $payload = $_.baseAudioPackage.oemCodecTuning.profilePayload
+            '{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}' -f $_.modelNumber,
+                $payload.profileIndex, $payload.descriptorOffset, $payload.payloadOffset,
+                $payload.size, $payload.sha256, $payload.recordCount, $payload.recordType
+        })
+    if (($actualPayloads -join '|') -cne ($expectedPayloads -join '|')) {
+        throw 'Realtek payload evidence must use the selected descriptor, not the next profile.'
+    }
     foreach ($profile in $Stack.candidateProfiles) {
         $base = $profile.baseAudioPackage
         if ($profile.usbIdentity.vid -cne '1532' -or
@@ -224,6 +237,8 @@ $mutations = @(
     { param($x) $x.genericComponentPackages[0].files[0].sha256 = 'bad' },
     { param($x) $x.genericComponentPackages[0].catalogSigner.thumbprint = 'bad' },
     { param($x) $x.genericComponentPackages[0].driverVersion = '4.2.29.1159' },
+    { param($x) $x.candidateProfiles[0].baseAudioPackage.oemCodecTuning.profilePayload.descriptorOffset += 12 },
+    { param($x) $x.candidateProfiles[0].baseAudioPackage.oemCodecTuning.profilePayload.sha256 = '78B9E87CD7DCF5965BF576C23805B61BBBFC2548B230853BE69D4ACA18EEEB9D' },
     { param($x) $x.modelBinding.status = 'Ready' },
     { param($x) $x.modelBinding.exactOemChildEnumerationPackage = 'NotEstablished' },
     { param($x) $x.modelBinding.oemChildExtensionEvidence.gitNormalizedInf.catalogMemberVerification = 'Valid' },
@@ -248,4 +263,4 @@ foreach ($mutation in $mutations) {
     }
 }
 
-Write-Output 'Legacy THX contracts passed: 3 candidate models, 4 generic packages, signed child-extension evidence and 26 rejection checks.'
+Write-Output 'Legacy THX contracts passed: 3 candidate models, 4 generic packages, signed child-extension evidence and 28 rejection checks.'
