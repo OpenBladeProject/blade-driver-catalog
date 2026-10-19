@@ -17,8 +17,8 @@ THX rznb12 4.2.37.1621 original signed installer as a public GitHub release asse
 under `OpenBladeProject/blade-driver-catalog`, tag
 `thx-rznb12-4.2.37.1621`. This is an owner statement; the permission document has
 not been independently reviewed. The descriptor marks the exact original file
-as a public catalog release asset and retains `Planned` publication status until
-that release is published. The original binary is hosted separately from Git;
+as a public catalog release asset with `Published` status. The original binary
+is hosted separately from Git;
 this repository contains metadata only and does not contain the installer bytes.
 
 OpenBlade is an independent project. Cataloging or redistributing an authorized

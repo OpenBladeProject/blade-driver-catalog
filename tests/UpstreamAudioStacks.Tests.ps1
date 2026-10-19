@@ -155,9 +155,9 @@ function Assert-AudioStack($Stack) {
             $Stack.redistribution.release.tag -cne 'thx-rznb12-4.2.37.1621' -or
             $Stack.redistribution.release.asset -cne 'THXAPO_rznb12_v4.2.37.1621-5117e8e-i2546a_MSHLKSIGN-2255eea3.3219a439.exe' -or
             $Stack.redistribution.release.url -cne $expectedUrl -or
-            $Stack.redistribution.release.publicationStatus -cne 'Planned' -or
+            $Stack.redistribution.release.publicationStatus -cne 'Published' -or
             $Stack.redistribution.release.authorizedAudience -cne 'Public users') {
-            throw 'Cached installer mirror authorization or exact planned release identity drifted.'
+            throw 'Cached installer mirror authorization or exact published release identity drifted.'
         }
     }
     elseif ($Stack.delivery.method -cne 'DirectVendorDownload' -or

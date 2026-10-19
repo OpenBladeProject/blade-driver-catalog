@@ -19,8 +19,10 @@ Each modern entry pins the artifact sizes, SHA-256 values and Authenticode
 signer, all APO/extension/service package files, and the two immutable active
 configuration files. It also links to the separately cataloged native DLL.
 The direct-download artifacts remain on Razer's servers. The recovered rznb12
-base installer is recorded as a planned catalog release asset; no binary bytes
-are stored in this repository and the release has not been published.
+base installer is published as a separate experimental
+[catalog release asset](https://github.com/OpenBladeProject/blade-driver-catalog/releases/tag/thx-rznb12-4.2.37.1621),
+with its original license notice and SHA-256 checksums. No binary bytes are
+stored in Git.
 
 A matching Realtek base audio driver must already be installed. The THX installer
 does not contain it. Razer documents restoring audio through
@@ -69,7 +71,7 @@ provision that separate installed reference.
 The project owner reports that the existing written permission from Razer US
 Ltd also covers this exact THX installer version as a public GitHub release
 asset. That statement is recorded as owner-reported permission and has not been
-independently checked against the authorization document. The planned asset is
+independently checked against the authorization document. The published asset is
 bound to repository `OpenBladeProject/blade-driver-catalog`, tag
 `thx-rznb12-4.2.37.1621`, and the original filename. Arbitrary repositories,
 tags, filenames, or versions are not authorized by this entry.

@@ -71,7 +71,7 @@ SpeakerPath profiles. It remains unprovisionable because generic THX
 software-component association and endpoint FX/APO binding are not established.
 The rznb12 4.2.41.2499 installed reference still lacks a
 matching base installer. A separate recovered 4.2.37.1621 base is recorded with
-Windows Installer cache provenance and an exact planned catalog release URL.
+Windows Installer cache provenance and an exact published catalog release URL.
 Its project-owner-reported redistribution permission, different driver hashes,
 protected inner Burn recipe, conditional whole-stack and both-endpoint admission,
 and lack of physical validation remain explicit.
