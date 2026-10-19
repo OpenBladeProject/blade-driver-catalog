@@ -49,8 +49,9 @@ function Assert-Applicability($Ledger, $Artifacts) {
                 throw 'Driver stack and coverage identities disagree.'
             }
         }
-        elseif ($artifact.manifestType -eq 'OpenBlade.RazerUpstreamComponentCatalogEntry') {
-            if ($entry.kind -ne 'UpstreamComponent' -or
+        elseif ($artifact.manifestType -in @('OpenBlade.RazerUpstreamComponentCatalogEntry','OpenBlade.RazerUpstreamAudioStackCatalogEntry')) {
+            $expectedKind = if ($artifact.manifestType -eq 'OpenBlade.RazerUpstreamAudioStackCatalogEntry') { 'UpstreamAudioStack' } else { 'UpstreamComponent' }
+            if ($entry.kind -ne $expectedKind -or
                 (($applicable | Sort-Object) -join '|') -cne
                 ((@($artifact.applicableProfiles.modelNumber) | Sort-Object) -join '|')) {
                 throw 'Component applicableProfiles must equal the applicable review set.'

@@ -47,3 +47,5 @@ OpenBlade 可以直接使用 Razer 提供的部分独立组件，而无需重新
     -NoProfile -NonInteractive -ExecutionPolicy Bypass `
     -File .\tests\Run-All.ps1
 ```
+
+[THX 音频驱动目录](docs/zh-CN/thx-audio-stacks.md)记录各型号所需的驱动和配置组件，并说明哪些缺失的安装包会导致无法完整安装。

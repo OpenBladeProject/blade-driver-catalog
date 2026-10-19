@@ -1,0 +1,507 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenBladeProject/blade-driver-catalog/blob/main/schemas/upstream-audio-stack.schema.json",
+  "title": "OpenBlade Razer upstream THX audio stack catalog entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "manifestType",
+    "schemaVersion",
+    "stack",
+    "applicableProfiles",
+    "driverPackages",
+    "activeConfiguration",
+    "artifacts",
+    "upstreamManifestEvidence",
+    "nativeClient",
+    "provisioning",
+    "delivery",
+    "redistribution",
+    "privacy",
+    "limitations"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../../schemas/upstream-audio-stack.schema.json"
+    },
+    "manifestType": {
+      "const": "OpenBlade.RazerUpstreamAudioStackCatalogEntry"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "stack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "productId",
+        "driverVersion",
+        "configurationVersion",
+        "serviceName",
+        "serviceExecutable"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "thx-rznb11",
+            "thx-rznb12"
+          ]
+        },
+        "productId": {
+          "enum": [
+            "rznb11",
+            "rznb12"
+          ]
+        },
+        "driverVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+(?:[.][0-9]+){3}$"
+        },
+        "configurationVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+(?:[.][0-9]+){3}$"
+        },
+        "serviceName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "serviceExecutable": {
+          "type": "string",
+          "pattern": "^[^/\\\\]+$"
+        }
+      }
+    },
+    "applicableProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vendorProductId",
+          "modelNumber",
+          "productName",
+          "usbIdentity",
+          "codecHardwareIds"
+        ],
+        "properties": {
+          "vendorProductId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "modelNumber": {
+            "type": "string",
+            "pattern": "^RZ09-[0-9]{4}$"
+          },
+          "productName": {
+            "type": "string",
+            "minLength": 1
+          },
+          "usbIdentity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "vid",
+              "pid"
+            ],
+            "properties": {
+              "vid": {
+                "type": "string",
+                "pattern": "^[0-9A-F]{4}$"
+              },
+              "pid": {
+                "type": "string",
+                "pattern": "^[0-9A-F]{4}$"
+              }
+            }
+          },
+          "codecHardwareIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "driverPackages": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "infName",
+          "catalogFile",
+          "files"
+        ],
+        "properties": {
+          "infName": {
+            "type": "string",
+            "pattern": "^[^/\\\\]+$"
+          },
+          "catalogFile": {
+            "type": "string",
+            "pattern": "^[^/\\\\]+$"
+          },
+          "files": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "sha256"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[^/\\\\]+$"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9A-F]{64}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "activeConfiguration": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "fileName",
+          "size",
+          "sha256",
+          "sourceArtifactId"
+        ],
+        "properties": {
+          "fileName": {
+            "type": "string",
+            "pattern": "^[^/\\\\]+$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{64}$"
+          },
+          "sourceArtifactId": {
+            "enum": [
+              "PropertiesUpdater",
+              "SurroundUpdater"
+            ]
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "role",
+          "version",
+          "fileName",
+          "size",
+          "sha256",
+          "sourceUrl",
+          "authenticode",
+          "manifestReferences"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "BaseInstaller",
+              "PropertiesUpdater",
+              "SurroundUpdater"
+            ]
+          },
+          "role": {
+            "enum": [
+              "BaseInstaller",
+              "PropertiesUpdater",
+              "SurroundUpdater"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+(?:[.][0-9]+){3}$"
+          },
+          "fileName": {
+            "type": "string",
+            "pattern": "^[^/\\\\]+[.]exe$"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{64}$"
+          },
+          "sourceUrl": {
+            "type": "string",
+            "pattern": "^https://app-assets[.]razer[.]com/files/synapse/devices/common/THX/[^/]+[.]exe$"
+          },
+          "authenticode": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "signerSubject",
+              "signerThumbprint",
+              "issuer"
+            ],
+            "properties": {
+              "status": {
+                "const": "Valid"
+              },
+              "signerSubject": {
+                "type": "string",
+                "minLength": 1
+              },
+              "signerThumbprint": {
+                "type": "string",
+                "pattern": "^[0-9A-F]{40}$"
+              },
+              "issuer": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "manifestReferences": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "vendorProductId",
+                "resourceName",
+                "resourceVersion",
+                "resourcePath",
+                "runOnInstall",
+                "restartRequired"
+              ],
+              "properties": {
+                "vendorProductId": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "resourceName": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "resourceVersion": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(?:[.][0-9]+){3}$"
+                },
+                "resourcePath": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "runOnInstall": {
+                  "type": "string"
+                },
+                "restartRequired": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "upstreamManifestEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vendorProductId",
+          "url",
+          "sha256",
+          "vendorCommit",
+          "resourceManifestVersion"
+        ],
+        "properties": {
+          "vendorProductId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://apps[.]razer[.]com/synapse/products/[0-9]+/mw/manifest[.]json$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{64}$"
+          },
+          "vendorCommit": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{40}$"
+          },
+          "resourceManifestVersion": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "nativeClient": {
+      "const": "components/thx-v4-native/1.1.1.0/component.json"
+    },
+    "provisioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "requiresMatchingBaseAudioDriver",
+        "baseAudioDriverIncluded",
+        "existingStackReplacementAllowed",
+        "physicalInstallationValidation",
+        "blockers"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "FreshInstallCandidate",
+            "BaseInstallerUnavailable"
+          ]
+        },
+        "requiresMatchingBaseAudioDriver": {
+          "const": true
+        },
+        "baseAudioDriverIncluded": {
+          "const": false
+        },
+        "existingStackReplacementAllowed": {
+          "const": false
+        },
+        "physicalInstallationValidation": {
+          "const": "Pending"
+        },
+        "blockers": {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "requiredVerification"
+      ],
+      "properties": {
+        "method": {
+          "const": "DirectVendorDownload"
+        },
+        "requiredVerification": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "Size",
+              "Sha256",
+              "Authenticode",
+              "InstalledDriverCatalogMembership",
+              "InstalledStackReadback"
+            ]
+          }
+        }
+      }
+    },
+    "redistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "catalogContainsArtifact",
+        "catalogReleaseAsset"
+      ],
+      "properties": {
+        "status": {
+          "const": "NotPublished"
+        },
+        "catalogContainsArtifact": {
+          "const": false
+        },
+        "catalogReleaseAsset": {
+          "const": false
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "containsDriverBytes",
+        "containsSerial",
+        "containsUsername",
+        "containsLocalPath",
+        "containsFullInstanceId"
+      ],
+      "properties": {
+        "containsDriverBytes": {
+          "const": false
+        },
+        "containsSerial": {
+          "const": false
+        },
+        "containsUsername": {
+          "const": false
+        },
+        "containsLocalPath": {
+          "const": false
+        },
+        "containsFullInstanceId": {
+          "const": false
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

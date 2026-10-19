@@ -57,3 +57,7 @@ New catalog entries also require decisions for every listed model. The catalog
 suite discovers entries by manifest type, checks complete coverage and exact
 identity agreement, and rejects missing reviews, unsupported statuses and
 component applicability drift. Existing driver manifest schemas remain unchanged.
+
+## THX driver stacks
+
+The [THX audio stack entries](thx-audio-stacks.md) record the matching rznb11 and rznb12 packages separately from the standalone DLL. They pin vendor downloads, complete driver files and active configuration, and explicitly record the unavailable rznb12 base installer.
