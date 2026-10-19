@@ -25,3 +25,35 @@ OpenBlade core owns exact-device admission, destination handling, runtime
 validation, and recovery behavior. See
 [OpenBlade issue #808](https://github.com/OpenBladeProject/openblade-core/issues/808),
 which motivated the component-detection work and this entry.
+
+## Review every supported model
+
+[`catalog/applicability.json`](../catalog/applicability.json) records the reviewed
+OpenBlade model set and a decision for every catalog artifact against every
+model. `Applicable` means the cited source supports catalog applicability;
+`NotEstablished` means evidence is insufficient, not that the model is incompatible.
+Neither status grants runtime admission or installation authority.
+
+The 2026-10-19 review covered all seven OpenBlade models. THX V4 Native 1.1.1.0
+is named by the manifests for RZ09-0530, RZ09-0528 and RZ09-0581. The reviewed
+manifests for RZ09-0328, RZ09-0482, RZ09-0483 and RZ09-0484 contain no THX native
+client resource. Their manifest build and revision are recorded in the ledger.
+The evidence does not establish a universal THX package.
+
+Both cataloged driver stacks remain scoped to their own PID. Their DKM, virtual
+consumer, keyboard and mouse INF targets name that PID. The RzCommon INF, CAT
+and SYS hashes are identical in both stacks, and its INF matches the generic
+`RAZER\DeviceContol` child. That shared dependency does not make either complete
+stack universal or establish support for the five other models.
+
+When OpenBlade adds or changes a model, review every driver stack and upstream
+component against that model's vendor definitions. Update the ledger's pinned
+core source and profiles, add an evidenced decision to every entry, and update
+component `applicableProfiles` for all established matches. Then refresh core's
+pinned coverage fixture and run both repositories' contract tests. Core's model
+coverage guard must fail until this review and fixture refresh are complete.
+
+New catalog entries also require decisions for every listed model. The catalog
+suite discovers entries by manifest type, checks complete coverage and exact
+identity agreement, and rejects missing reviews, unsupported statuses and
+component applicability drift. Existing driver manifest schemas remain unchanged.
