@@ -77,7 +77,7 @@ foreach ($directory in 'devices','components') {
         $value = Get-Content $file.FullName -Raw | ConvertFrom-Json
         # Discover by content, so a new entry cannot evade coverage by renaming its file.
         if ($value.PSObject.Properties.Name -contains 'manifestType') {
-            $path = [IO.Path]::GetRelativePath($repository, $file.FullName).Replace('\','/')
+            $path = $file.FullName.Substring($repository.Length + 1).Replace('\','/')
             $artifacts[$path] = $value
         }
     }
