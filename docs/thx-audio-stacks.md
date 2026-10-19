@@ -24,8 +24,13 @@ base installer is published as a separate experimental
 with its original license notice and SHA-256 checksums. No binary bytes are
 stored in Git.
 
-A matching Realtek base audio driver must already be installed. The THX installer
-does not contain it. Razer documents restoring audio through
+The base audio prerequisites must already be installed. RZ09-0528 and RZ09-0530
+use a matching Realtek HDA codec package. RZ09-0581 uses Windows inbox SDCA audio
+over Intel SST. The THX installers do not contain these prerequisites, and the
+current OpenBlade recipe does not install them. Official Windows Update sources
+are recorded separately in the [base audio investigation](thx-base-audio-prerequisites.md);
+source verification does not establish a complete or tested installation recipe.
+Razer also documents restoring audio through
 [Windows Update or system recovery](https://mysupport.razer.com/app/answers/detail/a_id/3985).
 The rznb11 installer must not be used for rznb12.
 
