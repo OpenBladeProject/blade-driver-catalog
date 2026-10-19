@@ -90,6 +90,26 @@
         "thxIntegration": { "const": "NotEstablished" }
       }
     },
+    "thxScuTuning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subsystemSelector",
+        "profileId",
+        "profileVersion",
+        "speakerPathSha256",
+        "schema",
+        "genericFallbackAccepted"
+      ],
+      "properties": {
+        "subsystemSelector": { "enum": ["2020", "3006", "3007"] },
+        "profileId": { "enum": ["PI490", "SO690", "KI890"] },
+        "profileVersion": { "enum": ["profile-20230502", "profile-20221107", "profile-20221122-PVT-red"] },
+        "speakerPathSha256": { "$ref": "#/$defs/sha256" },
+        "schema": { "const": "devices-V2" },
+        "genericFallbackAccepted": { "const": false }
+      }
+    },
     "baseAudioPackage": {
       "type": "object",
       "additionalProperties": false,
@@ -148,7 +168,8 @@
           "productName",
           "usbIdentity",
           "officialProductEvidenceUrl",
-          "baseAudioPackage"
+          "baseAudioPackage",
+          "thxScuTuning"
         ],
         "properties": {
           "vendorProductId": { "enum": [669, 671, 672] },
@@ -156,7 +177,8 @@
           "productName": { "type": "string", "minLength": 1 },
           "usbIdentity": { "$ref": "#/$defs/usbIdentity" },
           "officialProductEvidenceUrl": { "type": "string", "pattern": "^https://mysupport[.]razer[.]com/app/answers/detail/a_id/[0-9]+/$" },
-          "baseAudioPackage": { "$ref": "#/$defs/baseAudioPackage" }
+          "baseAudioPackage": { "$ref": "#/$defs/baseAudioPackage" },
+          "thxScuTuning": { "$ref": "#/$defs/thxScuTuning" }
         }
       }
     },
@@ -234,6 +256,12 @@
         "status",
         "exactOemChildEnumerationPackage",
         "exactModelTuning",
+        "genericFallbackAccepted",
+        "ordinaryAudioIncludeNeedsPresent",
+        "thxSpecificIncludeNeedsPresent",
+        "endpointFxApoBinding",
+        "apoRegistration",
+        "e82GuidEvidence",
         "genericComponentsAreModelBindingEvidence",
         "installableCandidate",
         "blockers"
@@ -241,7 +269,47 @@
       "properties": {
         "status": { "const": "Blocked" },
         "exactOemChildEnumerationPackage": { "const": "NotEstablished" },
-        "exactModelTuning": { "const": "NotEstablished" },
+        "exactModelTuning": { "const": "Established" },
+        "genericFallbackAccepted": { "const": false },
+        "ordinaryAudioIncludeNeedsPresent": { "const": true },
+        "thxSpecificIncludeNeedsPresent": { "const": false },
+        "endpointFxApoBinding": { "const": "NotEstablished" },
+        "apoRegistration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hostClsid", "offloadClsid"],
+          "properties": {
+            "hostClsid": { "const": "68650828-CA0F-4196-9096-5F50931AF10A" },
+            "offloadClsid": { "const": "E6769B7D-B58F-45CA-B6F2-964B83EDCB76" }
+          }
+        },
+        "e82GuidEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["guid", "presentIn", "absentFrom", "equalsThxApoClsid", "role"],
+          "properties": {
+            "guid": { "const": "E82A5EE8-44D2-44C1-897E-AA5AFBF146BA" },
+            "presentIn": {
+              "type": "array",
+              "prefixItems": [{ "const": "RZ09-0482 HDXACPRazer.inf" }],
+              "items": false,
+              "minItems": 1,
+              "maxItems": 1
+            },
+            "absentFrom": {
+              "type": "array",
+              "prefixItems": [
+                { "const": "RZ09-0483 HDXSSTRazer.inf" },
+                { "const": "RZ09-0484 HDXSSTRazer.inf" }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "equalsThxApoClsid": { "const": false },
+            "role": { "const": "NotEstablished" }
+          }
+        },
         "genericComponentsAreModelBindingEvidence": { "const": false },
         "installableCandidate": { "const": false },
         "blockers": {

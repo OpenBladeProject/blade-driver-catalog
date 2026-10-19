@@ -52,8 +52,14 @@ function Assert-Applicability($Ledger, $Artifacts) {
         }
         elseif ($artifact.manifestType -in @('OpenBlade.RazerUpstreamComponentCatalogEntry','OpenBlade.RazerUpstreamAudioStackCatalogEntry')) {
             $expectedKind = if ($artifact.manifestType -eq 'OpenBlade.RazerUpstreamAudioStackCatalogEntry') { 'UpstreamAudioStack' } else { 'UpstreamComponent' }
-            if ($entry.kind -ne $expectedKind -or
-                (($applicable | Sort-Object) -join '|') -cne
+            $sourceReviewPending = $artifact.manifestType -eq 'OpenBlade.RazerUpstreamAudioStackCatalogEntry' -and
+                $artifact.provisioning.status -eq 'SourceReviewPending'
+            $reviewedProfiles = if ($sourceReviewPending) {
+                @($entry.review | Where-Object status -eq CandidateOnly | ForEach-Object modelNumber)
+            }
+            else { $applicable }
+            if ($entry.kind -ne $expectedKind -or ($sourceReviewPending -and $applicable.Count -ne 0) -or
+                (($reviewedProfiles | Sort-Object) -join '|') -cne
                 ((@($artifact.applicableProfiles.modelNumber) | Sort-Object) -join '|')) {
                 throw 'Component applicableProfiles must equal the applicable review set.'
             }

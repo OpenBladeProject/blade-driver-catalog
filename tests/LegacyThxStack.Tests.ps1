@@ -19,17 +19,20 @@ function Assert-LegacyThxStack($Stack) {
     }
 
     $expectedProfiles = @(
-        '669|RZ09-0482|029D|HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582020|6.0.9484.1|d5987bbd-d8bd-4ebe-95e6-2c521b13baaa|6340FE3A2730FA7469D09BA5F8029F9492A8CF745562A66B2842154DE5726EF2|RTAIODAT.DAT|54704172|E84591EF1106343CE3200795CDFADDC4D6347F6F86E8E28012CEC82F130E5A32|Razer_2020|RealtekCodec|NotEstablished',
-        '671|RZ09-0483|029F|INTELAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583006|6.0.9601.1|fc8c3fe8-290e-4984-af52-75020538e18d|27AE05348EBB066F3F7FD4896A1E40416E565841ED76CEA38D039A2241905C78|RTAIODAT.DAT|57817855|98509C3F66CA9D20B12DE14A8063C25502C439840193D501E80A857EA510F08B|Razer_3006|RealtekCodec|NotEstablished',
-        '672|RZ09-0484|02A0|INTELAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583007|6.0.9601.1|01c12b71-a0f8-40ff-8be0-7b9c4225ed5a|27AE05348EBB066F3F7FD4896A1E40416E565841ED76CEA38D039A2241905C78|RTAIODAT.DAT|57817855|98509C3F66CA9D20B12DE14A8063C25502C439840193D501E80A857EA510F08B|Razer_3007|RealtekCodec|NotEstablished')
+        '669|RZ09-0482|029D|HDAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582020|6.0.9484.1|d5987bbd-d8bd-4ebe-95e6-2c521b13baaa|6340FE3A2730FA7469D09BA5F8029F9492A8CF745562A66B2842154DE5726EF2|RTAIODAT.DAT|54704172|E84591EF1106343CE3200795CDFADDC4D6347F6F86E8E28012CEC82F130E5A32|Razer_2020|RealtekCodec|NotEstablished|2020|PI490|profile-20230502|A694CC6E87985CF3EF58AAA2CF1E00FCCA4F24FE02EE464AC164C72986F4AF68|devices-V2|False',
+        '671|RZ09-0483|029F|INTELAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583006|6.0.9601.1|fc8c3fe8-290e-4984-af52-75020538e18d|27AE05348EBB066F3F7FD4896A1E40416E565841ED76CEA38D039A2241905C78|RTAIODAT.DAT|57817855|98509C3F66CA9D20B12DE14A8063C25502C439840193D501E80A857EA510F08B|Razer_3006|RealtekCodec|NotEstablished|3006|SO690|profile-20221107|94A947281EF38E06C8C81F26BBAA3A64640323FD50F264E171FC52401EBD36E2|devices-V2|False',
+        '672|RZ09-0484|02A0|INTELAUDIO\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583007|6.0.9601.1|01c12b71-a0f8-40ff-8be0-7b9c4225ed5a|27AE05348EBB066F3F7FD4896A1E40416E565841ED76CEA38D039A2241905C78|RTAIODAT.DAT|57817855|98509C3F66CA9D20B12DE14A8063C25502C439840193D501E80A857EA510F08B|Razer_3007|RealtekCodec|NotEstablished|3007|KI890|profile-20221122-PVT-red|ECECE0925FC8FA43D4102A9E49BB7EE1A7F8A9B3F6233F4D50A71C788A0FC767|devices-V2|False')
     $actualProfiles = @($Stack.candidateProfiles | ForEach-Object {
-            '{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}' -f $_.vendorProductId, $_.modelNumber,
+            '{0}|{1}|{2}|{3}|{4}|{5}|{6}|{7}|{8}|{9}|{10}|{11}|{12}|{13}|{14}|{15}|{16}|{17}|{18}' -f $_.vendorProductId, $_.modelNumber,
                 $_.usbIdentity.pid, $_.baseAudioPackage.hardwareId,
                 $_.baseAudioPackage.driverVersion, $_.baseAudioPackage.updateId,
                 $_.baseAudioPackage.cab.sha256, $_.baseAudioPackage.oemCodecTuning.fileName,
                 $_.baseAudioPackage.oemCodecTuning.size, $_.baseAudioPackage.oemCodecTuning.sha256,
                 $_.baseAudioPackage.oemCodecTuning.profileName, $_.baseAudioPackage.oemCodecTuning.scope,
-                $_.baseAudioPackage.oemCodecTuning.thxIntegration
+                $_.baseAudioPackage.oemCodecTuning.thxIntegration,
+                $_.thxScuTuning.subsystemSelector, $_.thxScuTuning.profileId,
+                $_.thxScuTuning.profileVersion, $_.thxScuTuning.speakerPathSha256,
+                $_.thxScuTuning.schema, $_.thxScuTuning.genericFallbackAccepted
         } | Sort-Object)
     if (($actualProfiles -join ',') -cne ($expectedProfiles -join ',')) {
         throw 'Legacy THX candidates are not the exact reviewed profile set.'
@@ -121,7 +124,18 @@ function Assert-LegacyThxStack($Stack) {
 
     if ($Stack.modelBinding.status -cne 'Blocked' -or
         $Stack.modelBinding.exactOemChildEnumerationPackage -cne 'NotEstablished' -or
-        $Stack.modelBinding.exactModelTuning -cne 'NotEstablished' -or
+        $Stack.modelBinding.exactModelTuning -cne 'Established' -or
+        $Stack.modelBinding.genericFallbackAccepted -ne $false -or
+        $Stack.modelBinding.ordinaryAudioIncludeNeedsPresent -ne $true -or
+        $Stack.modelBinding.thxSpecificIncludeNeedsPresent -ne $false -or
+        $Stack.modelBinding.endpointFxApoBinding -cne 'NotEstablished' -or
+        $Stack.modelBinding.apoRegistration.hostClsid -cne '68650828-CA0F-4196-9096-5F50931AF10A' -or
+        $Stack.modelBinding.apoRegistration.offloadClsid -cne 'E6769B7D-B58F-45CA-B6F2-964B83EDCB76' -or
+        $Stack.modelBinding.e82GuidEvidence.guid -cne 'E82A5EE8-44D2-44C1-897E-AA5AFBF146BA' -or
+        (@($Stack.modelBinding.e82GuidEvidence.presentIn) -join '|') -cne 'RZ09-0482 HDXACPRazer.inf' -or
+        (@($Stack.modelBinding.e82GuidEvidence.absentFrom) -join '|') -cne 'RZ09-0483 HDXSSTRazer.inf|RZ09-0484 HDXSSTRazer.inf' -or
+        $Stack.modelBinding.e82GuidEvidence.equalsThxApoClsid -ne $false -or
+        $Stack.modelBinding.e82GuidEvidence.role -cne 'NotEstablished' -or
         $Stack.modelBinding.genericComponentsAreModelBindingEvidence -or
         $Stack.modelBinding.installableCandidate -or
         @($Stack.modelBinding.blockers).Count -lt 2) {
@@ -140,6 +154,7 @@ $schema = Get-Content -LiteralPath $schemaPath -Raw | ConvertFrom-Json
 if ($schema.'$schema' -cne 'https://json-schema.org/draft/2020-12/schema' -or
     $schema.additionalProperties -ne $false -or
     $schema.properties.manifestType.const -cne 'OpenBlade.RazerLegacyThxStackEvidence' -or
+    $schema.properties.modelBinding.properties.exactModelTuning.const -cne 'Established' -or
     $schema.properties.modelBinding.properties.installableCandidate.const -ne $false) {
     throw 'Legacy THX JSON schema lost its strict evidence boundary.'
 }
@@ -160,12 +175,17 @@ $mutations = @(
     { param($x) $x.candidateProfiles[0].baseAudioPackage.oemCodecTuning.profileName = 'Razer_3007' },
     { param($x) $x.candidateProfiles[0].baseAudioPackage.oemCodecTuning.sha256 = '98509C3F66CA9D20B12DE14A8063C25502C439840193D501E80A857EA510F08B' },
     { param($x) $x.candidateProfiles[0].baseAudioPackage.oemCodecTuning.thxIntegration = 'Established' },
+    { param($x) $x.candidateProfiles[0].thxScuTuning.profileId = 'SO690' },
+    { param($x) $x.candidateProfiles[0].thxScuTuning.genericFallbackAccepted = $true },
     { param($x) $x.knownNonThxProfiles[0].audioTechnology = 'THX' },
     { param($x) $x.genericComponentPackages = @($x.genericComponentPackages | Select-Object -Skip 1) },
     { param($x) $x.genericComponentPackages[0].files[0].sha256 = 'bad' },
     { param($x) $x.genericComponentPackages[0].catalogSigner.thumbprint = 'bad' },
     { param($x) $x.genericComponentPackages[0].driverVersion = '4.2.29.1159' },
     { param($x) $x.modelBinding.status = 'Ready' },
+    { param($x) $x.modelBinding.exactModelTuning = 'NotEstablished' },
+    { param($x) $x.modelBinding.endpointFxApoBinding = 'Established' },
+    { param($x) $x.modelBinding.e82GuidEvidence.absentFrom = @('RZ09-0484 HDXSSTRazer.inf') },
     { param($x) $x.modelBinding.installableCandidate = $true },
     { param($x) $x.modelBinding.genericComponentsAreModelBindingEvidence = $true },
     { param($x) $x.delivery.packagePurpose = 'Installer' }
@@ -180,4 +200,4 @@ foreach ($mutation in $mutations) {
     }
 }
 
-Write-Output 'Legacy THX contracts passed: 3 candidate models, 4 generic packages and 15 rejection checks.'
+Write-Output 'Legacy THX contracts passed: 3 candidate models, 4 generic packages and 20 rejection checks.'
