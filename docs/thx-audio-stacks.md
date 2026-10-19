@@ -9,9 +9,9 @@ universal.
 | --- | --- | --- |
 | RZ09-0581 | [rznb12 4.2.41.2499](../components/thx-rznb12/4.2.41.2499/stack.json) installed reference; [recovered rznb12 4.2.37.1621 candidate](../components/thx-rznb12/4.2.37.1621/stack.json); configuration 4.2.37.1846 | Source-backed fresh-install candidate with conditional whole-stack admission and both-endpoint read admission before runtime mutation; installation and physical behavior remain unvalidated. The 4.2.41.2499 reference is still blocked because it has no matching base installer. |
 | RZ09-0528 | [rznb11 4.2.29.1159](../components/thx-rznb11/4.2.29.1159/stack.json), configuration 4.2.37.1845 | Source-backed fresh-install candidate; physical installation remains pending. |
-| RZ09-0484 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: exact THX SCU tuning is established; THX component association and endpoint FX/APO binding remain unestablished. |
-| RZ09-0483 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: exact THX SCU tuning is established; THX component association and endpoint FX/APO binding remain unestablished. |
-| RZ09-0482 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: exact THX SCU tuning is established; THX component association and endpoint FX/APO binding remain unestablished. |
+| RZ09-0484 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: model tuning and component association rules are established; endpoint effects binding and installation order remain unresolved. |
+| RZ09-0483 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: model tuning and component association rules are established; endpoint effects binding and installation order remain unresolved. |
+| RZ09-0482 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: model tuning and component association rules are established; endpoint effects binding and installation order remain unresolved. |
 | RZ09-0530 | [rznb11 4.2.29.1159](../components/thx-rznb11/4.2.29.1159/stack.json), configuration 4.2.37.1845 | Source-backed fresh-install candidate; physical installation remains pending. |
 | RZ09-0328 | Dolby Atmos in the [exact-model specification](https://mysupport.razer.com/app/answers/detail/a_id/3641/) | THX is not applicable. |
 
@@ -36,12 +36,23 @@ signed SCU contains the actual model selector and THX SpeakerPath tuning:
 `2020` selects PI490 `profile-20230502`, `3006` selects SO690
 `profile-20221107`, and `3007` selects KI890
 `profile-20221122-PVT-red`. It uses the V2 schema and explicitly rejects the
-generic fallback. What remains unestablished is creation or association of the
-generic `SWC\VEN_THX` components and the endpoint FX/APO binding. These
-packages remain component candidates, not a complete or installable stack.
+generic fallback. Earlier evidence did not establish creation or association
+of the generic `SWC\VEN_THX` components. A recovered signed
+`THXHDAudio.inf` extension now closes that gap: it exactly matches
+all three codec IDs and enumerates `THXAPO`, `THXSVC`, `THXHSA` and `THXSCU`
+through the normal AVX2/subsystem sections. It also names the `OutAPO` and
+`HPAPO` render endpoint settings and `%ProgramData%\THX\thx_spatial.conf.json`.
+The Git-hosted INF is LF-normalized and is not catalog-valid. Restoring only
+its original CRLF line endings reproduces the catalog-covered 29,311-byte INF;
+the catalog pins both forms so the normalized file cannot be mistaken for the
+signed original. The complete exact-model endpoint CompositeFX chain and the
+safe install, rescan and restart sequence remain unestablished. The legacy
+stack therefore remains blocked and non-installable.
 
-The reviewed Realtek INFs have the ordinary `ks.inf`/`wdmaudio.inf`
-`Include`/`Needs` dependencies, but no THX-specific `Include`/`Needs` rule. GUID
+The reviewed Realtek base INFs have the ordinary `ks.inf`/`wdmaudio.inf`
+`Include`/`Needs` dependencies, but no THX-specific `Include`/`Needs` rule. The
+separate signed THX extension supplies the exact codec matches and component
+enumeration. GUID
 `E82A5EE8-44D2-44C1-897E-AA5AFBF146BA` appears in the RZ09-0482 AMD INF and is
 absent from the RZ09-0483/RZ09-0484 Intel INF. It is neither the THX host APO
 CLSID `68650828-CA0F-4196-9096-5F50931AF10A` nor the offload CLSID

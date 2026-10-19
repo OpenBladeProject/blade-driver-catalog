@@ -137,6 +137,142 @@
         "oemCodecTuning": { "$ref": "#/$defs/oemCodecTuning" },
         "catalogSigner": { "$ref": "#/$defs/signer" }
       }
+    },
+    "oemChildExtensionEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "packageIdentity",
+        "gitNormalizedInf",
+        "recoveredSignedInf",
+        "catalog",
+        "exactMatches",
+        "componentIds",
+        "componentVariant",
+        "renderEndpointSettings",
+        "configurationPath"
+      ],
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repositoryUrl", "commit", "infPath", "catalogPath"],
+          "properties": {
+            "repositoryUrl": { "const": "https://github.com/Torahime3/razer-blade-14-thx-driver-restore" },
+            "commit": { "const": "4f3451e246a93d48dabf8e2140ce3aebbd2a08f4" },
+            "infPath": { "const": "drivers/thxhdaudio.inf_amd64_a639441cfa75798e/THXHDAudio.inf" },
+            "catalogPath": { "const": "drivers/thxhdaudio.inf_amd64_a639441cfa75798e/THXHDAudio.cat" }
+          }
+        },
+        "packageIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["infName", "catalogFile", "extensionId", "driverDate", "driverVersion"],
+          "properties": {
+            "infName": { "const": "THXHDAudio.inf" },
+            "catalogFile": { "const": "THXHDAudio.cat" },
+            "extensionId": { "const": "17B56683-7F95-4BAB-8031-AB5DE114A4CC" },
+            "driverDate": { "const": "2023-06-17" },
+            "driverVersion": { "const": "2.6.5.0" }
+          }
+        },
+        "gitNormalizedInf": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lineEndings", "size", "sha256", "catalogMemberVerification"],
+          "properties": {
+            "lineEndings": { "const": "LF" },
+            "size": { "const": 28868 },
+            "sha256": { "const": "5E800A76DD0DC284A048E7301433765D114640CFF82EC87D65D44DC375AF3D14" },
+            "catalogMemberVerification": { "const": "Invalid" }
+          }
+        },
+        "recoveredSignedInf": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lineEndings", "size", "sha256", "recovery", "directiveModifications", "catalogMemberVerification"],
+          "properties": {
+            "lineEndings": { "const": "CRLF" },
+            "size": { "const": 29311 },
+            "sha256": { "const": "6FE831463C60FD2C1ADA9207FD63607491BEA87F70AE5D48B9982F32B6571D72" },
+            "recovery": { "const": "RestoreGitNormalizedLineEndingsOnly" },
+            "directiveModifications": { "const": false },
+            "catalogMemberVerification": { "const": "Valid" }
+          }
+        },
+        "catalog": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["size", "sha256", "signatureVerification", "signerThumbprint", "signatureTimestampDate"],
+          "properties": {
+            "size": { "const": 25994 },
+            "sha256": { "const": "FB496566667F6AE7C415A96BFE3D97B14BD63C1681C19B9906A21EBF0AFFE799" },
+            "signatureVerification": { "const": "Valid" },
+            "signerThumbprint": { "const": "B878D8EB696CF3D4505E2F6641C57AF9062EC51A" },
+            "signatureTimestampDate": { "const": "2023-06-21" }
+          }
+        },
+        "exactMatches": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["modelNumber", "hardwareId", "installSection"],
+              "properties": {
+                "modelNumber": { "const": "RZ09-0482" },
+                "hardwareId": { "const": "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582020" },
+                "installSection": { "const": "DeviceExtension_Install_RT_SKU_C" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["modelNumber", "hardwareId", "installSection"],
+              "properties": {
+                "modelNumber": { "const": "RZ09-0483" },
+                "hardwareId": { "const": "INTELAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583006" },
+                "installSection": { "const": "DeviceExtension_Install_RT_SKU_A" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["modelNumber", "hardwareId", "installSection"],
+              "properties": {
+                "modelNumber": { "const": "RZ09-0484" },
+                "hardwareId": { "const": "INTELAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583007" },
+                "installSection": { "const": "DeviceExtension_Install_RT_SKU_A" }
+              }
+            }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "componentIds": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "VEN_THX&CID_THXAPO" },
+            { "const": "VEN_THX&PID_THXSVC" },
+            { "const": "VEN_THX&PID_THXHSA" },
+            { "const": "VEN_THX&PID_THXSCU" }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "componentVariant": { "const": "Avx2Subsystem" },
+        "renderEndpointSettings": {
+          "type": "array",
+          "prefixItems": [{ "const": "OutAPO" }, { "const": "HPAPO" }],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "configurationPath": { "const": "%ProgramData%\\THX\\thx_spatial.conf.json" }
+      }
     }
   },
   "properties": {
@@ -255,6 +391,7 @@
       "required": [
         "status",
         "exactOemChildEnumerationPackage",
+        "oemChildExtensionEvidence",
         "exactModelTuning",
         "genericFallbackAccepted",
         "ordinaryAudioIncludeNeedsPresent",
@@ -268,7 +405,8 @@
       ],
       "properties": {
         "status": { "const": "Blocked" },
-        "exactOemChildEnumerationPackage": { "const": "NotEstablished" },
+        "exactOemChildEnumerationPackage": { "const": "Established" },
+        "oemChildExtensionEvidence": { "$ref": "#/$defs/oemChildExtensionEvidence" },
         "exactModelTuning": { "const": "Established" },
         "genericFallbackAccepted": { "const": false },
         "ordinaryAudioIncludeNeedsPresent": { "const": true },

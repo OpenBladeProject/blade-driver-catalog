@@ -67,8 +67,10 @@ The [THX audio stack entries](thx-audio-stacks.md) cover all seven supported
 models: exact rznb11 and rznb12 packages, blocked legacy 2.6.5 component
 candidates for the three 2023 THX models, and the Dolby-only RZ09-0328. The
 legacy entry includes exact Realtek codec OEM tuning and model-specific THX SCU
-SpeakerPath profiles. It remains unprovisionable because generic THX
-software-component association and endpoint FX/APO binding are not established.
+SpeakerPath profiles. Its recovered signed OEM extension exactly matches the
+three codec IDs and enumerates the normal THX components. It remains
+unprovisionable because the complete endpoint CompositeFX chain and the safe
+install, rescan and restart sequence are not established.
 The rznb12 4.2.41.2499 installed reference still lacks a
 matching base installer. A separate recovered 4.2.37.1621 base is recorded with
 Windows Installer cache provenance and an exact published catalog release URL.
