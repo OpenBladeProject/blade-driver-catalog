@@ -1,23 +1,38 @@
 # THX audio stacks
 
-The catalog records two separate THX driver families. OpenBlade must select the
-stack by the exact Blade model and codec hardware ID, then verify the complete
-installed stack. The shared native client does not make these drivers universal.
+The catalog records two modern THX driver families and separate legacy 2.6.5
+evidence. OpenBlade must select by the exact Blade model and codec hardware ID.
+Shared clients and generic software-component packages do not make a stack
+universal.
 
-| Models | Stack | Vendor download coverage |
+| Model | Audio scope | Provisioning status |
 | --- | --- | --- |
-| RZ09-0528, RZ09-0530 | [rznb11 4.2.29.1159](../components/thx-rznb11/4.2.29.1159/stack.json), configuration 4.2.37.1845 | Base APO installer and both configuration updaters are available directly from Razer. Fresh installation is a source-backed experimental candidate. |
-| RZ09-0581 | [rznb12 4.2.41.2499](../components/thx-rznb12/4.2.41.2499/stack.json), configuration 4.2.37.1846 | The reviewed manifest supplies configuration updaters, but no base APO installer. Complete provisioning is unavailable. |
+| RZ09-0581 | [rznb12 4.2.41.2499](../components/thx-rznb12/4.2.41.2499/stack.json), configuration 4.2.37.1846 | Blocked: the reviewed manifest has no base APO installer. |
+| RZ09-0528 | [rznb11 4.2.29.1159](../components/thx-rznb11/4.2.29.1159/stack.json), configuration 4.2.37.1845 | Source-backed fresh-install candidate; physical installation remains pending. |
+| RZ09-0484 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: exact Realtek codec package found, but exact OEM child enumeration and model tuning are missing. |
+| RZ09-0483 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: exact Realtek codec package found, but exact OEM child enumeration and model tuning are missing. |
+| RZ09-0482 | [Legacy THX 2.6.5 evidence](../components/thx-legacy/2.6.5.0/stack.json) | Blocked: exact Realtek codec package found, but exact OEM child enumeration and model tuning are missing. |
+| RZ09-0530 | [rznb11 4.2.29.1159](../components/thx-rznb11/4.2.29.1159/stack.json), configuration 4.2.37.1845 | Source-backed fresh-install candidate; physical installation remains pending. |
+| RZ09-0328 | Dolby Atmos in the [exact-model specification](https://mysupport.razer.com/app/answers/detail/a_id/3641/) | THX is not applicable. |
 
-Each entry pins the original download sizes, SHA-256 values and Authenticode
-signer, all APO/extension/service package files, and the two immutable active
-configuration files. It also links to the separately cataloged native DLL.
+Each modern entry pins the original download sizes, SHA-256 values and
+Authenticode signer, all APO/extension/service package files, and the two
+immutable active configuration files. It also links to the separately
+cataloged native DLL.
 The repository publishes metadata only; downloads remain on Razer's servers.
 
 A matching Realtek base audio driver must already be installed. The THX installer
 does not contain it. Razer documents restoring audio through
 [Windows Update or system recovery](https://mysupport.razer.com/app/answers/detail/a_id/3985).
 The rznb11 installer must not be used for rznb12.
+
+The legacy entry pins the exact RZ09-0482, RZ09-0483 and RZ09-0484 Realtek
+codec IDs and base packages, plus four signed Windows 11 THX 2.6.5 component
+CABs: service, HSA, configuration and APO. Those THX packages expose only
+generic `SWC\VEN_THX` IDs. Their configuration is
+`generic-config-fallback-V2`; neither it nor the Realtek packages supplies the
+missing exact OEM child-enumeration and model-tuning layer. They are component
+candidates only, not a complete or installable stack.
 
 The vendor manifests were rechecked on 2026-10-19. The rznb11 base resource names
 are `THXAPO0709-02C5` and `THXAPO0710-02C6`; both specify `/s /norestart`.

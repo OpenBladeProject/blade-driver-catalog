@@ -60,4 +60,8 @@ component applicability drift. Existing driver manifest schemas remain unchanged
 
 ## THX driver stacks
 
-The [THX audio stack entries](thx-audio-stacks.md) record the matching rznb11 and rznb12 packages separately from the standalone DLL. They pin vendor downloads, complete driver files and active configuration, and explicitly record the unavailable rznb12 base installer.
+The [THX audio stack entries](thx-audio-stacks.md) cover all seven supported
+models: exact rznb11 and rznb12 packages, blocked legacy 2.6.5 component
+candidates for the three 2023 THX models, and the Dolby-only RZ09-0328. The
+legacy candidates are not installable without exact OEM child enumeration and
+model tuning; rznb12 also still lacks its base installer.
