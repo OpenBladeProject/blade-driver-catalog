@@ -211,6 +211,142 @@ Assert-True ($blade2025.redistribution.status -eq
     $blade2025.collection.exporterProvenance.reachability -eq 'MergedCommit') `
     'The Blade 16 (2025) entry must record its release authorization and exporter.'
 
+$componentSchemaPath = Join-Path $repository 'schemas\upstream-component.schema.json'
+$componentSchema = Get-Content -LiteralPath $componentSchemaPath -Raw |
+    ConvertFrom-Json
+$componentPath = Join-Path $repository (
+    'components\thx-v4-native\1.1.1.0\component.json')
+$componentEntry = Get-Content -LiteralPath $componentPath -Raw | ConvertFrom-Json
+$componentContext = "Upstream component '$componentPath'"
+
+Assert-True ($componentSchema.'$schema' -eq
+    'https://json-schema.org/draft/2020-12/schema') `
+    'The upstream component schema must identify JSON Schema draft 2020-12.'
+Assert-True ($componentSchema.additionalProperties -eq $false) `
+    'The upstream component schema must reject unknown top-level fields.'
+Assert-True ($componentSchema.properties.manifestType.const -eq
+    'OpenBlade.RazerUpstreamComponentCatalogEntry') `
+    'The upstream component schema has the wrong manifest type.'
+Assert-True ($componentSchema.properties.component.properties.kind.const -eq
+    'StandaloneDll') `
+    'The upstream component schema must keep standalone DLLs distinct.'
+foreach ($driverStoreProperty in 'collection','deviceTopology','packages') {
+    Assert-True ($componentSchema.properties.PSObject.Properties.Name -notcontains
+        $driverStoreProperty) `
+        "The upstream component schema must not include Driver Store property '$driverStoreProperty'."
+}
+
+Assert-RequiredProperties $componentEntry @(
+    '$schema','manifestType','schemaVersion','component','artifact','authenticode',
+    'applicableProfiles','upstreamManifestEvidence','delivery','redistribution',
+    'privacy','limitations') $componentContext
+Assert-True ($componentEntry.'$schema' -eq
+    '../../../schemas/upstream-component.schema.json') `
+    "$componentContext does not reference the repository schema."
+Assert-True ($componentEntry.manifestType -eq
+    'OpenBlade.RazerUpstreamComponentCatalogEntry' -and
+    $componentEntry.schemaVersion -eq 1) `
+    "$componentContext has the wrong type or schema version."
+Assert-RequiredProperties $componentEntry.component @(
+    'id','kind','displayName','version') "$componentContext component"
+Assert-True ($componentEntry.component.id -eq 'razer-thx-v4-native' -and
+    $componentEntry.component.kind -eq 'StandaloneDll' -and
+    $componentEntry.component.version -eq '1.1.1.0') `
+    "$componentContext has the wrong component identity."
+Assert-RequiredProperties $componentEntry.artifact @(
+    'fileName','size','sha256') "$componentContext artifact"
+Assert-True ($componentEntry.artifact.fileName -eq
+    'ThxV4Native_v1.1.1.0.dll' -and
+    $componentEntry.artifact.size -eq 13684872 -and
+    $componentEntry.artifact.sha256 -eq
+    '8E8F6923624762935D70B72F58BEC00808DB84DF740340047919B53331130A0A') `
+    "$componentContext has the wrong file identity."
+Assert-RequiredProperties $componentEntry.authenticode @(
+    'status','signerSubject','signerThumbprint','issuer') `
+    "$componentContext Authenticode evidence"
+Assert-True ($componentEntry.authenticode.status -eq 'Valid' -and
+    $componentEntry.authenticode.signerThumbprint -eq
+    '3FDDBD6F820144422494342EF44898D732E068DC') `
+    "$componentContext has the wrong Authenticode result or signer."
+Assert-True ($componentEntry.authenticode.signerSubject -eq
+    'CN=Razer USA Ltd., O=Razer USA Ltd., L=Irvine, S=California, C=US' -and
+    $componentEntry.authenticode.issuer -eq
+    'CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US') `
+    "$componentContext has incomplete certificate identity evidence."
+
+$expectedProfiles = @(
+    '709|RZ09-0530|02C5',
+    '710|RZ09-0528|02C6',
+    '736|RZ09-0581|02E0')
+$actualProfiles = @($componentEntry.applicableProfiles | ForEach-Object {
+        Assert-RequiredProperties $_ @(
+            'vendorProductId','modelNumber','productName','usbIdentity') `
+            "$componentContext applicable profile"
+        Assert-RequiredProperties $_.usbIdentity @('vid','pid') `
+            "$componentContext applicable profile USB identity"
+        Assert-True ($_.usbIdentity.vid -eq '1532') `
+            "$componentContext has an unexpected USB vendor."
+        '{0}|{1}|{2}' -f $_.vendorProductId, $_.modelNumber, $_.usbIdentity.pid
+    } | Sort-Object)
+Assert-True (($actualProfiles -join ',') -eq ($expectedProfiles -join ',')) `
+    "$componentContext does not have the exact admitted profile set."
+
+$expectedResources = @(
+    '709|THXNativeDLLV4Common-709',
+    '710|THXNativeDLLV4Common-710',
+    '736|THXNativeDLLV4Common-736')
+$actualResources = @($componentEntry.upstreamManifestEvidence | ForEach-Object {
+        Assert-RequiredProperties $_ @(
+            'vendorProductId','manifest','resourceName','resourcePath','sha256') `
+            "$componentContext upstream manifest evidence"
+        Assert-True ($_.manifest -eq 'mw/manifest.json' -and
+            $_.resourcePath -eq 'thxv4common' -and
+            $_.sha256 -eq $componentEntry.artifact.sha256) `
+            "$componentContext has inconsistent upstream manifest evidence."
+        '{0}|{1}' -f $_.vendorProductId, $_.resourceName
+    } | Sort-Object)
+Assert-True (($actualResources -join ',') -eq ($expectedResources -join ',')) `
+    "$componentContext does not have the exact vendor resource set."
+
+Assert-RequiredProperties $componentEntry.delivery @(
+    'method','sourceUrl','requiredVerification') "$componentContext delivery"
+Assert-True ($componentEntry.delivery.method -eq 'DirectVendorDownload' -and
+    $componentEntry.delivery.sourceUrl -eq
+    'https://app-assets.razer.com/files/synapse/devices/common/THX/ThxV4Native_v1.1.1.0.dll') `
+    "$componentContext must use the pinned direct vendor URL."
+Assert-True ((@($componentEntry.delivery.requiredVerification | Sort-Object) -join ',') -eq
+    'Authenticode,Sha256') `
+    "$componentContext must require hash and Authenticode verification."
+Assert-True ($componentEntry.redistribution.status -eq 'NotPublished' -and
+    -not $componentEntry.redistribution.catalogContainsArtifact -and
+    -not $componentEntry.redistribution.catalogReleaseAsset) `
+    "$componentContext must remain metadata-only and unpublished."
+foreach ($property in 'containsComponentBytes','containsSerial','containsUsername',
+        'containsLocalPath') {
+    Assert-True ($componentEntry.privacy.PSObject.Properties.Name -contains $property -and
+        -not $componentEntry.privacy.$property) `
+        "$componentContext has an unsafe or missing privacy flag '$property'."
+}
+foreach ($driverStoreProperty in 'collection','deviceTopology','packages') {
+    Assert-True ($componentEntry.PSObject.Properties.Name -notcontains
+        $driverStoreProperty) `
+        "$componentContext must not use Driver Store property '$driverStoreProperty'."
+}
+Assert-True (@($componentEntry.limitations).Count -ge 3) `
+    "$componentContext must state the standalone download limitations."
+
+Assert-True ($readme.Contains(
+    '[upstream component catalog](docs/upstream-components.md)')) `
+    'README.md must link to the upstream component documentation.'
+$russianReadme = [IO.File]::ReadAllText((Join-Path $repository 'README.ru-RU.md'))
+$chineseReadme = [IO.File]::ReadAllText((Join-Path $repository 'README.zh-CN.md'))
+Assert-True ($russianReadme.Contains(
+    '(docs/ru-RU/upstream-components.md)')) `
+    'README.ru-RU.md must link to the localized upstream component documentation.'
+Assert-True ($chineseReadme.Contains(
+    '(docs/zh-CN/upstream-components.md)')) `
+    'README.zh-CN.md must link to the localized upstream component documentation.'
+
 $manifestPaths = @(
     Get-ChildItem -LiteralPath (Join-Path $repository 'devices') `
         -Recurse -Filter 'manifest.json' -File)

@@ -18,6 +18,13 @@ OpenBlade 是独立于 Razer 的项目。这里保留的原始签名驱动文件
 
 请按照与你的型号对应的[安装指南](docs/zh-CN/installing.md)操作。
 
+<a id="upstream-components"></a>
+## 上游组件
+
+OpenBlade 可以直接使用 Razer 提供的部分独立组件，而无需重新发布这些文件。
+[上游组件目录](docs/zh-CN/upstream-components.md)记录了准确的适用型号、哈希、
+签名者信息和厂商下载链接。
+
 <a id="add-your-blade"></a>
 ## 添加你的 Blade
 

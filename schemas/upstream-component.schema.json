@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenBladeProject/blade-driver-catalog/blob/main/schemas/upstream-component.schema.json",
+  "title": "OpenBlade Razer upstream component catalog entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "manifestType",
+    "schemaVersion",
+    "component",
+    "artifact",
+    "authenticode",
+    "applicableProfiles",
+    "upstreamManifestEvidence",
+    "delivery",
+    "redistribution",
+    "privacy",
+    "limitations"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../../../schemas/upstream-component.schema.json"
+    },
+    "manifestType": {
+      "const": "OpenBlade.RazerUpstreamComponentCatalogEntry"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "displayName", "version"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "kind": { "const": "StandaloneDll" },
+        "displayName": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^[0-9]+(?:[.][0-9]+){3}$" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileName", "size", "sha256"],
+      "properties": {
+        "fileName": { "type": "string", "pattern": "^[^/\\u005C]+[.]dll$" },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9A-F]{64}$" }
+      }
+    },
+    "authenticode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "signerSubject", "signerThumbprint", "issuer"],
+      "properties": {
+        "status": { "const": "Valid" },
+        "signerSubject": { "type": "string", "minLength": 1 },
+        "signerThumbprint": { "type": "string", "pattern": "^[0-9A-F]{40}$" },
+        "issuer": { "type": "string", "minLength": 1 }
+      }
+    },
+    "applicableProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["vendorProductId", "modelNumber", "productName", "usbIdentity"],
+        "properties": {
+          "vendorProductId": { "type": "integer", "minimum": 1 },
+          "modelNumber": { "type": "string", "pattern": "^RZ09-[0-9]{4}$" },
+          "productName": { "type": "string", "minLength": 1 },
+          "usbIdentity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["vid", "pid"],
+            "properties": {
+              "vid": { "type": "string", "pattern": "^[0-9A-F]{4}$" },
+              "pid": { "type": "string", "pattern": "^[0-9A-F]{4}$" }
+            }
+          }
+        }
+      }
+    },
+    "upstreamManifestEvidence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["vendorProductId", "manifest", "resourceName", "resourcePath", "sha256"],
+        "properties": {
+          "vendorProductId": { "type": "integer", "minimum": 1 },
+          "manifest": { "const": "mw/manifest.json" },
+          "resourceName": { "type": "string", "pattern": "^THXNativeDLLV4Common-[0-9]+$" },
+          "resourcePath": { "const": "thxv4common" },
+          "sha256": { "type": "string", "pattern": "^[0-9A-F]{64}$" }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "sourceUrl", "requiredVerification"],
+      "properties": {
+        "method": { "const": "DirectVendorDownload" },
+        "sourceUrl": { "type": "string", "pattern": "^https://app-assets[.]razer[.]com/" },
+        "requiredVerification": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["Sha256", "Authenticode"] }
+        }
+      }
+    },
+    "redistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "catalogContainsArtifact", "catalogReleaseAsset"],
+      "properties": {
+        "status": { "const": "NotPublished" },
+        "catalogContainsArtifact": { "const": false },
+        "catalogReleaseAsset": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["containsComponentBytes", "containsSerial", "containsUsername", "containsLocalPath"],
+      "properties": {
+        "containsComponentBytes": { "const": false },
+        "containsSerial": { "const": false },
+        "containsUsername": { "const": false },
+        "containsLocalPath": { "const": false }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
