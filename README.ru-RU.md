@@ -48,3 +48,5 @@ OpenBlade может использовать отдельные компоне�
     -NoProfile -NonInteractive -ExecutionPolicy Bypass `
     -File .\tests\Run-All.ps1
 ```
+
+В [каталоге драйверов THX](docs/ru-RU/thx-audio-stacks.md) перечислены подходящие драйверы и конфигурации, а также недостающие пакеты, без которых полная установка невозможна.

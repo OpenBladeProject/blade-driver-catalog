@@ -25,6 +25,8 @@ OpenBlade can use selected standalone components directly from Razer without
 republishing them. See the [upstream component catalog](docs/upstream-components.md)
 for exact model scope, hashes, signer evidence, and the vendor download link.
 
+The [THX audio stack catalog](docs/thx-audio-stacks.md) records matching driver and configuration packages, including gaps that prevent a complete installation.
+
 ## Add your Blade
 
 Missing a model? [docs/exporting.md](docs/exporting.md) shows how to collect its

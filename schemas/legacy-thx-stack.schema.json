@@ -1,0 +1,535 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenBladeProject/blade-driver-catalog/blob/main/schemas/legacy-thx-stack.schema.json",
+  "title": "OpenBlade Razer legacy THX 2.6.5 evidence entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "manifestType",
+    "schemaVersion",
+    "stack",
+    "candidateProfiles",
+    "knownNonThxProfiles",
+    "genericComponentPackages",
+    "modelBinding",
+    "evidenceSources",
+    "delivery",
+    "redistribution",
+    "privacy",
+    "limitations"
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9A-F]{64}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+(?:[.][0-9]+){3}$"
+    },
+    "updateId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$"
+    },
+    "signer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "subject", "thumbprint", "issuer"],
+      "properties": {
+        "status": { "const": "Valid" },
+        "subject": { "type": "string", "minLength": 1 },
+        "thumbprint": { "type": "string", "pattern": "^[0-9A-F]{40}$" },
+        "issuer": { "type": "string", "minLength": 1 }
+      }
+    },
+    "cab": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileName", "size", "sha256", "downloadUrl"],
+      "properties": {
+        "fileName": { "type": "string", "pattern": "^[a-f0-9_-]+[.]cab$" },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "downloadUrl": {
+          "type": "string",
+          "pattern": "^https://catalog[.]s[.]download[.]windowsupdate[.]com/.+[.]cab$"
+        }
+      }
+    },
+    "filePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "role", "size", "sha256"],
+      "properties": {
+        "name": { "type": "string", "pattern": "^[^/\\\\]+$" },
+        "role": { "enum": ["Inf", "Catalog", "Payload"] },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "usbIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vid", "pid"],
+      "properties": {
+        "vid": { "const": "1532" },
+        "pid": { "type": "string", "pattern": "^[0-9A-F]{4}$" }
+      }
+    },
+    "oemCodecTuning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fileName", "size", "sha256", "profileName", "profilePayload", "scope", "thxIntegration"],
+      "properties": {
+        "fileName": { "const": "RTAIODAT.DAT" },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "profileName": { "enum": ["Razer_2020", "Razer_3006", "Razer_3007"] },
+        "profilePayload": { "$ref": "#/$defs/realtekProfilePayload" },
+        "scope": { "const": "RealtekCodec" },
+        "thxIntegration": { "const": "NotEstablished" }
+      }
+    },
+    "realtekProfilePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profileIndex", "descriptorOffset", "payloadOffset", "size", "sha256", "recordCount", "recordType"],
+      "properties": {
+        "profileIndex": { "type": "integer", "minimum": 0 },
+        "descriptorOffset": { "type": "integer", "minimum": 16 },
+        "payloadOffset": { "type": "integer", "minimum": 16 },
+        "size": { "type": "integer", "minimum": 36 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "recordCount": { "const": 1 },
+        "recordType": { "const": "RTKAMPI" }
+      }
+    },
+    "thxScuTuning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subsystemSelector",
+        "profileId",
+        "profileVersion",
+        "speakerPathSha256",
+        "schema",
+        "genericFallbackAccepted"
+      ],
+      "properties": {
+        "subsystemSelector": { "enum": ["2020", "3006", "3007"] },
+        "profileId": { "enum": ["PI490", "SO690", "KI890"] },
+        "profileVersion": { "enum": ["profile-20230502", "profile-20221107", "profile-20221122-PVT-red"] },
+        "speakerPathSha256": { "$ref": "#/$defs/sha256" },
+        "schema": { "const": "devices-V2" },
+        "genericFallbackAccepted": { "const": false }
+      }
+    },
+    "baseAudioPackage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "driverVersion",
+        "updateId",
+        "hardwareId",
+        "infName",
+        "catalogFile",
+        "cab",
+        "infSha256",
+        "catalogSha256",
+        "oemCodecTuning",
+        "catalogSigner"
+      ],
+      "properties": {
+        "driverVersion": { "$ref": "#/$defs/version" },
+        "updateId": { "$ref": "#/$defs/updateId" },
+        "hardwareId": { "type": "string", "pattern": "^(?:HDAUDIO|INTELAUDIO)\\\\FUNC_01&VEN_10EC&DEV_[0-9A-F]{4}&SUBSYS_1A58[0-9A-F]{4}$" },
+        "infName": { "type": "string", "pattern": "^[^/\\\\]+[.]inf$" },
+        "catalogFile": { "type": "string", "pattern": "^[^/\\\\]+[.]cat$" },
+        "cab": { "$ref": "#/$defs/cab" },
+        "infSha256": { "$ref": "#/$defs/sha256" },
+        "catalogSha256": { "$ref": "#/$defs/sha256" },
+        "oemCodecTuning": { "$ref": "#/$defs/oemCodecTuning" },
+        "catalogSigner": { "$ref": "#/$defs/signer" }
+      }
+    },
+    "oemChildExtensionEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "packageIdentity",
+        "gitNormalizedInf",
+        "recoveredSignedInf",
+        "catalog",
+        "exactMatches",
+        "componentIds",
+        "componentVariant",
+        "renderEndpointSettings",
+        "configurationPath"
+      ],
+      "properties": {
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["repositoryUrl", "commit", "infPath", "catalogPath"],
+          "properties": {
+            "repositoryUrl": { "const": "https://github.com/Torahime3/razer-blade-14-thx-driver-restore" },
+            "commit": { "const": "4f3451e246a93d48dabf8e2140ce3aebbd2a08f4" },
+            "infPath": { "const": "drivers/thxhdaudio.inf_amd64_a639441cfa75798e/THXHDAudio.inf" },
+            "catalogPath": { "const": "drivers/thxhdaudio.inf_amd64_a639441cfa75798e/THXHDAudio.cat" }
+          }
+        },
+        "packageIdentity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["infName", "catalogFile", "extensionId", "driverDate", "driverVersion"],
+          "properties": {
+            "infName": { "const": "THXHDAudio.inf" },
+            "catalogFile": { "const": "THXHDAudio.cat" },
+            "extensionId": { "const": "17B56683-7F95-4BAB-8031-AB5DE114A4CC" },
+            "driverDate": { "const": "2023-06-17" },
+            "driverVersion": { "const": "2.6.5.0" }
+          }
+        },
+        "gitNormalizedInf": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lineEndings", "size", "sha256", "catalogMemberVerification"],
+          "properties": {
+            "lineEndings": { "const": "LF" },
+            "size": { "const": 28868 },
+            "sha256": { "const": "5E800A76DD0DC284A048E7301433765D114640CFF82EC87D65D44DC375AF3D14" },
+            "catalogMemberVerification": { "const": "Invalid" }
+          }
+        },
+        "recoveredSignedInf": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["lineEndings", "size", "sha256", "recovery", "directiveModifications", "catalogMemberVerification"],
+          "properties": {
+            "lineEndings": { "const": "CRLF" },
+            "size": { "const": 29311 },
+            "sha256": { "const": "6FE831463C60FD2C1ADA9207FD63607491BEA87F70AE5D48B9982F32B6571D72" },
+            "recovery": { "const": "RestoreGitNormalizedLineEndingsOnly" },
+            "directiveModifications": { "const": false },
+            "catalogMemberVerification": { "const": "Valid" }
+          }
+        },
+        "catalog": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["size", "sha256", "signatureVerification", "signerThumbprint", "signatureTimestampDate"],
+          "properties": {
+            "size": { "const": 25994 },
+            "sha256": { "const": "FB496566667F6AE7C415A96BFE3D97B14BD63C1681C19B9906A21EBF0AFFE799" },
+            "signatureVerification": { "const": "Valid" },
+            "signerThumbprint": { "const": "B878D8EB696CF3D4505E2F6641C57AF9062EC51A" },
+            "signatureTimestampDate": { "const": "2023-06-21" }
+          }
+        },
+        "exactMatches": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["modelNumber", "hardwareId", "installSection"],
+              "properties": {
+                "modelNumber": { "const": "RZ09-0482" },
+                "hardwareId": { "const": "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582020" },
+                "installSection": { "const": "DeviceExtension_Install_RT_SKU_C" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["modelNumber", "hardwareId", "installSection"],
+              "properties": {
+                "modelNumber": { "const": "RZ09-0483" },
+                "hardwareId": { "const": "INTELAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583006" },
+                "installSection": { "const": "DeviceExtension_Install_RT_SKU_A" }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["modelNumber", "hardwareId", "installSection"],
+              "properties": {
+                "modelNumber": { "const": "RZ09-0484" },
+                "hardwareId": { "const": "INTELAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A583007" },
+                "installSection": { "const": "DeviceExtension_Install_RT_SKU_A" }
+              }
+            }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "componentIds": {
+          "type": "array",
+          "prefixItems": [
+            { "const": "VEN_THX&CID_THXAPO" },
+            { "const": "VEN_THX&PID_THXSVC" },
+            { "const": "VEN_THX&PID_THXHSA" },
+            { "const": "VEN_THX&PID_THXSCU" }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "componentVariant": { "const": "Avx2Subsystem" },
+        "renderEndpointSettings": {
+          "type": "array",
+          "prefixItems": [{ "const": "OutAPO" }, { "const": "HPAPO" }],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "configurationPath": { "const": "%ProgramData%\\THX\\thx_spatial.conf.json" }
+      }
+    }
+  },
+  "properties": {
+    "$schema": { "const": "../../../schemas/legacy-thx-stack.schema.json" },
+    "manifestType": { "const": "OpenBlade.RazerLegacyThxStackEvidence" },
+    "schemaVersion": { "const": 1 },
+    "stack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "driverVersion", "generation", "controlApplicationProductId"],
+      "properties": {
+        "id": { "const": "thx-legacy-2.6.5" },
+        "driverVersion": { "const": "2.6.5.0" },
+        "generation": { "const": "LegacyThxSpatialAudioControl" },
+        "controlApplicationProductId": { "const": "9NC521C2JHDK" }
+      }
+    },
+    "candidateProfiles": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "vendorProductId",
+          "modelNumber",
+          "productName",
+          "usbIdentity",
+          "officialProductEvidenceUrl",
+          "baseAudioPackage",
+          "thxScuTuning"
+        ],
+        "properties": {
+          "vendorProductId": { "enum": [669, 671, 672] },
+          "modelNumber": { "enum": ["RZ09-0482", "RZ09-0483", "RZ09-0484"] },
+          "productName": { "type": "string", "minLength": 1 },
+          "usbIdentity": { "$ref": "#/$defs/usbIdentity" },
+          "officialProductEvidenceUrl": { "type": "string", "pattern": "^https://mysupport[.]razer[.]com/app/answers/detail/a_id/[0-9]+/$" },
+          "baseAudioPackage": { "$ref": "#/$defs/baseAudioPackage" },
+          "thxScuTuning": { "$ref": "#/$defs/thxScuTuning" }
+        }
+      }
+    },
+    "knownNonThxProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["modelNumber", "productName", "usbIdentity", "audioTechnology", "officialProductEvidenceUrl"],
+        "properties": {
+          "modelNumber": { "const": "RZ09-0328" },
+          "productName": { "const": "Razer Blade 15 Base (2020)" },
+          "usbIdentity": { "$ref": "#/$defs/usbIdentity" },
+          "audioTechnology": { "const": "DolbyAtmos" },
+          "officialProductEvidenceUrl": { "const": "https://mysupport.razer.com/app/answers/detail/a_id/3641/" }
+        }
+      }
+    },
+    "genericComponentPackages": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "driverVersion",
+          "updateId",
+          "hardwareIds",
+          "infName",
+          "catalogFile",
+          "cab",
+          "files",
+          "authenticodeFiles",
+          "catalogSigner"
+        ],
+        "properties": {
+          "role": { "enum": ["Service", "Hsa", "Configuration", "Apo"] },
+          "driverVersion": { "const": "2.6.5.0" },
+          "updateId": { "$ref": "#/$defs/updateId" },
+          "hardwareIds": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 2,
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^SWC\\\\VEN_THX&(?:PID|CID)_[A-Z0-9_]+$" }
+          },
+          "infName": { "type": "string", "pattern": "^[^/\\\\]+[.]inf$" },
+          "catalogFile": { "type": "string", "pattern": "^[^/\\\\]+[.]cat$" },
+          "cab": { "$ref": "#/$defs/cab" },
+          "files": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/filePin" }
+          },
+          "authenticodeFiles": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "pattern": "^[^/\\\\]+[.](?:dll|exe)$" }
+          },
+          "catalogSigner": { "$ref": "#/$defs/signer" },
+          "authenticodeSigner": { "$ref": "#/$defs/signer" }
+        }
+      }
+    },
+    "modelBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "exactOemChildEnumerationPackage",
+        "oemChildExtensionEvidence",
+        "exactModelTuning",
+        "genericFallbackAccepted",
+        "ordinaryAudioIncludeNeedsPresent",
+        "thxSpecificIncludeNeedsPresent",
+        "endpointFxApoBinding",
+        "apoRegistration",
+        "e82GuidEvidence",
+        "genericComponentsAreModelBindingEvidence",
+        "installableCandidate",
+        "blockers"
+      ],
+      "properties": {
+        "status": { "const": "Blocked" },
+        "exactOemChildEnumerationPackage": { "const": "Established" },
+        "oemChildExtensionEvidence": { "$ref": "#/$defs/oemChildExtensionEvidence" },
+        "exactModelTuning": { "const": "Established" },
+        "genericFallbackAccepted": { "const": false },
+        "ordinaryAudioIncludeNeedsPresent": { "const": true },
+        "thxSpecificIncludeNeedsPresent": { "const": false },
+        "endpointFxApoBinding": { "const": "NotEstablished" },
+        "apoRegistration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hostClsid", "offloadClsid"],
+          "properties": {
+            "hostClsid": { "const": "68650828-CA0F-4196-9096-5F50931AF10A" },
+            "offloadClsid": { "const": "E6769B7D-B58F-45CA-B6F2-964B83EDCB76" }
+          }
+        },
+        "e82GuidEvidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["guid", "presentIn", "absentFrom", "equalsThxApoClsid", "role"],
+          "properties": {
+            "guid": { "const": "E82A5EE8-44D2-44C1-897E-AA5AFBF146BA" },
+            "presentIn": {
+              "type": "array",
+              "prefixItems": [{ "const": "RZ09-0482 HDXACPRazer.inf" }],
+              "items": false,
+              "minItems": 1,
+              "maxItems": 1
+            },
+            "absentFrom": {
+              "type": "array",
+              "prefixItems": [
+                { "const": "RZ09-0483 HDXSSTRazer.inf" },
+                { "const": "RZ09-0484 HDXSSTRazer.inf" }
+              ],
+              "items": false,
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "equalsThxApoClsid": { "const": false },
+            "role": { "const": "NotEstablished" }
+          }
+        },
+        "genericComponentsAreModelBindingEvidence": { "const": false },
+        "installableCandidate": { "const": false },
+        "blockers": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "evidenceSources": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "url"],
+        "properties": {
+          "kind": { "enum": ["RazerLegacyThxRepair", "RazerThxCompatibility", "RazerAudioRecovery", "MicrosoftUpdateCatalog"] },
+          "url": { "type": "string", "pattern": "^https://" }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "packagePurpose", "requiredVerification"],
+      "properties": {
+        "method": { "const": "MicrosoftUpdateCatalog" },
+        "packagePurpose": { "const": "ComponentCandidatesOnly" },
+        "requiredVerification": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": { "enum": ["Size", "Sha256", "CatalogSignature", "PayloadAuthenticode"] }
+        }
+      }
+    },
+    "redistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "catalogContainsArtifact", "catalogReleaseAsset"],
+      "properties": {
+        "status": { "const": "NotPublished" },
+        "catalogContainsArtifact": { "const": false },
+        "catalogReleaseAsset": { "const": false }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["containsDriverBytes", "containsSerial", "containsUsername", "containsLocalPath", "containsFullInstanceId"],
+      "properties": {
+        "containsDriverBytes": { "const": false },
+        "containsSerial": { "const": false },
+        "containsUsername": { "const": false },
+        "containsLocalPath": { "const": false },
+        "containsFullInstanceId": { "const": false }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

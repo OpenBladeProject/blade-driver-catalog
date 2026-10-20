@@ -30,7 +30,8 @@ function Assert-Applicability($Ledger, $Artifacts) {
             throw 'Every artifact needs exactly one review for every supported model.'
         }
         foreach ($review in $entry.review) {
-            if ($review.status -notin @('Applicable','NotEstablished') -or
+            if ($review.status -notin @(
+                    'Applicable','CandidateOnly','NotApplicable','NotEstablished') -or
                 [string]::IsNullOrWhiteSpace($review.reason) -or
                 [string]::IsNullOrWhiteSpace($review.evidence)) {
                 throw 'Every applicability decision needs a supported status, reason and evidence.'
@@ -49,9 +50,16 @@ function Assert-Applicability($Ledger, $Artifacts) {
                 throw 'Driver stack and coverage identities disagree.'
             }
         }
-        elseif ($artifact.manifestType -eq 'OpenBlade.RazerUpstreamComponentCatalogEntry') {
-            if ($entry.kind -ne 'UpstreamComponent' -or
-                (($applicable | Sort-Object) -join '|') -cne
+        elseif ($artifact.manifestType -in @('OpenBlade.RazerUpstreamComponentCatalogEntry','OpenBlade.RazerUpstreamAudioStackCatalogEntry')) {
+            $expectedKind = if ($artifact.manifestType -eq 'OpenBlade.RazerUpstreamAudioStackCatalogEntry') { 'UpstreamAudioStack' } else { 'UpstreamComponent' }
+            $sourceReviewPending = $artifact.manifestType -eq 'OpenBlade.RazerUpstreamAudioStackCatalogEntry' -and
+                $artifact.provisioning.status -eq 'SourceReviewPending'
+            $reviewedProfiles = if ($sourceReviewPending) {
+                @($entry.review | Where-Object status -eq CandidateOnly | ForEach-Object modelNumber)
+            }
+            else { $applicable }
+            if ($entry.kind -ne $expectedKind -or ($sourceReviewPending -and $applicable.Count -ne 0) -or
+                (($reviewedProfiles | Sort-Object) -join '|') -cne
                 ((@($artifact.applicableProfiles.modelNumber) | Sort-Object) -join '|')) {
                 throw 'Component applicableProfiles must equal the applicable review set.'
             }
@@ -62,6 +70,35 @@ function Assert-Applicability($Ledger, $Artifacts) {
                     $covered.usbIdentity.vid -cne $profile.usbIdentity.vid -or
                     $covered.usbIdentity.pid -cne $profile.usbIdentity.pid) {
                     throw 'Component and coverage identities disagree.'
+                }
+            }
+        }
+        elseif ($artifact.manifestType -eq 'OpenBlade.RazerLegacyThxStackEvidence') {
+            if ($entry.kind -ne 'LegacyAudioEvidence') {
+                throw 'Legacy THX evidence needs its distinct applicability kind.'
+            }
+            $candidateOnly = @($entry.review |
+                Where-Object status -eq CandidateOnly |
+                ForEach-Object modelNumber)
+            if ((($candidateOnly | Sort-Object) -join '|') -cne
+                ((@($artifact.candidateProfiles.modelNumber) | Sort-Object) -join '|')) {
+                throw 'Legacy component candidates must equal the candidate-only review set.'
+            }
+            foreach ($profile in $artifact.candidateProfiles) {
+                $covered = $Ledger.profiles |
+                    Where-Object modelNumber -eq $profile.modelNumber
+                if ($covered.productName -cne $profile.productName -or
+                    $covered.vendorProductId -ne $profile.vendorProductId -or
+                    $covered.usbIdentity.vid -cne $profile.usbIdentity.vid -or
+                    $covered.usbIdentity.pid -cne $profile.usbIdentity.pid) {
+                    throw 'Legacy THX candidate and coverage identities disagree.'
+                }
+            }
+            foreach ($profile in $artifact.knownNonThxProfiles) {
+                $review = $entry.review |
+                    Where-Object modelNumber -eq $profile.modelNumber
+                if ($review.status -ne 'NotApplicable') {
+                    throw 'Known non-THX evidence must remain explicitly not applicable.'
                 }
             }
         }

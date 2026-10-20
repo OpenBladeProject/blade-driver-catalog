@@ -56,4 +56,34 @@ coverage guard must fail until this review and fixture refresh are complete.
 New catalog entries also require decisions for every listed model. The catalog
 suite discovers entries by manifest type, checks complete coverage and exact
 identity agreement, and rejects missing reviews, unsupported statuses and
-component applicability drift. Existing driver manifest schemas remain unchanged.
+component applicability drift. A source-reviewed recovered installer uses
+`Applicable` only when its exact model, carrier, protected inner installer,
+complete stack and admission conditions are pinned. This catalog status does
+not grant runtime admission or physical validation.
+
+## Installed driver APIs
+
+Catalog versions, SHA-256 values and signer evidence identify exact artifacts
+for download, export and installation. They do not whitelist installed driver
+builds. Runtime API admission belongs to core: retain exact model and device
+scope, verify actual package/service bindings and Windows trust, and validate the
+typed interface. Compatible updates must not require a new OpenBlade release.
+Observed hashes may invalidate cached runtime state. Changed API contracts still
+require review; artifact hashes and installer verification remain exact.
+
+## THX driver stacks
+
+The [THX audio stack entries](thx-audio-stacks.md) cover all seven supported
+models: exact rznb11 and rznb12 packages, blocked legacy 2.6.5 component
+candidates for the three 2023 THX models, and the Dolby-only RZ09-0328. The
+legacy entry includes exact Realtek codec OEM tuning and model-specific THX SCU
+SpeakerPath profiles. Its recovered signed OEM extension exactly matches the
+three codec IDs and enumerates the normal THX components. It remains
+unprovisionable because the complete endpoint CompositeFX chain and the safe
+install, rescan and restart sequence are not established.
+The rznb12 4.2.41.2499 installed reference still lacks a
+matching base installer. A separate recovered 4.2.37.1621 base is recorded with
+Windows Installer cache provenance and an exact published catalog release URL.
+Its project-owner-reported redistribution permission, different driver hashes,
+protected inner Burn recipe, conditional whole-stack and both-endpoint admission,
+and lack of physical validation remain explicit.

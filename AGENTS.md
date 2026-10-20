@@ -8,6 +8,14 @@ control code.
   device-instance IDs, interface paths, or machine-local `oem###.inf` names.
 - Keep every catalog entry scoped to the exact model, hardware IDs, package
   versions, files, hashes, and signer evidence that were reviewed.
+- Exact versions and hashes identify downloadable/exported artifacts and
+  installation recipes. They must not become runtime build allowlists for
+  already installed drivers accessed through compatible APIs. Core must verify
+  actual model/device/package/service binding, current Windows signature/catalog
+  trust and publisher, catalog membership and the typed API contract. Observed
+  content fingerprints may invalidate stale runtime state, without requiring a
+  catalog or OpenBlade update for every compatible driver build. Preserve exact
+  artifact verification and model-specific applicability.
 - Do not copy a package identity, dependency, installation order, service,
   binary name, or runtime behavior from one Razer device to another.
 - Collection workflows are read-only. Do not install, update, bind, disable,

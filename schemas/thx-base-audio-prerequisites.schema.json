@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/OpenBladeProject/blade-driver-catalog/blob/main/schemas/thx-base-audio-prerequisites.schema.json",
+  "title": "OpenBlade THX base-audio prerequisite evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "manifestType", "schemaVersion", "status", "intel", "realtek", "verification", "limits"],
+  "properties": {
+    "$schema": { "const": "../../schemas/thx-base-audio-prerequisites.schema.json" },
+    "manifestType": { "const": "OpenBlade.ThxBaseAudioPrerequisites" },
+    "schemaVersion": { "const": 1 },
+    "status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence", "installation", "provisioningImplemented"],
+      "properties": {
+        "evidence": { "const": "SourceVerified" },
+        "installation": { "const": "InstallationUnvalidated" },
+        "provisioningImplemented": {
+          "$comment": "True means a candidate source implementation exists at OpenBlade core commit 1f839e64a0853ad2b5d085fe571b84e9df0857ee; it does not mean shipped or installation-validated.",
+          "const": true
+        }
+      }
+    },
+    "intel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["models", "source", "rootHardwareIds", "catalogHardwareIds", "exactObservedChain", "activePublishedInfBindings", "activeInfByteMatchesOfficialCab", "root", "copyInf", "packages", "inbox", "sameCabNotInRootClosure", "limit"],
+      "properties": {
+        "models": { "const": ["RZ09-0581"] },
+        "source": { "$ref": "#/$defs/catalogSource" },
+        "rootHardwareIds": { "type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
+        "catalogHardwareIds": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
+        "exactObservedChain": { "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
+        "activePublishedInfBindings": { "type": "array", "minItems": 3, "maxItems": 3, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Za-z0-9]+\\.inf=[0-9.]+$" } },
+        "activeInfByteMatchesOfficialCab": { "const": true },
+        "root": { "const": "IntcAudioBus.inf" },
+        "copyInf": { "type": "array", "minItems": 9, "maxItems": 9, "uniqueItems": true, "items": { "$ref": "#/$defs/fileName" } },
+        "packages": { "type": "array", "minItems": 10, "maxItems": 10, "items": { "$ref": "#/$defs/package" } },
+        "inbox": { "type": "array", "minItems": 7, "maxItems": 7, "items": { "$ref": "#/$defs/inboxDependency" } },
+        "sameCabNotInRootClosure": { "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": { "$ref": "#/$defs/fileName" } },
+        "limit": { "type": "string", "minLength": 40 }
+      }
+    },
+    "realtek": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["models", "rootHardwareIds", "source", "driverVer", "inf", "catalog", "files", "inbox"],
+      "properties": {
+        "models": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["RZ09_0528", "RZ09_0530"],
+          "properties": {
+            "RZ09_0528": { "const": "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A58300E" },
+            "RZ09_0530": { "const": "HDAUDIO\\FUNC_01&VEN_10EC&DEV_0298&SUBSYS_1A582023" }
+          }
+        },
+        "rootHardwareIds": { "type": "array", "minItems": 11, "maxItems": 11, "uniqueItems": true, "items": { "$ref": "#/$defs/hardwareId" } },
+        "source": { "$ref": "#/$defs/realtekSource" },
+        "driverVer": { "const": "10/28/2025,6.0.9906.1" },
+        "inf": { "const": "HDXACPRazer.inf" },
+        "catalog": { "$ref": "#/$defs/catalogIdentity" },
+        "files": { "type": "array", "minItems": 5, "maxItems": 5, "items": { "$ref": "#/$defs/filePin" } },
+        "inbox": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 10 } }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intelCatalogs", "intelMemberChecks", "intelFailures", "realtekMemberChecks", "realtekFailures", "synapseReferences"],
+      "properties": {
+        "intelCatalogs": { "const": 10 },
+        "intelMemberChecks": { "const": 65 },
+        "intelFailures": { "const": 0 },
+        "realtekMemberChecks": { "const": 4 },
+        "realtekFailures": { "const": 0 },
+        "synapseReferences": { "const": 0 }
+      }
+    },
+    "limits": { "type": "array", "minItems": 4, "items": { "type": "string", "minLength": 20 } }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[A-F0-9]{64}$" },
+    "fileName": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.inf$" },
+    "hardwareId": { "type": "string", "pattern": "^(PCI|INTELAUDIO|HDAUDIO)\\\\[A-Z0-9_&]+$" },
+    "url": { "type": "string", "pattern": "^https://" },
+    "catalogSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["updateId", "detailUrl", "downloadUrl", "cabSize", "cabSha256"],
+      "properties": {
+        "updateId": { "type": "string", "pattern": "^[a-f0-9-]{36}$" },
+        "detailUrl": { "$ref": "#/$defs/url" },
+        "downloadUrl": { "$ref": "#/$defs/url" },
+        "cabSize": { "type": "integer", "minimum": 1 },
+        "cabSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "realtekSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["updateIds", "detailUrls", "downloadUrl", "cabSize", "cabSha256"],
+      "properties": {
+        "updateIds": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-f0-9-]{36}$" } },
+        "detailUrls": { "type": "array", "minItems": 2, "maxItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/url" } },
+        "downloadUrl": { "$ref": "#/$defs/url" },
+        "cabSize": { "type": "integer", "minimum": 1 },
+        "cabSha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "catalogIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "status", "signer", "thumbprint", "issuer"],
+      "properties": {
+        "file": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.cat$" },
+        "status": { "const": "Valid" },
+        "signer": { "type": "string", "pattern": "^CN=Microsoft Windows Hardware Compatibility Publisher," },
+        "thumbprint": { "type": "string", "pattern": "^[A-F0-9]{40}$" },
+        "issuer": { "type": "string", "pattern": "^CN=Microsoft Windows Third Party Component CA 2012," }
+      }
+    },
+    "catalogPin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "size", "sha256", "status", "signer", "thumbprint", "issuer"],
+      "properties": {
+        "file": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+\\.cat$" },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "status": { "const": "Valid" },
+        "signer": { "type": "string", "pattern": "^CN=Microsoft Windows Hardware Compatibility Publisher," },
+        "thumbprint": { "type": "string", "pattern": "^[A-F0-9]{40}$" },
+        "issuer": { "type": "string", "pattern": "^CN=Microsoft Windows Third Party Component CA 2012," }
+      }
+    },
+    "filePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "size", "sha256", "catalogMembership"],
+      "properties": {
+        "path": { "type": "string", "minLength": 3 },
+        "size": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "catalogMembership": { "enum": ["Verified", "CatalogSelfSignature"] }
+      }
+    },
+    "package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inf", "driverVer", "catalog", "files"],
+      "properties": {
+        "inf": { "$ref": "#/$defs/fileName" },
+        "driverVer": { "type": "string", "pattern": "^[0-9/]+,[0-9.]+$" },
+        "catalog": { "$ref": "#/$defs/catalogPin" },
+        "files": { "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/filePin" } }
+      }
+    },
+    "inboxDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["inf"],
+      "properties": {
+        "inf": { "$ref": "#/$defs/fileName" },
+        "needs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 3 } },
+        "files": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 3 } },
+        "service": { "type": "string", "minLength": 3 },
+        "observedVersion": { "type": "string", "pattern": "^[0-9.]+$" }
+      }
+    }
+  }
+}
