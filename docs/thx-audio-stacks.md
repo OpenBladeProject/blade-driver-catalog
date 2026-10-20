@@ -15,6 +15,14 @@ universal.
 | RZ09-0530 | [rznb11 4.2.29.1159](../components/thx-rznb11/4.2.29.1159/stack.json), configuration 4.2.37.1845 | Source-backed fresh-install candidate; physical installation remains pending. |
 | RZ09-0328 | Dolby Atmos in the [exact-model specification](https://mysupport.razer.com/app/answers/detail/a_id/3641/) | THX is not applicable. |
 
+Installed-driver API compatibility is separate from these exact installation
+recipes. Core PR [#819](https://github.com/OpenBladeProject/openblade-core/pull/819)
+admits compatible updates using the actual model/device/package/service binding,
+Windows catalog trust and typed API contract. Runtime content fingerprints
+invalidate stale admission; they are not a driver-build allowlist. A compatible
+installed update does not require new catalog hashes or an OpenBlade release.
+Exact download and provisioning verification remains required.
+
 Each modern entry pins the artifact sizes, SHA-256 values and Authenticode
 signer, all APO/extension/service package files, and the two immutable active
 configuration files. It also links to the separately cataloged native DLL.
@@ -86,8 +94,9 @@ No public Razer download or Synapse manifest reference was established for the
 base installer, so the descriptor uses empty base `manifestReferences` and
 records the cache provenance explicitly. It retains the reviewed official
 4.2.37.1846 updater and active-configuration pins from the current rznb12
-descriptor. Its driver hashes differ from 4.2.41.2499, and it does not admit or
-provision that separate installed reference.
+descriptor. Its driver hashes differ from 4.2.41.2499, so it is a separate exact
+installation recipe and cannot provision that installed reference. Runtime API
+admission is independent of this artifact identity.
 
 The project owner reports that the existing written permission from Razer US
 Ltd also covers this exact THX installer version as a public GitHub release

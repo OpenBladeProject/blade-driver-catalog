@@ -61,6 +61,16 @@ component applicability drift. A source-reviewed recovered installer uses
 complete stack and admission conditions are pinned. This catalog status does
 not grant runtime admission or physical validation.
 
+## Installed driver APIs
+
+Catalog versions, SHA-256 values and signer evidence identify exact artifacts
+for download, export and installation. They do not whitelist installed driver
+builds. Runtime API admission belongs to core: retain exact model and device
+scope, verify actual package/service bindings and Windows trust, and validate the
+typed interface. Compatible updates must not require a new OpenBlade release.
+Observed hashes may invalidate cached runtime state. Changed API contracts still
+require review; artifact hashes and installer verification remain exact.
+
 ## THX driver stacks
 
 The [THX audio stack entries](thx-audio-stacks.md) cover all seven supported
