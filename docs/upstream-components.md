@@ -12,7 +12,7 @@ schema.
 
 The [THX V4 Native 1.1.1.0 entry](../components/thx-v4-native/1.1.1.0/component.json)
 records the exact vendor URL, file size, SHA-256, Authenticode signer, and the
-three exact Razer profiles whose current Synapse manifests name the same file.
+reviewed exact Razer profiles whose Synapse manifests name the same file.
 The catalog does not contain or publish the DLL.
 
 OpenBlade may offer the vendor URL as a direct download. It must verify both
@@ -34,7 +34,9 @@ model. `Applicable` means the cited source supports catalog applicability;
 `NotEstablished` means evidence is insufficient, not that the model is incompatible.
 Neither status grants runtime admission or installation authority.
 
-The 2026-10-19 review covered all seven OpenBlade models. THX V4 Native 1.1.1.0
+The 2026-11-07 review adds RZ09-0508, RZ09-0510, RZ09-0509 and RZ09-0529, covering eleven OpenBlade models. The three 2024 manifests name THX V3 resources, so the cataloged V4/legacy stacks remain unestablished for them. RZ09-0529 names the exact V4 Native DLL, but its complete rznb11 codec binding and installation recipe remain unestablished. No new runtime or driver-setup admission follows from this review.
+
+The 2026-10-19 review covered the original seven OpenBlade models. THX V4 Native 1.1.1.0
 is named by the manifests for RZ09-0530, RZ09-0528 and RZ09-0581. The reviewed
 manifests for RZ09-0328, RZ09-0482, RZ09-0483 and RZ09-0484 contain no THX native
 client resource. Their manifest build and revision are recorded in the ledger.

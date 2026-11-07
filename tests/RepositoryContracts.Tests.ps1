@@ -277,6 +277,7 @@ Assert-True ($componentEntry.authenticode.signerSubject -eq
 $expectedProfiles = @(
     '709|RZ09-0530|02C5',
     '710|RZ09-0528|02C6',
+    '711|RZ09-0529|02C7',
     '736|RZ09-0581|02E0')
 $actualProfiles = @($componentEntry.applicableProfiles | ForEach-Object {
         Assert-RequiredProperties $_ @(
@@ -294,6 +295,7 @@ Assert-True (($actualProfiles -join ',') -eq ($expectedProfiles -join ',')) `
 $expectedResources = @(
     '709|THXNativeDLLV4Common-709',
     '710|THXNativeDLLV4Common-710',
+    '711|THXNativeDLLV4Common-711',
     '736|THXNativeDLLV4Common-736')
 $actualResources = @($componentEntry.upstreamManifestEvidence | ForEach-Object {
         Assert-RequiredProperties $_ @(

@@ -11,7 +11,7 @@ Driver Store 驱动包，也不会重新发布其专有文件。这类条目使�
 
 [THX V4 Native 1.1.1.0 条目](../../components/thx-v4-native/1.1.1.0/component.json)
 记录了准确的厂商网址、文件大小、SHA-256、Authenticode 签名者，以及当前
-Synapse 清单中列出同一文件的三个 Razer 配置。目录不包含或发布该 DLL。
+Synapse 清单中列出同一文件的已审核 Razer 配置。目录不包含或发布该 DLL。
 
 OpenBlade 可以提供厂商直链下载，但在使用文件前必须同时核对记录的
 SHA-256 和 Authenticode 签名。该下载只提供独立 DLL，不会安装 APO 栈或
@@ -25,9 +25,11 @@ SHA-256 和 Authenticode 签名。该下载只提供独立 DLL，不会安装 AP
 ## 审核全部受支持型号
 
 [`catalog/applicability.json`](../../catalog/applicability.json) 记录 OpenBlade
-全部七个型号，以及每个目录条目对每个型号的审核结论。`Applicable` 表示来源
+全部十一个型号，以及每个目录条目对每个型号的审核结论。`Applicable` 表示来源
 支持其适用范围；`NotEstablished` 表示证据不足，并不表示不兼容。这些状态不
 授予安装或运行时设备控制权限。
+
+2026-11-07 的审核新增 RZ09-0508、RZ09-0510、RZ09-0509 和 RZ09-0529。三个 2024 型号的清单列出 THX V3 资源；RZ09-0529 列出相同的 V4 Native DLL，但其完整 rznb11 编解码器绑定和安装方案仍未确定。此审核不增加运行时或驱动安装权限。
 
 2026-10-19 的审核确认 RZ09-0530、RZ09-0528 和 RZ09-0581 的清单包含
 THX V4 Native 1.1.1.0；RZ09-0328、RZ09-0482、RZ09-0483 和 RZ09-0484
