@@ -274,9 +274,39 @@ Assert-True ($componentEntry.authenticode.signerSubject -eq
     'CN=DigiCert Trusted G4 Code Signing RSA4096 SHA384 2021 CA1, O="DigiCert, Inc.", C=US') `
     "$componentContext has incomplete certificate identity evidence."
 
+$applicability = Get-Content -LiteralPath (
+    Join-Path $repository 'catalog/applicability.json') -Raw | ConvertFrom-Json
+$earlyBladeReviews = @(
+    'RZ09-0300|0246|582|2609301513|cc9bdedf6acc57b1fe523a19bc877893aae87a2d',
+    'RZ09-0330|0253|595|2609301503|8df6538660cc2c12207b66a61bd097ccab3f1527',
+    'RZ09-0351|0268|616|2609301513|3056caae7f4fb1e29f93c46767a9f77ffbe5e42a',
+    'RZ09-0370|0270|624|2609301503|8d2f548809c8197100d215af8ac39b28918281bc',
+    'RZ09-0427|028C|652|2609301510|b96e3d33fec8d5ff05fc169d209db6ec445f7b5b',
+    'RZ09-0421|028A|650|2609301510|fb7730a7c31f76cc79534bd9208ec53fe2c3bf2e',
+    'RZ09-0423|028B|651|2609301509|af988c9605e191ac024d3ad402648cb03f964784')
+foreach ($reviewPin in $earlyBladeReviews) {
+    $model, $usbProductId, $productId, $build, $revision = $reviewPin.Split('|')
+    $profile = @($applicability.profiles | Where-Object modelNumber -eq $model)
+    Assert-True ($profile.Count -eq 1 -and
+        $profile[0].usbIdentity.pid -ceq $usbProductId -and
+        $profile[0].vendorProductId -eq [int]$productId) `
+        "The reviewed early Blade identity for $model drifted."
+    foreach ($entry in $applicability.entries) {
+        $review = @($entry.review | Where-Object modelNumber -eq $model)
+        Assert-True ($review.Count -eq 1 -and
+            $review[0].status -ceq 'NotEstablished' -and
+            $review[0].evidence -ceq
+                "https://apps.razer.com/synapse/products/$productId/mw/manifest.json" -and
+            $review[0].vendorBuild -ceq $build -and
+            $review[0].vendorRevision -ceq $revision) `
+            "The $model review must retain its source pin and unestablished artifact scope."
+    }
+}
+
 $expectedProfiles = @(
     '709|RZ09-0530|02C5',
     '710|RZ09-0528|02C6',
+    '711|RZ09-0529|02C7',
     '736|RZ09-0581|02E0')
 $actualProfiles = @($componentEntry.applicableProfiles | ForEach-Object {
         Assert-RequiredProperties $_ @(
@@ -294,6 +324,7 @@ Assert-True (($actualProfiles -join ',') -eq ($expectedProfiles -join ',')) `
 $expectedResources = @(
     '709|THXNativeDLLV4Common-709',
     '710|THXNativeDLLV4Common-710',
+    '711|THXNativeDLLV4Common-711',
     '736|THXNativeDLLV4Common-736')
 $actualResources = @($componentEntry.upstreamManifestEvidence | ForEach-Object {
         Assert-RequiredProperties $_ @(

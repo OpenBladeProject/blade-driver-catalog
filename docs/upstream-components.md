@@ -12,7 +12,7 @@ schema.
 
 The [THX V4 Native 1.1.1.0 entry](../components/thx-v4-native/1.1.1.0/component.json)
 records the exact vendor URL, file size, SHA-256, Authenticode signer, and the
-three exact Razer profiles whose current Synapse manifests name the same file.
+reviewed exact Razer profiles whose Synapse manifests name the same file.
 The catalog does not contain or publish the DLL.
 
 OpenBlade may offer the vendor URL as a direct download. It must verify both
@@ -34,7 +34,28 @@ model. `Applicable` means the cited source supports catalog applicability;
 `NotEstablished` means evidence is insufficient, not that the model is incompatible.
 Neither status grants runtime admission or installation authority.
 
-The 2026-10-19 review covered all seven OpenBlade models. THX V4 Native 1.1.1.0
+The 2026-11-07 review covers eighteen OpenBlade models and all seven catalog
+artifacts, with 126 model/artifact decisions. RZ09-0508, RZ09-0510 and RZ09-0509
+name THX V3 resources, so the cataloged V4/legacy stacks remain unestablished for
+them. RZ09-0529 names the exact V4 Native DLL, but its complete rznb11 codec
+binding and installation recipe remain unestablished.
+
+The exact-model manifests for RZ09-0370, RZ09-0427, RZ09-0421 and RZ09-0423 name
+their own PID-specific 0.1.2.0 driver carrier and the shared BladeNative 1.0.10.1
+DLL, with no THX resource declarations. All seven existing artifacts remain
+`NotEstablished` for these four models. Absent THX declarations do not prove
+incompatibility; exact-codec bindings, tuning and complete installation recipes
+remain unreviewed. No new runtime or driver-setup admission follows from this
+review.
+
+RZ09-0300, RZ09-0330 and RZ09-0351 also have separate exact-PID carriers
+(0.1.0.0, 0.1.2.0 and 0.0.1.0 respectively), plus the same BladeNative DLL and
+no THX resource declarations. Their installer manifests point to separate
+model-specific resource manifests. All 21 decisions for these three models are
+`NotEstablished`; no cataloged whole driver or audio stack, native THX artifact,
+codec tuning or installation recipe has been established for them.
+
+The 2026-10-19 review covered the original seven OpenBlade models. THX V4 Native 1.1.1.0
 is named by the manifests for RZ09-0530, RZ09-0528 and RZ09-0581. The reviewed
 manifests for RZ09-0328, RZ09-0482, RZ09-0483 and RZ09-0484 contain no THX native
 client resource. Their manifest build and revision are recorded in the ledger.
@@ -44,7 +65,7 @@ Both cataloged driver stacks remain scoped to their own PID. Their DKM, virtual
 consumer, keyboard and mouse INF targets name that PID. The RzCommon INF, CAT
 and SYS hashes are identical in both stacks, and its INF matches the generic
 `RAZER\DeviceContol` child. That shared dependency does not make either complete
-stack universal or establish support for the five other models.
+stack universal or establish support for the other models.
 
 When OpenBlade adds or changes a model, review every driver stack and upstream
 component against that model's vendor definitions. Update the ledger's pinned
@@ -73,8 +94,8 @@ require review; artifact hashes and installer verification remain exact.
 
 ## THX driver stacks
 
-The [THX audio stack entries](thx-audio-stacks.md) cover all seven supported
-models: exact rznb11 and rznb12 packages, blocked legacy 2.6.5 component
+The [THX audio stack entries](thx-audio-stacks.md) describe exact rznb11 and
+rznb12 packages, blocked legacy 2.6.5 component
 candidates for the three 2023 THX models, and the Dolby-only RZ09-0328. The
 legacy entry includes exact Realtek codec OEM tuning and model-specific THX SCU
 SpeakerPath profiles. Its recovered signed OEM extension exactly matches the
