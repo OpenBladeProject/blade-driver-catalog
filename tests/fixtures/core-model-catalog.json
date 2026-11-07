@@ -1,0 +1,158 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Offline exact model coverage from the immutable reviewed core metadata source; grants no runtime or installation authority.",
+  "source": {
+    "repository": "OSSBlade/openblade-core",
+    "commit": "5e545f2a0d187ec2f5c95913102ee5ef4fef251f",
+    "path": "src/OpenBlade.Contracts/RazerBladeModelCatalog.cs",
+    "gitBlobSha1": "b04025030a9daca2f6ec89464999c7924f8a0182",
+    "sha256": "BBBF2E38049C9EC0E4541209456B229F1D4814367ABD0A760E9C04512DD5194F",
+    "content": "namespace OpenBlade.Contracts;\n\npublic enum BladeSupportBasis\n{\n    NotEstablished,\n    SourceReviewed,\n    PhysicallyValidated,\n}\n\npublic sealed record RazerBladeModelInfo(\n    string ModelNumber,\n    string ProductName,\n    int ModelYear)\n{\n    public string UsbVendorId { get; init; } = string.Empty;\n\n    public string UsbProductId { get; init; } = string.Empty;\n\n    // Model support and physical evidence are separate from per-feature admission.\n    // Neither property authorizes a hardware operation.\n    public BladeSupportBasis SupportBasis { get; init; }\n\n    public bool IsOfficiallySupported => SupportBasis is\n        BladeSupportBasis.SourceReviewed or BladeSupportBasis.PhysicallyValidated;\n\n    public bool HasPhysicalValidation => SupportBasis == BladeSupportBasis.PhysicallyValidated;\n\n    public string DisplayName => $\"{ProductName} ({ModelYear})\";\n}\n\npublic static class RazerBladeModelCatalog\n{\n    public const string OpenBladeTargetModelNumber = \"RZ09-0581\";\n    public const string Rz090528ModelNumber = \"RZ09-0528\";\n    public const string Rz090484ModelNumber = \"RZ09-0484\";\n\n    // Razer support Answer ID 5481: How to identify a Razer Blade model.\n    private static readonly RazerBladeModelInfo[] Models =\n    [\n        new(OpenBladeTargetModelNumber, \"Razer Blade 16\", 2026)\n        {\n            UsbVendorId = \"1532\",\n            UsbProductId = \"02E0\",\n            SupportBasis = BladeSupportBasis.PhysicallyValidated,\n        },\n        new(Rz090528ModelNumber, \"Razer Blade 16\", 2025)\n        {\n            UsbVendorId = \"1532\",\n            UsbProductId = \"02C6\",\n            SupportBasis = BladeSupportBasis.PhysicallyValidated,\n        },\n        new(Rz090484ModelNumber, \"Razer Blade 18\", 2023) { UsbVendorId = \"1532\", UsbProductId = \"02A0\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0483\", \"Razer Blade 16\", 2023) { UsbVendorId = \"1532\", UsbProductId = \"029F\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0482\", \"Razer Blade 14\", 2023) { UsbVendorId = \"1532\", UsbProductId = \"029D\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0530\", \"Razer Blade 14\", 2025) { UsbVendorId = \"1532\", UsbProductId = \"02C5\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0328\", \"Razer Blade 15 Base\", 2020) { UsbVendorId = \"1532\", UsbProductId = \"0255\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0508\", \"Razer Blade 14\", 2024) { UsbVendorId = \"1532\", UsbProductId = \"02B6\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0510\", \"Razer Blade 16\", 2024) { UsbVendorId = \"1532\", UsbProductId = \"02B7\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0509\", \"Razer Blade 18\", 2024) { UsbVendorId = \"1532\", UsbProductId = \"02B8\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0529\", \"Razer Blade 18\", 2025) { UsbVendorId = \"1532\", UsbProductId = \"02C7\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0370\", \"Razer Blade 14\", 2021) { UsbVendorId = \"1532\", UsbProductId = \"0270\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0427\", \"Razer Blade 14\", 2022) { UsbVendorId = \"1532\", UsbProductId = \"028C\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0421\", \"Razer Blade 15\", 2022) { UsbVendorId = \"1532\", UsbProductId = \"028A\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0423\", \"Razer Blade 17\", 2022) { UsbVendorId = \"1532\", UsbProductId = \"028B\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0330\", \"Razer Blade 15 Advanced\", 2020) { UsbVendorId = \"1532\", UsbProductId = \"0253\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0351\", \"Razer Blade 15 Base\", 2020) { UsbVendorId = \"1532\", UsbProductId = \"0268\", SupportBasis = BladeSupportBasis.SourceReviewed },\n        new(\"RZ09-0300\", \"Razer Blade 15 Base\", 2019) { UsbVendorId = \"1532\", UsbProductId = \"0246\", SupportBasis = BladeSupportBasis.SourceReviewed },\n    ];\n\n    public static IReadOnlyList<RazerBladeModelInfo> All { get; } = Array.AsReadOnly(Models);\n\n    public static RazerBladeModelInfo? Find(string? modelNumber)\n    {\n        if (string.IsNullOrWhiteSpace(modelNumber))\n        {\n            return null;\n        }\n\n        string candidate = modelNumber.Trim();\n        return Models.FirstOrDefault(model => candidate.StartsWith(\n            model.ModelNumber,\n            StringComparison.OrdinalIgnoreCase));\n    }\n}\n"
+  },
+  "profiles": [
+    {
+      "modelNumber": "RZ09-0581",
+      "productName": "Razer Blade 16 (2026)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02E0"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0528",
+      "productName": "Razer Blade 16 (2025)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02C6"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0484",
+      "productName": "Razer Blade 18 (2023)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02A0"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0483",
+      "productName": "Razer Blade 16 (2023)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "029F"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0482",
+      "productName": "Razer Blade 14 (2023)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "029D"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0530",
+      "productName": "Razer Blade 14 (2025)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02C5"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0328",
+      "productName": "Razer Blade 15 Base (2020)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "0255"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0508",
+      "productName": "Razer Blade 14 (2024)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02B6"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0510",
+      "productName": "Razer Blade 16 (2024)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02B7"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0509",
+      "productName": "Razer Blade 18 (2024)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02B8"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0529",
+      "productName": "Razer Blade 18 (2025)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "02C7"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0370",
+      "productName": "Razer Blade 14 (2021)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "0270"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0427",
+      "productName": "Razer Blade 14 (2022)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "028C"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0421",
+      "productName": "Razer Blade 15 (2022)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "028A"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0423",
+      "productName": "Razer Blade 17 (2022)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "028B"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0330",
+      "productName": "Razer Blade 15 Advanced (2020)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "0253"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0351",
+      "productName": "Razer Blade 15 Base (2020)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "0268"
+      }
+    },
+    {
+      "modelNumber": "RZ09-0300",
+      "productName": "Razer Blade 15 Base (2019)",
+      "usbIdentity": {
+        "vid": "1532",
+        "pid": "0246"
+      }
+    }
+  ]
+}
