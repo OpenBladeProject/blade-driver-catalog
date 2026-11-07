@@ -277,6 +277,7 @@ Assert-True ($componentEntry.authenticode.signerSubject -eq
 $applicability = Get-Content -LiteralPath (
     Join-Path $repository 'catalog/applicability.json') -Raw | ConvertFrom-Json
 $earlyBladeReviews = @(
+    'RZ09-0301|0245|581|2609301519|3b9a4c059c4b6c9770715f0df2eef07d472cc53c',
     'RZ09-0300|0246|582|2609301513|cc9bdedf6acc57b1fe523a19bc877893aae87a2d',
     'RZ09-0330|0253|595|2609301503|8df6538660cc2c12207b66a61bd097ccab3f1527',
     'RZ09-0351|0268|616|2609301513|3056caae7f4fb1e29f93c46767a9f77ffbe5e42a',
