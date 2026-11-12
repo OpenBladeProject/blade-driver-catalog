@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-11-12",
+  "modelNumber": "RZ09-0409",
+  "usbIdentity": {
+    "vid": "1532",
+    "pid": "0276"
+  },
+  "source": {
+    "url": "https://apps.razer.com/synapse/products/630/mw/manifest.json",
+    "sha256": "E8D0C08305BA433112BB778C5D5D2833D26F5DBB1FB59A76C403AB8DE2FCC910",
+    "vendorBuild": "2609301504",
+    "vendorRevision": "c8f9bacea06d246e7f579debb84827b98e2635f9"
+  },
+  "declaredResources": [
+    {
+      "name": "NormalDriver_PID0276Drv",
+      "version": "0.1.1.0",
+      "sha256": "47D343EA5E7F81CABDF2487F5EF74B135C0AD6BEC49D5949A02A635E2F5E56D7"
+    },
+    {
+      "name": "BladeDLL",
+      "version": "1.0.10.1",
+      "sha256": "87E07BF624706203EEA9925FC3EC1787AB7D097C3FC4F55009176E5B676077F1"
+    }
+  ],
+  "thxResources": [],
+  "artifactDecisions": "Seven NotEstablished decisions; shared dependencies do not establish applicability of a complete stack.",
+  "runtimeAuthority": "No driver installation, runtime API, or physical-validation authority is added."
+}
