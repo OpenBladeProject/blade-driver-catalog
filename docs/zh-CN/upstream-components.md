@@ -25,15 +25,16 @@ SHA-256 和 Authenticode 签名。该下载只提供独立 DLL，不会安装 AP
 ## 审核全部受支持型号
 
 [`catalog/applicability.json`](../../catalog/applicability.json) 记录 OpenBlade
-全部二十一个型号，以及七个目录条目对每个型号的共 147 条审核结论。`Applicable` 表示来源
+全部二十二个型号，以及七个目录条目对每个型号的共 154 条审核结论。`Applicable` 表示来源
 支持其适用范围；`NotEstablished` 表示证据不足，并不表示不兼容。这些状态不
 授予安装或运行时设备控制权限。
 
-2026-11-12 的审核新增 RZ09-0409 / PID 0276 和 RZ09-0287 / PID 0234。
-其专属驱动载体版本分别为 0.1.1.0 和 0.1.2.0，另列 BladeNative 1.0.10.1，
+2026-11-12 的审核新增 RZ09-0409 / PID 0276、RZ09-0287 / PID 0234 和 RZ09-0314 / PID 024C。
+其专属驱动载体版本分别为 0.1.1.0、0.1.2.0 和 0.1.2.0，另列 BladeNative 1.0.10.1，
 没有 THX 资源。[产品 630](../../evidence/source-reviews/rz09-0409.json)和
-[产品 564](../../evidence/source-reviews/rz09-0287.json)的固定来源保留清单标识。
-全部十四条结论均为 `NotEstablished`；共享组件不证明完整驱动或音频栈适用，
+[产品 564](../../evidence/source-reviews/rz09-0287.json)及
+[产品 588](../../evidence/source-reviews/rz09-0314.json)的固定来源保留清单标识。
+全部二十一条结论均为 `NotEstablished`；共享组件不证明完整驱动或音频栈适用，
 此次审核不增加运行时、驱动安装或物理验证权限。
 
 2026-11-07 的审核新增 RZ09-0508、RZ09-0510、RZ09-0509 和 RZ09-0529。三个 2024 型号的清单列出 THX V3 资源；RZ09-0529 列出相同的 V4 Native DLL，但其完整 rznb11 编解码器绑定和安装方案仍未确定。此审核不增加运行时或驱动安装权限。
