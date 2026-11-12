@@ -34,11 +34,20 @@ model. `Applicable` means the cited source supports catalog applicability;
 `NotEstablished` means evidence is insufficient, not that the model is incompatible.
 Neither status grants runtime admission or installation authority.
 
-The 2026-11-07 review covers nineteen OpenBlade models and all seven catalog
-artifacts, with 133 model/artifact decisions. RZ09-0508, RZ09-0510 and RZ09-0509
+The 2026-11-12 review covers twenty-two OpenBlade models and all seven catalog
+artifacts, with 154 model/artifact decisions. RZ09-0508, RZ09-0510 and RZ09-0509
 name THX V3 resources, so the cataloged V4/legacy stacks remain unestablished for
 them. RZ09-0529 names the exact V4 Native DLL, but its complete rznb11 codec
 binding and installation recipe remain unestablished.
+
+RZ09-0409 / PID 0276, RZ09-0287 / PID 0234 and RZ09-0314 / PID 024C declare
+separate driver carriers at versions 0.1.1.0, 0.1.2.0 and 0.1.2.0 respectively,
+plus BladeNative 1.0.10.1 and no THX resources. Their [product 630](../evidence/source-reviews/rz09-0409.json),
+[product 564](../evidence/source-reviews/rz09-0287.json) and
+[product 588](../evidence/source-reviews/rz09-0314.json) source pins retain
+the reviewed manifest identities. All twenty-one decisions are `NotEstablished`;
+shared components do not establish complete driver or audio stack applicability.
+No runtime, driver-installation or physical-validation authority is added.
 
 The exact-model manifests for RZ09-0370, RZ09-0427, RZ09-0421 and RZ09-0423 name
 their own PID-specific 0.1.2.0 driver carrier and the shared BladeNative 1.0.10.1
